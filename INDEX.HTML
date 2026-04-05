@@ -1,0 +1,4448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Esuraksha - Safety Navigator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  >
+  <style>
+    :root{
+      --text:#eef4ff;
+      --muted:#a4b3cf;
+      --line:rgba(191,210,255,0.16);
+      --accent:#60a5fa;
+      --accent-strong:#8b5cf6;
+      --accent-cyan:#22d3ee;
+      --accent-soft:rgba(96,165,250,0.16);
+      --warning:#fbbf24;
+      --danger:#fb7185;
+      --safe:#34d399;
+      --panel:rgba(9,14,29,0.62);
+      --panel-soft:rgba(16,23,44,0.82);
+      --surface:rgba(255,255,255,0.06);
+      --shadow:0 34px 90px rgba(2, 6, 23, 0.58);
+      --glow:0 0 0 1px rgba(255,255,255,0.06), 0 20px 60px rgba(96,165,250,0.18);
+      --radius-xl:32px;
+      --radius-lg:20px;
+      --radius-md:16px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      min-height:100vh;
+      min-height:100dvh;
+      font-family:"Inter", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 18%, rgba(96,165,250,0.22), transparent 20%),
+        radial-gradient(circle at 85% 12%, rgba(139,92,246,0.2), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(34,211,238,0.14), transparent 28%),
+        linear-gradient(135deg, #02030a 0%, #081121 38%, #0d1730 72%, #07101e 100%);
+      padding:calc(28px + env(safe-area-inset-top, 0px)) calc(22px + env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) calc(22px + env(safe-area-inset-left, 0px));
+      display:grid;
+      place-items:center;
+      overflow-x:hidden;
+      touch-action:manipulation;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      border-radius:50%;
+      pointer-events:none;
+      filter:blur(16px);
+      opacity:0.72;
+    }
+
+    body::before{
+      width:280px;
+      height:280px;
+      top:-100px;
+      right:8%;
+      background:rgba(96,165,250,0.2);
+    }
+
+    body::after{
+      width:360px;
+      height:360px;
+      bottom:-160px;
+      left:-90px;
+      background:rgba(139,92,246,0.18);
+    }
+
+    .app{
+      width:min(1240px, 100%);
+      margin:0 auto;
+      display:grid;
+      gap:26px;
+    }
+
+    .header{
+      background:linear-gradient(145deg, rgba(11,16,34,0.68), rgba(16,23,44,0.62) 55%, rgba(20,26,58,0.58));
+      border-radius:var(--radius-xl);
+      padding:48px 42px 40px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.12);
+      backdrop-filter:blur(24px);
+      text-align:center;
+    }
+
+    .header::after{
+      content:"";
+      position:absolute;
+      width:360px;
+      height:360px;
+      right:-110px;
+      top:-140px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(96,165,250,0.28), transparent 65%);
+      pointer-events:none;
+    }
+
+    .header::before{
+      content:"";
+      position:absolute;
+      inset:auto auto -120px -120px;
+      width:340px;
+      height:340px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(34,211,238,0.18), transparent 68%);
+      pointer-events:none;
+    }
+
+    .header h1{
+      font-size:clamp(2.6rem, 7vw, 4.9rem);
+      font-weight:800;
+      letter-spacing:-0.05em;
+      line-height:1;
+      text-shadow:0 0 30px rgba(96,165,250,0.38), 0 0 60px rgba(139,92,246,0.18);
+    }
+
+    .header p{
+      margin-top:10px;
+      max-width:760px;
+      margin-inline:auto;
+      color:rgba(243,248,255,0.76);
+      line-height:1.7;
+      font-size:1.05rem;
+    }
+
+    .header-eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(96,165,250,0.12);
+      border:1px solid rgba(96,165,250,0.18);
+      color:#dffdf7;
+      font-size:0.8rem;
+      font-weight:700;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+    }
+
+    .header-copy{
+      display:grid;
+      gap:14px;
+      justify-items:center;
+      position:relative;
+      z-index:1;
+    }
+
+    .header-tagline{
+      color:#d8e8f9;
+      font-size:1rem;
+      font-weight:700;
+    }
+
+    .advantage-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:14px;
+      margin-top:28px;
+      position:relative;
+      z-index:1;
+    }
+
+    .advantage-card{
+      padding:18px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.1);
+      box-shadow:var(--glow);
+      display:grid;
+      gap:8px;
+      transition:transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .advantage-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 50px rgba(96,165,250,0.14);
+      border-color:rgba(96,165,250,0.22);
+    }
+
+    .advantage-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-size:1.15rem;
+      background:linear-gradient(135deg, rgba(96,165,250,0.18), rgba(139,92,246,0.16));
+      border:1px solid rgba(96,165,250,0.18);
+    }
+
+    .advantage-card strong{
+      font-size:0.96rem;
+      color:#f3f8ff;
+    }
+
+    .advantage-card span{
+      color:var(--muted);
+      font-size:0.85rem;
+      line-height:1.55;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:380px 1fr;
+      gap:26px;
+      align-items:stretch;
+    }
+
+    .panel,
+    .visual-card{
+      background:var(--panel);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(22px);
+    }
+
+    .panel{
+      padding:30px;
+      display:grid;
+      gap:22px;
+      align-content:start;
+    }
+
+    .section-label{
+      font-size:0.78rem;
+      font-weight:700;
+      letter-spacing:0.14em;
+      text-transform:uppercase;
+      color:#d7e5f6;
+    }
+
+    .panel h2{
+      font-size:1.5rem;
+      letter-spacing:-0.03em;
+    }
+
+    .panel p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:0.96rem;
+    }
+
+    .field-group{
+      display:grid;
+      gap:14px;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+      position:relative;
+    }
+
+    .field label{
+      font-size:0.92rem;
+      font-weight:600;
+      color:#f2f7fd;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .field input{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:var(--radius-md);
+      min-height:56px;
+      padding:16px 18px;
+      font:inherit;
+      color:var(--text);
+      background:var(--panel-soft);
+      outline:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
+      transition:border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+
+    .field input::placeholder{
+      color:#b8cde0;
+    }
+
+    .field input:focus{
+      border-color:rgba(96,165,250,0.62);
+      background:rgba(17,25,40,1);
+      box-shadow:0 0 0 4px rgba(96,165,250,0.14), 0 10px 24px rgba(96,165,250,0.12);
+      transform:translateY(-1px);
+    }
+
+    .autocomplete-list{
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+      margin-top:8px;
+      padding:8px;
+      border-radius:16px;
+      background:rgba(8,15,28,0.96);
+      border:1px solid rgba(255,255,255,0.14);
+      backdrop-filter:blur(18px);
+      box-shadow:0 20px 40px rgba(4,16,34,0.32);
+      display:none;
+      z-index:20;
+    }
+
+    .autocomplete-list.visible{
+      display:grid;
+      gap:6px;
+    }
+
+    .autocomplete-item{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background:rgba(255,255,255,0.05);
+      color:#eff7ff;
+      text-align:left;
+      font:inherit;
+      cursor:pointer;
+      transition:background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .autocomplete-item:hover{
+      background:rgba(124,243,208,0.14);
+      border-color:rgba(124,243,208,0.2);
+      transform:translateY(-1px);
+    }
+
+    .autocomplete-item small{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:0.77rem;
+      line-height:1.45;
+    }
+
+    .actions{
+      display:grid;
+      gap:12px;
+    }
+
+    .mode-selector{
+      display:grid;
+      gap:10px;
+    }
+
+    .mode-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .mode-button{
+      display:grid;
+      justify-items:center;
+      gap:6px;
+      padding:14px 10px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      color:#eff7ff;
+      transition:transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .mode-button.active{
+      background:linear-gradient(135deg, rgba(96,165,250,0.14), rgba(139,92,246,0.14));
+      border-color:rgba(96,165,250,0.34);
+      box-shadow:0 16px 30px rgba(0,0,0,0.22);
+    }
+
+    .mode-button:hover{
+      transform:translateY(-2px);
+      border-color:rgba(96,165,250,0.24);
+    }
+
+    .mode-icon{
+      display:grid;
+      place-items:center;
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      background:rgba(255,255,255,0.08);
+      font-size:0.82rem;
+      font-weight:800;
+      letter-spacing:0.04em;
+    }
+
+    .mode-meta{
+      color:var(--muted);
+      font-size:0.76rem;
+      text-align:center;
+      line-height:1.45;
+    }
+
+    .input-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .quick-actions{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    button{
+      border:none;
+      border-radius:18px;
+      min-height:52px;
+      padding:15px 18px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      letter-spacing:0.01em;
+      transition:transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+    }
+
+    button:hover{
+      transform:translateY(-2px) scale(1.01);
+    }
+
+    .primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent-strong) 55%, var(--accent-cyan));
+      color:#f8fbff;
+      box-shadow:0 16px 34px rgba(96,165,250,0.24), 0 0 30px rgba(139,92,246,0.18);
+    }
+
+    .secondary{
+      background:rgba(96,165,250,0.08);
+      color:#dffdf7;
+      border:1px solid rgba(96,165,250,0.18);
+    }
+
+    .ghost{
+      background:rgba(255,255,255,0.06);
+      color:#ebf4ff;
+      border:1px solid var(--line);
+    }
+
+    .primary:hover{
+      box-shadow:0 22px 44px rgba(96,165,250,0.26), 0 0 34px rgba(139,92,246,0.22);
+    }
+
+    .secondary:hover{
+      background:rgba(96,165,250,0.14);
+      box-shadow:0 16px 32px rgba(8, 24, 42, 0.2);
+    }
+
+    .ghost:hover{
+      background:rgba(255,255,255,0.12);
+      box-shadow:0 16px 32px rgba(8, 24, 42, 0.18);
+    }
+
+    .status{
+      border-radius:18px;
+      padding:16px;
+      background:linear-gradient(180deg, rgba(52,211,153,0.12), rgba(52,211,153,0.08));
+      color:#dffdf7;
+      line-height:1.6;
+      font-size:0.94rem;
+      border:1px solid rgba(52,211,153,0.16);
+    }
+
+    .route-health{
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      font-size:0.92rem;
+      font-weight:700;
+      line-height:1.5;
+    }
+
+    .route-health.green{
+      background:rgba(124,243,208,0.14);
+      border-color:rgba(124,243,208,0.28);
+      color:#dffdf7;
+    }
+
+    .route-health.yellow{
+      background:rgba(251,191,36,0.14);
+      border-color:rgba(251,191,36,0.28);
+      color:#fff3cd;
+    }
+
+    .route-health.red{
+      background:rgba(251,113,133,0.14);
+      border-color:rgba(251,113,133,0.28);
+      color:#ffe4e6;
+    }
+
+    .safety-status-panel{
+      display:grid;
+      gap:14px;
+      padding:18px;
+      border-radius:22px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .status-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .status-tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      display:grid;
+      gap:6px;
+    }
+
+    .status-tile strong{
+      font-size:1.15rem;
+      color:#f3f8ff;
+    }
+
+    .status-tile span{
+      color:var(--muted);
+      font-size:0.8rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      font-weight:700;
+    }
+
+    .time-mode-pill{
+      display:inline-flex;
+      width:max-content;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.1);
+      color:#eff7ff;
+      font-size:0.84rem;
+      font-weight:700;
+    }
+
+    .safety-suggestion{
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.05);
+      color:#eaf4ff;
+      line-height:1.6;
+      font-size:0.92rem;
+      font-weight:600;
+    }
+
+    .safety-suggestion.safe{
+      background:rgba(52,211,153,0.12);
+      border-color:rgba(52,211,153,0.22);
+      color:#ddfff4;
+    }
+
+    .safety-suggestion.medium{
+      background:rgba(251,191,36,0.12);
+      border-color:rgba(251,191,36,0.24);
+      color:#fff4cc;
+    }
+
+    .safety-suggestion.risky{
+      background:rgba(251,113,133,0.12);
+      border-color:rgba(251,113,133,0.22);
+      color:#ffe1e7;
+    }
+
+    .route-summary{
+      display:grid;
+      gap:10px;
+      max-height:320px;
+      overflow:auto;
+      padding-right:4px;
+    }
+
+    .results-overview{
+      display:grid;
+      gap:12px;
+    }
+
+    .results-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:14px;
+    }
+
+    .result-card{
+      padding:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.1);
+      display:grid;
+      gap:8px;
+      position:relative;
+      overflow:hidden;
+      opacity:0;
+      animation:fadeUp 0.45s ease forwards;
+      transition:transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .result-card::after{
+      content:"";
+      position:absolute;
+      inset:auto -10% -55% auto;
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.16), transparent 68%);
+      pointer-events:none;
+    }
+
+    .result-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(255,255,255,0.2);
+      box-shadow:0 24px 44px rgba(17,24,39,0.32);
+    }
+
+    .result-title{
+      font-size:1rem;
+      font-weight:800;
+      color:#eff7ff;
+    }
+
+    .result-chip{
+      display:inline-flex;
+      width:max-content;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      color:#eff7ff;
+      font-size:0.76rem;
+      font-weight:700;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+    }
+
+    .result-line{
+      color:var(--muted);
+      font-size:0.9rem;
+      line-height:1.55;
+    }
+
+    .result-metric{
+      font-size:1.45rem;
+      font-weight:800;
+      letter-spacing:-0.03em;
+      color:#eff7ff;
+    }
+
+    .result-card.active{
+      border-color:rgba(96,165,250,0.36);
+      box-shadow:0 24px 50px rgba(96,165,250,0.18);
+    }
+
+    .result-card.shortest.active{
+      border-color:rgba(229,231,235,0.42);
+      box-shadow:0 24px 50px rgba(255,255,255,0.08);
+    }
+
+    .result-card.safest.active{
+      border-color:rgba(52,211,153,0.44);
+      box-shadow:0 26px 56px rgba(52,211,153,0.22), 0 0 34px rgba(52,211,153,0.18);
+    }
+
+    .result-card.fastest.active{
+      border-color:rgba(96,165,250,0.42);
+      box-shadow:0 24px 50px rgba(96,165,250,0.14);
+    }
+
+    .result-badge{
+      display:inline-flex;
+      width:max-content;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:0.76rem;
+      font-weight:700;
+      line-height:1;
+    }
+
+    .badge-good{
+      background:rgba(124,243,208,0.14);
+      color:#dffdf7;
+    }
+
+    .badge-watch{
+      background:rgba(251,191,36,0.14);
+      color:#fff3cd;
+    }
+
+    .badge-risk{
+      background:rgba(251,113,133,0.14);
+      color:#ffe4e6;
+    }
+
+    .segment-card{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.1);
+      line-height:1.55;
+      opacity:0;
+      animation:fadeUp 0.55s ease forwards;
+    }
+
+    .segment-card strong{
+      display:block;
+      margin-bottom:4px;
+      color:#eff7ff;
+      font-size:0.92rem;
+    }
+
+    .segment-meta{
+      color:var(--muted);
+      font-size:0.84rem;
+    }
+
+    .density-low{
+      border-color:rgba(124,243,208,0.32);
+      box-shadow:inset 0 0 0 1px rgba(124,243,208,0.08);
+    }
+
+    .density-medium{
+      border-color:rgba(251,191,36,0.28);
+      box-shadow:inset 0 0 0 1px rgba(251,191,36,0.08);
+    }
+
+    .density-high{
+      border-color:rgba(251,113,133,0.32);
+      box-shadow:inset 0 0 0 1px rgba(251,113,133,0.08);
+    }
+
+    .visual-card{
+      padding:26px;
+      display:grid;
+      gap:16px;
+      min-height:620px;
+      box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .visual-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .visual-head h3{
+      font-size:1.25rem;
+      letter-spacing:-0.02em;
+    }
+
+    .visual-head span{
+      color:var(--muted);
+      font-size:0.94rem;
+    }
+
+    .visualization{
+      position:relative;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.1);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size:auto, 28px 28px, 28px 28px;
+      min-height:520px;
+      overflow:hidden;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.04), 0 24px 45px rgba(0,0,0,0.22), 0 0 40px rgba(96,165,250,0.12);
+    }
+
+    #map{
+      display:block;
+      width:100%;
+      height:100%;
+      min-height:520px;
+      touch-action:pan-x pan-y;
+    }
+
+    .map-overlay{
+      position:absolute;
+      left:18px;
+      top:18px;
+      z-index:2;
+      max-width:320px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(7,17,31,0.72);
+      border:1px solid rgba(255,255,255,0.14);
+      backdrop-filter:blur(16px);
+      box-shadow:0 16px 30px rgba(4,16,34,0.22);
+      line-height:1.6;
+      font-size:0.9rem;
+      color:#eff7ff;
+    }
+
+    .map-overlay strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:0.95rem;
+    }
+
+    .leaflet-container{
+      background:#0f2236;
+      font-family:"Inter", sans-serif;
+      -webkit-tap-highlight-color:transparent;
+      border-radius:24px;
+    }
+
+    .placeholder-badges{
+      display:flex;
+      justify-content:flex-start;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    .badge{
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--line);
+      color:#deebf7;
+      font-size:0.84rem;
+      font-weight:600;
+    }
+
+    .legend{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .legend-note{
+      color:var(--muted);
+      font-size:0.92rem;
+      line-height:1.6;
+    }
+
+    .legend-route{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .legend-swatch{
+      width:14px;
+      height:14px;
+      border-radius:999px;
+      display:inline-block;
+    }
+
+    .loading-indicator{
+      display:none;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      color:#e6f0fa;
+      font-size:0.9rem;
+      font-weight:600;
+    }
+
+    .loading-indicator.visible{
+      display:flex;
+    }
+
+    .mobile-tip{
+      color:var(--muted);
+      font-size:0.84rem;
+      line-height:1.55;
+    }
+
+    .location-indicator{
+      display:none;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(52,211,153,0.12);
+      border:1px solid rgba(52,211,153,0.18);
+      color:#dffdf7;
+      font-size:0.84rem;
+      font-weight:600;
+    }
+
+    .location-indicator.visible{
+      display:flex;
+    }
+
+    .floating-alert{
+      position:fixed;
+      right:22px;
+      bottom:22px;
+      z-index:40;
+      max-width:320px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:linear-gradient(135deg, rgba(127,29,29,0.92), rgba(190,24,93,0.88));
+      color:#fff1f2;
+      border:1px solid rgba(251,113,133,0.24);
+      box-shadow:0 20px 45px rgba(136,19,55,0.34);
+      transform:translateY(120%);
+      opacity:0;
+      transition:transform 0.35s ease, opacity 0.35s ease;
+      backdrop-filter:blur(18px);
+    }
+
+    .floating-alert.visible{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .features-section{
+      display:grid;
+      gap:16px;
+    }
+
+    .features-section .section-label{
+      text-align:center;
+    }
+
+    .features-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:16px;
+    }
+
+    .feature-card{
+      padding:20px;
+      border-radius:22px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(20px);
+      box-shadow:var(--glow);
+      display:grid;
+      gap:10px;
+      transition:transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .feature-card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 24px 50px rgba(96,165,250,0.14);
+      border-color:rgba(96,165,250,0.22);
+    }
+
+    .feature-icon{
+      width:48px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      background:linear-gradient(135deg, rgba(96,165,250,0.18), rgba(139,92,246,0.16));
+      border:1px solid rgba(96,165,250,0.18);
+      font-size:1.2rem;
+    }
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip{
+      background:rgba(8,15,28,0.94);
+      color:#eff7ff;
+      border:1px solid rgba(255,255,255,0.12);
+    }
+
+    .leaflet-popup-content{
+      margin:12px 14px;
+      font-family:"Inter", sans-serif;
+      line-height:1.55;
+    }
+
+    .location-pin{
+      display:grid;
+      place-items:center;
+      width:42px;
+      height:42px;
+      border-radius:18px;
+      background:rgba(7,17,31,0.92);
+      color:#eff7ff;
+      font-size:1rem;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,0.14);
+      box-shadow:0 14px 26px rgba(4,16,34,0.28);
+    }
+
+    .location-pin.source{
+      outline:3px solid rgba(124,243,208,0.22);
+    }
+
+    .location-pin.destination{
+      outline:3px solid rgba(96,165,250,0.2);
+    }
+
+    .spinner{
+      width:16px;
+      height:16px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,0.18);
+      border-top-color:#7cf3d0;
+      animation:spin 0.9s linear infinite;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg);}
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media (max-width: 920px){
+      body{
+        padding:calc(16px + env(safe-area-inset-top, 0px)) calc(14px + env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) calc(14px + env(safe-area-inset-left, 0px));
+      }
+
+      .layout{
+        grid-template-columns:1fr;
+      }
+
+      .header,
+      .panel,
+      .visual-card{
+        border-radius:26px;
+      }
+
+      .visual-card{
+        min-height:500px;
+      }
+
+      .visualization{
+        min-height:420px;
+      }
+
+      #map{
+        min-height:420px;
+      }
+
+      .results-grid{
+        grid-template-columns:1fr;
+      }
+
+      .advantage-grid,
+      .status-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .features-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .mode-grid{
+        grid-template-columns:1fr;
+      }
+      .app{
+        gap:18px;
+      }
+    }
+
+    @media (max-width: 640px){
+      .header{
+        padding:24px 20px;
+      }
+
+      .panel,
+      .visual-card{
+        padding:18px;
+      }
+
+      .header h1{
+        font-size:2rem;
+      }
+
+      .panel h2{
+        font-size:1.25rem;
+      }
+
+      .visual-head{
+        align-items:flex-start;
+      }
+
+      button{
+        min-height:52px;
+        padding:14px 15px;
+      }
+
+      .visualization{
+        min-height:56vh;
+      }
+
+      #map{
+        min-height:56vh;
+      }
+
+      .input-actions{
+        grid-template-columns:1fr;
+      }
+
+      .advantage-grid,
+      .status-grid{
+        grid-template-columns:1fr;
+      }
+
+      .features-grid{
+        grid-template-columns:1fr;
+      }
+
+      .legend{
+        align-items:flex-start;
+      }
+
+      .map-overlay{
+        left:12px;
+        top:12px;
+        max-width:calc(100% - 24px);
+        padding:12px 14px;
+      }
+
+      .floating-alert{
+        right:14px;
+        left:14px;
+        bottom:14px;
+        max-width:none;
+      }
+    }
+    /* UI refresh overrides */
+    :root{
+      --bg:#07111f;
+      --bg-soft:#0c1a2b;
+      --card:#0f1c2e;
+      --card-strong:#13243a;
+      --text:#f8fbff;
+      --muted:#9cb0c9;
+      --line:rgba(148, 163, 184, 0.18);
+      --accent:#3b82f6;
+      --accent-2:#22c55e;
+      --white-route:#f8fafc;
+      --shadow:0 20px 50px rgba(0, 0, 0, 0.28);
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --radius-md:14px;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,0.16), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(34,197,94,0.12), transparent 20%),
+        linear-gradient(180deg, #030914 0%, #07111f 42%, #0b1727 100%);
+      padding:32px 18px;
+      display:block;
+    }
+
+    body::before,
+    body::after,
+    .header::before,
+    .header::after{
+      display:none;
+    }
+
+    .app{
+      width:min(1180px, 100%);
+      gap:20px;
+    }
+
+    .header{
+      padding:36px 28px;
+      text-align:left;
+      background:linear-gradient(180deg, rgba(13,27,45,0.96), rgba(9,19,33,0.96));
+      border:1px solid rgba(96,165,250,0.14);
+      box-shadow:var(--shadow);
+    }
+
+    .header-copy{
+      justify-items:start;
+      gap:10px;
+    }
+
+    .header-eyebrow{
+      background:rgba(59,130,246,0.12);
+      color:#dbeafe;
+      border-color:rgba(59,130,246,0.16);
+    }
+
+    .header h1{
+      font-size:clamp(2.4rem, 5vw, 3.7rem);
+      text-shadow:none;
+    }
+
+    .header p{
+      margin-top:0;
+      max-width:760px;
+      color:#c8d7eb;
+      font-size:1rem;
+      line-height:1.7;
+    }
+
+    .header-tagline{
+      color:#ffffff;
+      font-weight:700;
+    }
+
+    .advantage-grid,
+    .features-section{
+      display:none;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:20px;
+    }
+
+    .panel,
+    .visual-card{
+      background:linear-gradient(180deg, rgba(15,28,46,0.98), rgba(11,22,37,0.98));
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      backdrop-filter:none;
+    }
+
+    .panel{
+      padding:24px;
+      gap:18px;
+    }
+
+    .panel h2,
+    .visual-head h3{
+      font-size:1.55rem;
+      letter-spacing:-0.02em;
+    }
+
+    .panel p,
+    .legend-note,
+    .mobile-tip{
+      color:var(--muted);
+    }
+
+    .field-group{
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:16px;
+    }
+
+    .field{
+      gap:10px;
+    }
+
+    .field label{
+      font-size:0.92rem;
+      color:#e5eefb;
+    }
+
+    .field{
+      position:relative;
+    }
+
+    .field input{
+      min-height:58px;
+      padding:16px 18px 16px 48px;
+      border-radius:16px;
+      background-color:var(--card-strong);
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239cb0c9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-6-5.33-6-11a6 6 0 1 1 12 0c0 5.67-6 11-6 11Z'/%3E%3Ccircle cx='12' cy='10' r='2.5'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:16px center;
+      background-size:18px 18px;
+      border:1px solid rgba(148,163,184,0.2);
+      box-shadow:none;
+    }
+
+    .field input::placeholder{
+      color:#8ea4bf;
+    }
+
+    .field input:focus{
+      background-color:#15273d;
+      border-color:rgba(59,130,246,0.9);
+      box-shadow:0 0 0 4px rgba(59,130,246,0.16);
+      transform:none;
+    }
+
+    .mode-grid{
+      gap:12px;
+    }
+
+    .mode-button{
+      padding:16px 12px;
+      border-radius:18px;
+      background:#122237;
+      border:1px solid rgba(148,163,184,0.14);
+    }
+
+    .mode-button.active{
+      background:linear-gradient(180deg, rgba(59,130,246,0.14), rgba(59,130,246,0.06));
+      border-color:rgba(59,130,246,0.45);
+      box-shadow:inset 0 0 0 1px rgba(59,130,246,0.08);
+    }
+
+    .mode-icon{
+      background:rgba(255,255,255,0.06);
+    }
+
+    .input-actions,
+    .actions{
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    .quick-actions{
+      gap:8px;
+    }
+
+    button{
+      min-height:54px;
+      border-radius:16px;
+      font-weight:700;
+    }
+
+    .primary{
+      background:linear-gradient(135deg, #1d4ed8, #3b82f6 55%, #22c55e);
+      box-shadow:0 14px 28px rgba(29,78,216,0.25);
+    }
+
+    .secondary{
+      background:rgba(59,130,246,0.1);
+      border:1px solid rgba(59,130,246,0.18);
+      color:#eff6ff;
+    }
+
+    .ghost{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(148,163,184,0.18);
+    }
+
+    .status{
+      background:rgba(59,130,246,0.08);
+      border:1px solid rgba(59,130,246,0.14);
+      color:#dbeafe;
+      padding:16px 18px;
+    }
+
+    .loading-indicator{
+      margin-top:0;
+    }
+
+    .route-health{
+      border-radius:16px;
+    }
+
+    .safety-status-panel{
+      padding:0;
+      background:transparent;
+      border:none;
+    }
+
+    .status-grid{
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    .status-tile{
+      background:#122237;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.14);
+    }
+
+    .time-mode-pill{
+      background:rgba(34,197,94,0.12);
+      border-color:rgba(34,197,94,0.2);
+      color:#dcfce7;
+    }
+
+    .safety-suggestion{
+      border-radius:16px;
+      font-weight:700;
+    }
+
+    .results-grid{
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:14px;
+    }
+
+    .result-card{
+      opacity:1;
+      animation:none;
+      padding:18px;
+      background:linear-gradient(180deg, rgba(19,36,58,0.96), rgba(14,27,44,0.96));
+      border-radius:18px;
+      box-shadow:none;
+    }
+
+    .result-card::after{
+      display:none;
+    }
+
+    .result-card.safest.active,
+    .result-card.safest{
+      border-color:rgba(34,197,94,0.45);
+    }
+
+    .result-card.fastest.active,
+    .result-card.fastest{
+      border-color:rgba(59,130,246,0.45);
+    }
+
+    .result-card.shortest.active,
+    .result-card.shortest{
+      border-color:rgba(248,250,252,0.34);
+    }
+
+    .route-summary{
+      max-height:none;
+      overflow:visible;
+    }
+
+    .segment-card{
+      opacity:1;
+      animation:none;
+      background:#122237;
+      border-radius:16px;
+    }
+
+    .visual-card{
+      min-height:auto;
+      padding:24px;
+    }
+
+    .visualization{
+      min-height:560px;
+      border-radius:20px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:#0c1a2b;
+      box-shadow:0 16px 40px rgba(0,0,0,0.25);
+    }
+
+    #map{
+      min-height:560px;
+    }
+
+    .leaflet-container{
+      border-radius:20px;
+    }
+
+    .map-overlay{
+      background:rgba(7,17,31,0.88);
+      border-radius:16px;
+    }
+
+    .floating-alert{
+      right:18px;
+      bottom:18px;
+      background:linear-gradient(135deg, rgba(127,29,29,0.96), rgba(185,28,28,0.96));
+    }
+
+    @media (max-width: 900px){
+      .field-group,
+      .results-grid,
+      .status-grid,
+      .input-actions,
+      .actions{
+        grid-template-columns:1fr;
+      }
+
+      .mode-grid{
+        grid-template-columns:1fr;
+      }
+
+      .header{
+        padding:28px 20px;
+      }
+
+      .panel,
+      .visual-card{
+        padding:20px;
+      }
+
+      .visualization,
+      #map{
+        min-height:420px;
+      }
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:18px;
+      position:relative;
+      z-index:2;
+      margin-bottom:18px;
+    }
+
+    .brand-cluster{
+      display:grid;
+      gap:8px;
+    }
+
+    .auth-area{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .auth-button{
+      min-height:48px;
+      padding:12px 18px;
+      border-radius:999px;
+      background:linear-gradient(135deg, rgba(59,130,246,0.18), rgba(34,197,94,0.12));
+      border:1px solid rgba(96,165,250,0.24);
+      color:#eff6ff;
+      box-shadow:0 14px 30px rgba(15,23,42,0.2);
+    }
+
+    .user-chip{
+      display:none;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px 8px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(148,163,184,0.16);
+    }
+
+    .user-chip.visible{
+      display:flex;
+    }
+
+    .user-avatar{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, #1d4ed8, #22c55e);
+      color:#fff;
+      font-size:0.92rem;
+      font-weight:800;
+    }
+
+    .user-meta{
+      display:grid;
+      gap:2px;
+      text-align:left;
+    }
+
+    .user-meta strong{
+      font-size:0.92rem;
+      color:#f8fbff;
+    }
+
+    .user-meta span{
+      font-size:0.76rem;
+      color:var(--muted);
+    }
+
+    .product-stats{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .stat-card{
+      padding:16px 18px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(148,163,184,0.16);
+      display:grid;
+      gap:6px;
+      text-align:left;
+    }
+
+    .stat-card strong{
+      font-size:1.2rem;
+    }
+
+    .planner-grid{
+      display:grid;
+      grid-template-columns:minmax(0, 1.25fr) minmax(320px, 0.9fr);
+      gap:20px;
+      align-items:start;
+    }
+
+    .planner-stack{
+      display:grid;
+      gap:18px;
+    }
+
+    .info-stack{
+      display:grid;
+      gap:18px;
+    }
+
+    .premium-card{
+      padding:20px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(148,163,184,0.14);
+      box-shadow:0 20px 45px rgba(3,7,18,0.18);
+    }
+
+    .status-block{
+      display:grid;
+      gap:14px;
+    }
+
+    .score-ring{
+      display:grid;
+      gap:10px;
+    }
+
+    .score-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .score-progress{
+      width:100%;
+      height:12px;
+      border-radius:999px;
+      background:rgba(148,163,184,0.12);
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,0.12);
+    }
+
+    .score-progress-bar{
+      width:0;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg, #ef4444 0%, #f59e0b 45%, #22c55e 100%);
+      transition:width 0.35s ease;
+    }
+
+    .risk-dots{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .risk-dot{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(148,163,184,0.16);
+      font-size:0.8rem;
+      font-weight:700;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+    }
+
+    .dot.safe{ background:#22c55e; }
+    .dot.medium{ background:#f59e0b; }
+    .dot.high{ background:#ef4444; }
+
+    .breakdown-grid{
+      display:grid;
+      gap:10px;
+    }
+
+    .breakdown-item{
+      display:grid;
+      gap:8px;
+    }
+
+    .breakdown-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:0.9rem;
+      color:#dbeafe;
+    }
+
+    .mini-progress{
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(148,163,184,0.14);
+    }
+
+    .mini-progress span{
+      display:block;
+      height:100%;
+      border-radius:inherit;
+      width:0;
+      transition:width 0.3s ease;
+    }
+
+    .alert-card{
+      display:grid;
+      gap:8px;
+      padding:16px 18px;
+      border-radius:18px;
+      border:1px solid rgba(239,68,68,0.25);
+      background:linear-gradient(180deg, rgba(127,29,29,0.25), rgba(69,10,10,0.14));
+      color:#fee2e2;
+    }
+
+    .alert-card strong{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:0.96rem;
+    }
+
+    .panel-actions{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    .insight-button{
+      min-height:48px;
+    }
+
+    .utility-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .utility-card{
+      display:grid;
+      gap:14px;
+    }
+
+    .utility-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .utility-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .utility-item{
+      width:100%;
+      padding:14px;
+      border-radius:16px;
+      background:#122237;
+      border:1px solid rgba(148,163,184,0.14);
+      color:#eff6ff;
+      text-align:left;
+      display:grid;
+      gap:6px;
+    }
+
+    .utility-item small{
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .empty-state{
+      padding:18px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.04);
+      border:1px dashed rgba(148,163,184,0.22);
+      color:var(--muted);
+      text-align:center;
+      line-height:1.6;
+    }
+
+    .results-shell{
+      display:grid;
+      gap:18px;
+    }
+
+    .result-card{
+      transform-origin:center;
+    }
+
+    .result-card.safest.active{
+      transform:scale(1.03);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .result-card.safest.active::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:inherit;
+      border:1px solid rgba(34,197,94,0.6);
+      box-shadow:0 0 0 1px rgba(34,197,94,0.2), 0 0 26px rgba(34,197,94,0.2);
+      animation:pulseBorder 1.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+
+    .result-meta-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .result-meta{
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(148,163,184,0.1);
+    }
+
+    .result-meta span{
+      display:block;
+      color:var(--muted);
+      font-size:0.74rem;
+      margin-bottom:4px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+    }
+
+    .bookmark-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .map-toolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .layer-toggles{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .toggle-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(255,255,255,0.05);
+      color:#eff6ff;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .toggle-chip input{
+      accent-color:#22c55e;
+    }
+
+    .overlay-legend{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:0.84rem;
+    }
+
+    .fade-in{
+      animation:fadeSection 0.55s ease both;
+    }
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,0.72);
+      backdrop-filter:blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:60;
+    }
+
+    .modal-backdrop.visible{
+      display:flex;
+    }
+
+    .modal{
+      width:min(480px, 100%);
+      padding:24px;
+      border-radius:24px;
+      background:linear-gradient(180deg, #101c2d, #0a1422);
+      border:1px solid rgba(148,163,184,0.16);
+      box-shadow:0 30px 60px rgba(0,0,0,0.34);
+      display:grid;
+      gap:18px;
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .modal-close{
+      min-height:42px;
+      width:42px;
+      padding:0;
+      border-radius:50%;
+    }
+
+    .auth-form{
+      display:grid;
+      gap:12px;
+    }
+
+    .auth-form input{
+      width:100%;
+      min-height:52px;
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,0.18);
+      background:#122237;
+      padding:14px 16px;
+      color:#eff6ff;
+      font:inherit;
+    }
+
+    .auth-form input:focus{
+      outline:none;
+      border-color:rgba(96,165,250,0.7);
+      box-shadow:0 0 0 3px rgba(96,165,250,0.14);
+    }
+
+    .auth-tabs{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:10px;
+      padding:6px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(148,163,184,0.14);
+    }
+
+    .auth-tab{
+      min-height:46px;
+      border:none;
+      border-radius:14px;
+      background:transparent;
+      color:#dbeafe;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:background 0.22s ease, color 0.22s ease, transform 0.22s ease;
+    }
+
+    .auth-tab.active{
+      background:linear-gradient(135deg, rgba(96,165,250,0.22), rgba(34,211,238,0.16));
+      color:#f8fbff;
+      box-shadow:0 10px 24px rgba(15,23,42,0.18);
+    }
+
+    .auth-panel{
+      display:none;
+      gap:12px;
+    }
+
+    .auth-panel.active{
+      display:grid;
+    }
+
+    .auth-panel-copy{
+      color:var(--muted);
+      font-size:0.9rem;
+      line-height:1.6;
+    }
+
+    .auth-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .auth-actions button{
+      flex:1 1 180px;
+    }
+
+    .auth-message{
+      display:none;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,0.16);
+      font-size:0.9rem;
+      line-height:1.55;
+    }
+
+    .auth-message.visible{
+      display:block;
+    }
+
+    .auth-message.error{
+      background:rgba(127,29,29,0.28);
+      border-color:rgba(251,113,133,0.3);
+      color:#ffe4e6;
+    }
+
+    .auth-message.success{
+      background:rgba(6,95,70,0.28);
+      border-color:rgba(52,211,153,0.3);
+      color:#dcfce7;
+    }
+
+    .auth-helper{
+      color:var(--muted);
+      font-size:0.84rem;
+      line-height:1.55;
+    }
+
+    .auth-account-card{
+      display:none;
+      gap:12px;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(148,163,184,0.16);
+    }
+
+    .auth-account-card.visible{
+      display:grid;
+    }
+
+    .auth-account-card strong{
+      font-size:1rem;
+      color:#f8fbff;
+    }
+
+    .auth-account-card span{
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+
+    .auth-divider{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:var(--muted);
+      font-size:0.84rem;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after{
+      content:"";
+      height:1px;
+      flex:1;
+      background:rgba(148,163,184,0.18);
+    }
+
+    .auth-google{
+      background:#fff;
+      color:#0f172a;
+    }
+
+    .preferences-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      font-size:0.92rem;
+      color:#dbeafe;
+    }
+
+    .switch{
+      position:relative;
+      width:56px;
+      height:32px;
+      display:inline-flex;
+      align-items:center;
+    }
+
+    .switch input{
+      opacity:0;
+      width:0;
+      height:0;
+    }
+
+    .slider{
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background:rgba(148,163,184,0.25);
+      transition:background 0.24s ease;
+    }
+
+    .slider::before{
+      content:"";
+      position:absolute;
+      width:24px;
+      height:24px;
+      left:4px;
+      top:4px;
+      border-radius:50%;
+      background:#fff;
+      transition:transform 0.24s ease;
+    }
+
+    .switch input:checked + .slider{
+      background:linear-gradient(135deg, #1d4ed8, #22c55e);
+    }
+
+    .switch input:checked + .slider::before{
+      transform:translateX(24px);
+    }
+
+    @keyframes pulseBorder{
+      0%, 100%{ opacity:0.7; }
+      50%{ opacity:1; }
+    }
+
+    @keyframes fadeSection{
+      from{
+        opacity:0;
+        transform:translateY(16px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media (max-width: 1100px){
+      .planner-grid,
+      .utility-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 900px){
+      .topbar,
+      .map-toolbar,
+      .auth-area{
+        align-items:stretch;
+      }
+
+      .topbar,
+      .map-toolbar{
+        flex-direction:column;
+      }
+
+      .product-stats,
+      .panel-actions,
+      .result-meta-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="topbar">
+        <div class="brand-cluster">
+          <div class="header-eyebrow">Safety Navigation Application</div>
+        </div>
+        <div class="auth-area">
+          <div class="user-chip" id="userChip">
+            <div class="user-avatar" id="userAvatar">ES</div>
+            <div class="user-meta">
+              <strong id="userName">Guest User</strong>
+              <span id="userStatus">Secure mode available</span>
+            </div>
+          </div>
+          <button class="auth-button" id="authTrigger" type="button">Sign In / Sign Up</button>
+        </div>
+      </div>
+      <div class="header-copy">
+        <h1>&#128737;&#65039; Esuraksha</h1>
+        <p>
+          Plan safer journeys in seconds with clear route choices, safety insights, and a map built for quick decisions.
+        </p>
+        <div class="header-tagline">Your Safety, Our Priority</div>
+      </div>
+      <div class="advantage-grid product-stats">
+        <article class="advantage-card">
+          <div class="advantage-icon">&#128737;&#65039;</div>
+          <strong>AI-ranked route safety</strong>
+          <span>Crime, crowd, and time signals combine into one premium safety recommendation.</span>
+        </article>
+        <article class="advantage-card">
+          <div class="advantage-icon">&#11088;</div>
+          <strong>Saved routes and recents</strong>
+          <span>Signed-in users can reuse trusted journeys in seconds from recent and saved cards.</span>
+        </article>
+        <article class="advantage-card">
+          <div class="advantage-icon">&#128293;</div>
+          <strong>Overlay awareness</strong>
+          <span>Crime and crowd layers add visual context directly on the map before you travel.</span>
+        </article>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <div>
+          <div class="section-label">Route Planner</div>
+          <h2>Choose your source and destination</h2>
+          <p>Enter locations, select a travel mode, and compare the safest, fastest, and shortest routes.</p>
+        </div>
+
+        <div class="field-group">
+          <div class="field">
+            <label for="sourceNode">📍 Enter Source Location</label>
+            <input id="sourceNode" type="text" placeholder="Enter source location">
+            <div class="autocomplete-list" id="sourceSuggestions"></div>
+          </div>
+
+          <div class="field">
+            <label for="destinationNode">📍 Enter Destination</label>
+            <input id="destinationNode" type="text" placeholder="Enter destination">
+            <div class="autocomplete-list" id="destinationSuggestions"></div>
+          </div>
+        </div>
+
+        <div class="mode-selector">
+          <div class="section-label">Travel Mode</div>
+          <div class="mode-grid" id="modeSelector">
+            <button class="mode-button active" type="button" data-transport="car">
+              <span class="mode-icon">CAR</span>
+              <span>Car</span>
+              <span class="mode-meta">Balanced road travel</span>
+            </button>
+            <button class="mode-button" type="button" data-transport="twoWheeler">
+              <span class="mode-icon">2W</span>
+              <span>Two-Wheeler</span>
+              <span class="mode-meta">Useful in dense traffic</span>
+            </button>
+            <button class="mode-button" type="button" data-transport="walking">
+              <span class="mode-icon">W</span>
+              <span>Walking</span>
+              <span class="mode-meta">Pedestrian-friendly routes</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="input-actions">
+          <button class="secondary" id="setSourceBtn">Set Source</button>
+          <button class="secondary" id="setDestinationBtn">Set Destination</button>
+        </div>
+
+        <div class="quick-actions">
+          <button class="ghost" id="useCurrentLocationBtn">📍 Use My Location</button>
+          <div class="mobile-tip">You can also tap the map to set source and destination points quickly.</div>
+          <div class="location-indicator" id="locationIndicator">Using current location</div>
+        </div>
+
+        <div class="actions">
+          <button class="secondary" id="shortestRouteBtn">&#9898; Shortest Route</button>
+          <button class="primary" id="safestRouteBtn">&#128737;&#65039; Find Safest Route</button>
+          <button class="secondary" id="fastestRouteBtn">&#128309; Fastest Route</button>
+          <button class="ghost" id="resetView">Reset</button>
+        </div>
+
+        <div class="status" id="statusText">
+          Waiting for input. Add a source and destination to begin.
+        </div>
+
+        <div class="loading-indicator" id="loadingIndicator">
+          <div class="spinner"></div>
+          <span id="loadingText">Looking up location...</span>
+        </div>
+
+        <div class="route-health green" id="routeHealth">
+          Route status will appear here after route analysis.
+        </div>
+
+        <div class="safety-status-panel">
+          <div class="section-label">Safety Information</div>
+          <div class="time-mode-pill" id="timeModeBadge">Day Mode</div>
+          <div class="score-ring">
+            <div class="score-head">
+              <div>
+                <div class="section-label">Safety Score</div>
+                <strong id="safetyScoreValue">--</strong>
+              </div>
+              <div class="risk-dots">
+                <span class="risk-dot"><span class="dot safe"></span>Safe</span>
+                <span class="risk-dot"><span class="dot medium"></span>Medium</span>
+                <span class="risk-dot"><span class="dot high"></span>High</span>
+              </div>
+            </div>
+            <div class="score-progress">
+              <div class="score-progress-bar" id="safetyScoreBar"></div>
+            </div>
+          </div>
+          <div class="status-grid">
+            <div class="status-tile">
+              <span>Risk Level</span>
+              <strong id="areaSafetyValue">Waiting</strong>
+            </div>
+            <div class="status-tile">
+              <span>Crowd Level</span>
+              <strong id="crowdLevelValue">--</strong>
+            </div>
+            <div class="status-tile">
+              <span>Safety Focus</span>
+              <strong id="protectionFocusValue">Active</strong>
+            </div>
+            <div class="status-tile">
+              <span>Route Status</span>
+              <strong id="routeRiskLabel">Standby</strong>
+            </div>
+          </div>
+          <div class="breakdown-grid">
+            <div class="breakdown-item">
+              <div class="breakdown-row"><span>Crime Risk</span><strong id="crimeRiskValue">--</strong></div>
+              <div class="mini-progress"><span id="crimeRiskBar" style="background:#ef4444;"></span></div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-row"><span>Crowd Density</span><strong id="crowdRiskValue">--</strong></div>
+              <div class="mini-progress"><span id="crowdRiskBar" style="background:#f59e0b;"></span></div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-row"><span>Time Risk</span><strong id="timeRiskValue">--</strong></div>
+              <div class="mini-progress"><span id="timeRiskBar" style="background:#3b82f6;"></span></div>
+            </div>
+          </div>
+          <div class="alert-card" id="alertCard">
+            <strong>&#9888;&#65039; High Risk Area Detection</strong>
+            <span id="alertReason">Reason: Low lighting, crime history, and low crowd support indicators will appear here when needed.</span>
+          </div>
+          <div class="safety-suggestion safe" id="safetySuggestion">We prioritize your safety over shortest distance.</div>
+          <div class="panel-actions">
+            <button class="secondary insight-button" id="whyRouteBtn" type="button">Why this route?</button>
+            <button class="ghost insight-button" id="saveRouteBtn" type="button">Save current route</button>
+          </div>
+        </div>
+
+        <div class="results-overview">
+          <div class="section-label">Route Results</div>
+          <div class="results-grid" id="comparisonGrid">
+            <div class="result-card">
+              <div class="result-title">Waiting for routes</div>
+              <div class="result-line">Safest, fastest, and shortest route cards will appear here after analysis.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-summary" id="routeSummary">
+          <div class="segment-card">
+            <strong>Route details</strong>
+            <div class="segment-meta">Distance, time, safety, and road details will appear here after route analysis.</div>
+          </div>
+        </div>
+
+        <div class="utility-grid">
+          <section class="premium-card utility-card fade-in">
+            <div class="utility-head">
+              <div>
+                <div class="section-label">Recent Searches</div>
+                <strong>Reuse previous trips</strong>
+              </div>
+            </div>
+            <div class="utility-list" id="recentSearchesList">
+              <div class="empty-state">Your recent searches will appear here after route analysis.</div>
+            </div>
+          </section>
+
+          <section class="premium-card utility-card fade-in">
+            <div class="utility-head">
+              <div>
+                <div class="section-label">Saved Routes</div>
+                <strong>Bookmark trusted journeys</strong>
+              </div>
+            </div>
+            <div class="utility-list" id="savedRoutesList">
+              <div class="empty-state">Sign in and save routes for one-tap access later.</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="visual-card">
+        <div class="visual-head">
+          <div>
+            <div class="section-label">Map Display</div>
+            <h3>Live safety route map</h3>
+          </div>
+          <span id="visualHint">Select locations to begin</span>
+        </div>
+
+        <div class="map-toolbar">
+          <div class="layer-toggles">
+            <label class="toggle-chip">
+              <input id="crimeLayerToggle" type="checkbox">
+              <span>&#128293; Crime Heatmap</span>
+            </label>
+            <label class="toggle-chip">
+              <input id="crowdLayerToggle" type="checkbox">
+              <span>&#128101; Crowd Density</span>
+            </label>
+          </div>
+          <div class="overlay-legend">
+            <span><span class="dot high"></span> Dangerous zones</span>
+            <span><span class="dot safe"></span> Safer zones</span>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="placeholder-badges">
+            <span class="badge legend-route"><span class="legend-swatch" style="background:#22c55e;"></span>Safest Route</span>
+            <span class="badge legend-route"><span class="legend-swatch" style="background:#3b82f6;"></span>Fastest Route</span>
+            <span class="badge legend-route"><span class="legend-swatch" style="background:#f8fafc;"></span>Shortest Route</span>
+            <span class="badge">Selected points</span>
+          </div>
+          <div class="legend-note">Click the map or search by place name to choose your trip points.</div>
+        </div>
+
+        <div class="visualization" id="graphArea">
+          <div class="map-overlay" id="mapOverlay">
+            <strong>Map selection mode</strong>
+            Click once to set the source point, then click again to set the destination point.
+          </div>
+          <div id="map"></div>
+        </div>
+      </section>
+    </main>
+
+    <section class="features-section">
+      <div class="section-label">Why Esuraksha</div>
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-icon">&#128737;&#65039;</div>
+          <strong>Safety First</strong>
+          <p>Each route is scored for safety before distance is considered.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">&#127769;</div>
+          <strong>Night Protection</strong>
+          <p>Night mode increases route caution when streets become quieter or riskier.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">&#128205;</div>
+          <strong>Live Location</strong>
+          <p>Use your current location instantly for faster emergency navigation.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">&#128101;</div>
+          <strong>Crowd Awareness</strong>
+          <p>Crowd density helps avoid isolated stretches and support safer travel.</p>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <div class="floating-alert" id="floatingAlert">&#9888;&#65039; This route may not be safe at night</div>
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div class="section-label">Secure Access</div>
+          <h3>Login and register with OTP</h3>
+          <p>Verify with a one-time password before entering your E-SURAKSHA account.</p>
+        </div>
+        <button class="ghost modal-close" id="closeAuthModal" type="button">&times;</button>
+      </div>
+
+      <div class="auth-account-card" id="authAccountCard">
+        <strong id="authAccountName">Signed in</strong>
+        <span id="authAccountMeta">Your account is verified with OTP.</span>
+        <button class="ghost" id="logoutBtn" type="button">Logout</button>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth-view="login" type="button">Login</button>
+        <button class="auth-tab" data-auth-view="register" type="button">Register</button>
+      </div>
+
+      <div class="auth-message" id="authMessage"></div>
+
+      <section class="auth-panel active" id="loginPanel">
+        <p class="auth-panel-copy">Enter your 10-digit phone number or your saved user ID. OTP will be sent to your registered phone number.</p>
+        <form class="auth-form" id="loginRequestForm">
+          <input id="loginIdentifier" type="text" placeholder="Phone number or User ID" required>
+          <button class="primary" id="loginSendOtpBtn" type="submit">Send Login OTP</button>
+        </form>
+        <form class="auth-form" id="loginVerifyForm" style="display:none;">
+          <input id="loginOtp" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP" required>
+          <div class="auth-actions">
+            <button class="primary" id="loginVerifyBtn" type="submit">Verify and Login</button>
+            <button class="ghost" id="loginBackBtn" type="button">Request New OTP</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="auth-panel" id="registerPanel">
+        <p class="auth-panel-copy">Create your account with name, user ID, and 10-digit phone number. Registration completes only after correct OTP verification.</p>
+        <form class="auth-form" id="registerRequestForm">
+          <input id="registerName" type="text" placeholder="Full name" required>
+          <input id="registerUserId" type="text" placeholder="Choose a User ID" required>
+          <input id="registerPhone" type="text" inputmode="numeric" maxlength="10" placeholder="10-digit phone number" required>
+          <button class="primary" id="registerSendOtpBtn" type="submit">Send Registration OTP</button>
+        </form>
+        <form class="auth-form" id="registerVerifyForm" style="display:none;">
+          <input id="registerOtp" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP" required>
+          <div class="auth-actions">
+            <button class="primary" id="registerVerifyBtn" type="submit">Verify and Register</button>
+            <button class="ghost" id="registerBackBtn" type="button">Request New OTP</button>
+          </div>
+        </form>
+      </section>
+
+      <div class="auth-helper">Demo mode: OTP is printed in the backend console for testing. Later, connect a real SMS provider inside <code>server.py</code>.</div>
+
+      <div class="preferences-row">
+        <span>Remember my night mode preference</span>
+        <label class="switch">
+          <input id="nightModePreference" type="checkbox">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="whyRouteModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div class="section-label">Route Reasoning</div>
+          <h3>Why this route?</h3>
+          <p id="whyRouteSummary">We explain how crime, crowd density, and time influenced the recommendation.</p>
+        </div>
+        <button class="ghost modal-close" id="closeWhyRouteModal" type="button">×</button>
+      </div>
+      <div class="breakdown-grid" id="whyRouteDetails"></div>
+    </div>
+  </div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script>
+    
+    const sourceNode = document.getElementById('sourceNode');
+    const destinationNode = document.getElementById('destinationNode');
+    const sourceSuggestions = document.getElementById('sourceSuggestions');
+    const destinationSuggestions = document.getElementById('destinationSuggestions');
+    const statusText = document.getElementById('statusText');
+    const visualHint = document.getElementById('visualHint');
+    const mapOverlay = document.getElementById('mapOverlay');
+    const routeHealth = document.getElementById('routeHealth');
+    const routeSummary = document.getElementById('routeSummary');
+    const comparisonGrid = document.getElementById('comparisonGrid');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const loadingText = document.getElementById('loadingText');
+    const modeSelector = document.getElementById('modeSelector');
+    const useCurrentLocationBtn = document.getElementById('useCurrentLocationBtn');
+    const locationIndicator = document.getElementById('locationIndicator');
+    const timeModeBadge = document.getElementById('timeModeBadge');
+    const safetyScoreValue = document.getElementById('safetyScoreValue');
+    const areaSafetyValue = document.getElementById('areaSafetyValue');
+    const crowdLevelValue = document.getElementById('crowdLevelValue');
+    const protectionFocusValue = document.getElementById('protectionFocusValue');
+    const safetySuggestion = document.getElementById('safetySuggestion');
+    const floatingAlert = document.getElementById('floatingAlert');
+    const authTrigger = document.getElementById('authTrigger');
+    const authModal = document.getElementById('authModal');
+    const closeAuthModal = document.getElementById('closeAuthModal');
+    const authTabs = Array.from(document.querySelectorAll('[data-auth-view]'));
+    const authMessage = document.getElementById('authMessage');
+    const authAccountCard = document.getElementById('authAccountCard');
+    const authAccountName = document.getElementById('authAccountName');
+    const authAccountMeta = document.getElementById('authAccountMeta');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginPanel = document.getElementById('loginPanel');
+    const registerPanel = document.getElementById('registerPanel');
+    const loginRequestForm = document.getElementById('loginRequestForm');
+    const loginVerifyForm = document.getElementById('loginVerifyForm');
+    const registerRequestForm = document.getElementById('registerRequestForm');
+    const registerVerifyForm = document.getElementById('registerVerifyForm');
+    const loginIdentifier = document.getElementById('loginIdentifier');
+    const loginOtp = document.getElementById('loginOtp');
+    const registerName = document.getElementById('registerName');
+    const registerUserId = document.getElementById('registerUserId');
+    const registerPhone = document.getElementById('registerPhone');
+    const registerOtp = document.getElementById('registerOtp');
+    const loginBackBtn = document.getElementById('loginBackBtn');
+    const registerBackBtn = document.getElementById('registerBackBtn');
+    const userChip = document.getElementById('userChip');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const userStatus = document.getElementById('userStatus');
+    const nightModePreference = document.getElementById('nightModePreference');
+    const recentSearchesList = document.getElementById('recentSearchesList');
+    const savedRoutesList = document.getElementById('savedRoutesList');
+    const whyRouteBtn = document.getElementById('whyRouteBtn');
+    const saveRouteBtn = document.getElementById('saveRouteBtn');
+    const whyRouteModal = document.getElementById('whyRouteModal');
+    const closeWhyRouteModal = document.getElementById('closeWhyRouteModal');
+    const whyRouteSummary = document.getElementById('whyRouteSummary');
+    const whyRouteDetails = document.getElementById('whyRouteDetails');
+    const safetyScoreBar = document.getElementById('safetyScoreBar');
+    const crimeRiskValue = document.getElementById('crimeRiskValue');
+    const crowdRiskValue = document.getElementById('crowdRiskValue');
+    const timeRiskValue = document.getElementById('timeRiskValue');
+    const crimeRiskBar = document.getElementById('crimeRiskBar');
+    const crowdRiskBar = document.getElementById('crowdRiskBar');
+    const timeRiskBar = document.getElementById('timeRiskBar');
+    const alertCard = document.getElementById('alertCard');
+    const alertReason = document.getElementById('alertReason');
+    const routeRiskLabel = document.getElementById('routeRiskLabel');
+    const crimeLayerToggle = document.getElementById('crimeLayerToggle');
+    const crowdLayerToggle = document.getElementById('crowdLayerToggle');
+    const sourceLabelNode = document.querySelector('label[for="sourceNode"]');
+    const destinationLabelNode = document.querySelector('label[for="destinationNode"]');
+    const API_BASE_URL = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+      ? 'http://127.0.0.1:5000'
+      : 'https://your-render-backend-url.onrender.com';
+    let currentAuthView = 'login';
+    let authFlowState = {
+      login: {
+        otpRequestId: '',
+        maskedPhoneNumber: ''
+      },
+      register: {
+        otpRequestId: '',
+        maskedPhoneNumber: ''
+      }
+    };
+
+    if (sourceLabelNode) sourceLabelNode.textContent = 'Source';
+    if (destinationLabelNode) destinationLabelNode.textContent = 'Destination';
+    if (useCurrentLocationBtn) useCurrentLocationBtn.textContent = '📍 Use My Location';
+
+    if (useCurrentLocationBtn) useCurrentLocationBtn.textContent = '\u{1F4CD} Use My Location';
+
+    const STORAGE_KEY = 'esuraksha-app-state-v1';
+    const defaultAppState = {
+      user: null,
+      recentSearches: [],
+      savedRoutes: [],
+      preferences: {
+        preferNightMode: false
+      }
+    };
+
+    function normalizeUserRecord(user) {
+      if (!user || typeof user !== 'object') {
+        return null;
+      }
+
+      const cleanName = String(user.name || user.fullName || '').trim();
+      const cleanUserId = String(user.userId || '').trim();
+      const cleanPhoneNumber = sanitizeDigits(user.phoneNumber || '');
+
+      return {
+        id: String(user.id || '').trim(),
+        name: cleanName || 'Esuraksha User',
+        userId: cleanUserId || '',
+        phoneNumber: cleanPhoneNumber || '',
+        provider: 'otp'
+      };
+    }
+
+    function loadAppState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        return {
+          ...defaultAppState,
+          ...(parsed || {}),
+          user: normalizeUserRecord((parsed || {}).user),
+          preferences: {
+            ...defaultAppState.preferences,
+            ...((parsed || {}).preferences || {})
+          }
+        };
+      } catch (error) {
+        return { ...defaultAppState };
+      }
+    }
+
+    function persistAppState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    }
+
+    function sanitizeDigits(value) {
+      return String(value || '').replace(/\D/g, '');
+    }
+
+    function isValidPhoneNumber(phoneNumber) {
+      return /^\d{10}$/.test(phoneNumber);
+    }
+
+    function maskPhoneNumber(phoneNumber) {
+      if (!isValidPhoneNumber(phoneNumber)) {
+        return '';
+      }
+      return `${phoneNumber.slice(0, 2)}******${phoneNumber.slice(-2)}`;
+    }
+
+    function resetAuthFlow(mode) {
+      authFlowState[mode] = {
+        otpRequestId: '',
+        maskedPhoneNumber: ''
+      };
+
+      if (mode === 'login') {
+        loginOtp.value = '';
+      } else {
+        registerOtp.value = '';
+      }
+    }
+
+    function setAuthMessage(message, type = 'error') {
+      authMessage.textContent = message;
+      authMessage.className = `auth-message visible ${type}`;
+    }
+
+    function clearAuthMessage() {
+      authMessage.textContent = '';
+      authMessage.className = 'auth-message';
+    }
+
+    function updateAuthPanels() {
+      loginPanel.classList.toggle('active', currentAuthView === 'login');
+      registerPanel.classList.toggle('active', currentAuthView === 'register');
+      authTabs.forEach((button) => {
+        button.classList.toggle('active', button.dataset.authView === currentAuthView);
+      });
+
+      loginVerifyForm.style.display = authFlowState.login.otpRequestId ? 'grid' : 'none';
+      registerVerifyForm.style.display = authFlowState.register.otpRequestId ? 'grid' : 'none';
+      loginRequestForm.style.display = authFlowState.login.otpRequestId ? 'none' : 'grid';
+      registerRequestForm.style.display = authFlowState.register.otpRequestId ? 'none' : 'grid';
+    }
+
+    function switchAuthView(view) {
+      currentAuthView = view === 'register' ? 'register' : 'login';
+      clearAuthMessage();
+      updateAuthPanels();
+    }
+
+    function openAuthModal(view = currentAuthView) {
+      switchAuthView(view);
+      setModalVisibility(authModal, true);
+    }
+
+    function closeAuthAndResetMessage() {
+      clearAuthMessage();
+      setModalVisibility(authModal, false);
+    }
+
+    async function postJson(path, payload) {
+      let response;
+      console.log('OTP request ->', `${API_BASE_URL}${path}`, payload);
+
+      try {
+        response = await fetch(`${API_BASE_URL}${path}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        console.error('OTP fetch failed:', error);
+        throw new Error(`Cannot connect to OTP backend at ${API_BASE_URL}. Start the backend server and try again.`);
+      }
+
+      const rawText = await response.text();
+      let data = {};
+
+      if (rawText.trim()) {
+        try {
+          data = JSON.parse(rawText);
+        } catch (error) {
+          console.error('OTP backend non-JSON response:', rawText);
+          throw new Error(`Backend returned non-JSON response (${response.status}). Check that the frontend URL matches the OTP backend route.`);
+        }
+      }
+
+      console.log('OTP response <-', response.status, data);
+
+      if (!response.ok) {
+        throw new Error(data.message || `OTP request failed with status ${response.status}.`);
+      }
+
+      return data;
+    }
+
+    async function handleRegisterOtpRequest(event) {
+      event.preventDefault();
+      clearAuthMessage();
+
+      const fullName = registerName.value.trim();
+      const userId = registerUserId.value.trim();
+      const phoneNumber = sanitizeDigits(registerPhone.value);
+      registerPhone.value = phoneNumber;
+
+      if (!fullName) {
+        setAuthMessage('Full name is required.');
+        return;
+      }
+
+      if (userId.length < 4) {
+        setAuthMessage('User ID must be at least 4 characters.');
+        return;
+      }
+
+      if (!isValidPhoneNumber(phoneNumber)) {
+        setAuthMessage('Phone number must be exactly 10 digits.');
+        return;
+      }
+
+      console.log('Registration phone ->', phoneNumber);
+
+      try {
+        const result = await postJson('/send-register-otp', {
+          name: fullName,
+          userId,
+          phone: phoneNumber
+        });
+
+        console.log('Registration OTP response data ->', result);
+        const displayPhone = result.maskedPhoneNumber || maskPhoneNumber(phoneNumber);
+        authFlowState.register.otpRequestId = result.otpRequestId || '';
+        authFlowState.register.maskedPhoneNumber = displayPhone;
+        updateAuthPanels();
+        setAuthMessage(`OTP sent for registration. Demo OTP is printed in the backend console for ${displayPhone}.`, 'success');
+      } catch (error) {
+        setAuthMessage(error.message);
+      }
+    }
+
+    async function handleLoginOtpRequest(event) {
+      event.preventDefault();
+      clearAuthMessage();
+
+      const identifier = loginIdentifier.value.trim();
+
+      if (!identifier) {
+        setAuthMessage('Phone number or user ID is required.');
+        return;
+      }
+
+      if (/^\d+$/.test(identifier) && !isValidPhoneNumber(sanitizeDigits(identifier))) {
+        setAuthMessage('Phone number must be exactly 10 digits.');
+        return;
+      }
+
+      try {
+        const result = await postJson('/send-login-otp', {
+          identifier
+        });
+
+        authFlowState.login.otpRequestId = result.otpRequestId;
+        authFlowState.login.maskedPhoneNumber = result.maskedPhoneNumber;
+        updateAuthPanels();
+        setAuthMessage(`OTP sent for login. Demo OTP is printed in the backend console for ${result.maskedPhoneNumber}.`, 'success');
+      } catch (error) {
+        setAuthMessage(error.message);
+      }
+    }
+
+    async function verifyOtp(mode, otpValue) {
+      const cleanOtp = sanitizeDigits(otpValue);
+
+      if (!/^\d{6}$/.test(cleanOtp)) {
+        setAuthMessage('Please enter a valid 6-digit OTP.');
+        return;
+      }
+
+      try {
+        const endpoint = mode === 'login' ? '/verify-login-otp' : '/verify-register-otp';
+        const result = await postJson(endpoint, {
+          otpRequestId: authFlowState[mode].otpRequestId,
+          otp: cleanOtp
+        });
+
+        appState.user = normalizeUserRecord(result.user);
+        appState.preferences.preferNightMode = nightModePreference.checked;
+        persistAppState();
+        updateUserInterface();
+        resetAuthFlow('login');
+        resetAuthFlow('register');
+        updateAuthPanels();
+        statusText.textContent = mode === 'register'
+          ? 'Registration successful. Your account is now verified with OTP.'
+          : 'Login successful. Your account is now verified with OTP.';
+        setAuthMessage(result.message, 'success');
+        window.setTimeout(() => {
+          closeAuthAndResetMessage();
+        }, 900);
+      } catch (error) {
+        const isExpired = error.message.toLowerCase().includes('expired');
+        setAuthMessage(error.message);
+        if (isExpired) {
+          resetAuthFlow(mode);
+          updateAuthPanels();
+        }
+      }
+    }
+
+    let appState = loadAppState();
+    let currentSelectedProfile = null;
+    let currentComparisons = null;
+    let routeInsightPayload = null;
+    let crimeLayerGroup = null;
+    let crowdLayerGroup = null;
+
+    const routeConfigs = {
+      shortest: { title: 'Shortest Route', color: '#f8fafc', description: 'Best when you want the most direct road path.' },
+      safest: { title: 'Safest Route', color: '#22c55e', description: 'Highlighted for better safety based on crime and crowd signals.' },
+      fastest: { title: 'Fastest Route', color: '#3b82f6', description: 'Best when you want to reduce travel time with balanced safety.' }
+    };
+
+    const transportConfigs = {
+      car: {
+        label: 'Car',
+        icon: 'CAR',
+        osrmProfile: 'driving',
+        durationFactor: 1,
+        trafficFactor: 1,
+        riskFactor: 1
+      },
+      twoWheeler: {
+        label: 'Two-Wheeler',
+        icon: '2W',
+        osrmProfile: 'driving',
+        durationFactor: 0.84,
+        trafficFactor: 0.72,
+        riskFactor: 0.9
+      },
+      walking: {
+        label: 'Walking',
+        icon: 'W',
+        osrmProfile: 'foot',
+        durationFactor: 1,
+        trafficFactor: 0.25,
+        riskFactor: 0.7
+      }
+    };
+
+    const historicalTrafficDataset = [
+      { keyword: 'market', averageDensity: 'High', multiplier: 2.0, riskBoost: 0.16 },
+      { keyword: 'school', averageDensity: 'High', multiplier: 1.9, riskBoost: 0.12 },
+      { keyword: 'junction', averageDensity: 'Medium', multiplier: 1.55, riskBoost: 0.2 },
+      { keyword: 'station', averageDensity: 'Medium', multiplier: 1.45, riskBoost: 0.08 },
+      { keyword: 'police', averageDensity: 'Medium', multiplier: 1.35, riskBoost: 0.04 },
+      { keyword: 'hospital', averageDensity: 'Medium', multiplier: 1.4, riskBoost: 0.03 },
+      { keyword: 'fire', averageDensity: 'Low', multiplier: 1.1, riskBoost: 0.02 },
+      { keyword: 'bypass', averageDensity: 'Low', multiplier: 1.05, riskBoost: 0.01 },
+      { keyword: 'ring', averageDensity: 'Low', multiplier: 1.1, riskBoost: 0.03 },
+      { keyword: 'highway', averageDensity: 'Medium', multiplier: 1.4, riskBoost: 0.08 },
+      { keyword: 'road', averageDensity: 'Medium', multiplier: 1.3, riskBoost: 0.06 }
+    ];
+
+    const crimeDataset = [
+      { keyword: 'isolated', risk: 0.9 },
+      { keyword: 'dark', risk: 0.86 },
+      { keyword: 'slum', risk: 0.88 },
+      { keyword: 'highway', risk: 0.64 },
+      { keyword: 'bypass', risk: 0.72 },
+      { keyword: 'forest', risk: 0.92 },
+      { keyword: 'industrial', risk: 0.74 },
+      { keyword: 'market', risk: 0.34 },
+      { keyword: 'school', risk: 0.22 },
+      { keyword: 'hospital', risk: 0.16 },
+      { keyword: 'police', risk: 0.08 }
+    ];
+
+    const areaCrimeSeedData = [
+      { area_name: 'market', base_crime_rate: 0.34 },
+      { area_name: 'school', base_crime_rate: 0.22 },
+      { area_name: 'hospital', base_crime_rate: 0.16 },
+      { area_name: 'police', base_crime_rate: 0.08 },
+      { area_name: 'station', base_crime_rate: 0.42 },
+      { area_name: 'junction', base_crime_rate: 0.48 },
+      { area_name: 'industrial', base_crime_rate: 0.68 },
+      { area_name: 'bypass', base_crime_rate: 0.72 },
+      { area_name: 'highway', base_crime_rate: 0.64 },
+      { area_name: 'forest', base_crime_rate: 0.88 }
+    ];
+
+    const highRiskPenaltyKeywords = ['isolated', 'dark', 'forest', 'bypass', 'highway'];
+
+    let map;
+    let sourceMarker = null;
+    let destinationMarker = null;
+    let selectingDestination = false;
+    let sourceLocation = null;
+    let destinationLocation = null;
+    let routeLayers = [];
+    let animationFrame = 0;
+    let requestCounter = 0;
+    let currentTransportMode = 'car';
+    let lastSelectedRouteMode = null;
+    let hasAutoLocationAttempted = false;
+
+    function setLoadingState(isVisible, message = 'Loading...') {
+      loadingIndicator.className = isVisible ? 'loading-indicator visible' : 'loading-indicator';
+      loadingText.textContent = message;
+    }
+
+    function setRouteHealth(colorClass, message) {
+      routeHealth.className = `route-health ${colorClass}`;
+      routeHealth.textContent = message;
+    }
+
+    function setLocationIndicator(isVisible, message = 'Using current location') {
+      locationIndicator.className = isVisible ? 'location-indicator visible' : 'location-indicator';
+      locationIndicator.textContent = message;
+    }
+
+    function setFloatingAlert(isVisible, message = 'This route may not be safe at night') {
+      floatingAlert.className = isVisible ? 'floating-alert visible' : 'floating-alert';
+      floatingAlert.textContent = message;
+    }
+
+    function getTimeModeInfo() {
+      const hour = new Date().getHours();
+      if (hour >= 19 || hour < 6) {
+        return {
+          label: 'Night Mode',
+          focus: 'Night Protection'
+        };
+      }
+      return {
+        label: 'Day Mode',
+        focus: 'Day Awareness'
+      };
+    }
+
+    function updateTimeModeBadge() {
+      const timeMode = getTimeModeInfo();
+      timeModeBadge.textContent = timeMode.label;
+      protectionFocusValue.textContent = timeMode.focus;
+    }
+
+    function updateSafetyStatusPanel(profile = null) {
+      updateTimeModeBadge();
+      if (!profile) {
+        safetyScoreValue.textContent = '--';
+        areaSafetyValue.textContent = 'Waiting';
+        crowdLevelValue.textContent = '--';
+        safetySuggestion.className = 'safety-suggestion safe';
+        safetySuggestion.textContent = 'We prioritize your safety over shortest distance.';
+        setFloatingAlert(false);
+        return;
+      }
+
+      safetyScoreValue.textContent = `${Math.round(profile.safetyScore * 100)}%`;
+      const averageCrowdLevel = profile.segments.length
+        ? profile.segments.reduce((sum, segment) => sum + segment.crowdDensity, 0) / profile.segments.length
+        : 0;
+      crowdLevelValue.textContent = averageCrowdLevel >= 2.4 ? 'High' : averageCrowdLevel >= 1.7 ? 'Medium' : 'Low';
+        areaSafetyValue.textContent = profile.safetyLevel.label === 'High'
+        ? 'Low'
+        : profile.safetyLevel.label === 'Moderate'
+          ? 'Medium'
+          : 'High';
+
+      if (profile.averageRisk > 0.5) {
+        safetySuggestion.className = 'safety-suggestion risky';
+        safetySuggestion.textContent = '⚠️ This route may not be safe at night.';
+        setFloatingAlert(true, '⚠️ This route may not be safe at night');
+        safetySuggestion.textContent = '\u26A0\uFE0F This route may not be safe at night.';
+        setFloatingAlert(true, '\u26A0\uFE0F This route may not be safe at night');
+        return;
+      }
+
+      if (profile.averageRisk > 0.25) {
+        safetySuggestion.className = 'safety-suggestion medium';
+        safetySuggestion.textContent = '⚠️ Caution advised. Stay alert in moderate-risk segments.';
+        setFloatingAlert(true, '⚠️ Stay alert: this route has moderate safety risk');
+        return;
+      }
+
+      safetySuggestion.className = 'safety-suggestion safe';
+      safetySuggestion.textContent = '✅ This route is recommended. Safety signals look favorable for this journey.';
+      safetySuggestion.textContent = '\u2705 This route is recommended. Safety signals look favorable for this journey.';
+      setFloatingAlert(false);
+    }
+
+    function updateSafetyStatusPanel(profile = null) {
+      updateTimeModeBadge();
+      if (!profile) {
+        safetyScoreValue.textContent = '--';
+        areaSafetyValue.textContent = 'Waiting';
+        crowdLevelValue.textContent = '--';
+        routeRiskLabel.textContent = 'Standby';
+        safetyScoreBar.style.width = '0%';
+        crimeRiskValue.textContent = '--';
+        crowdRiskValue.textContent = '--';
+        timeRiskValue.textContent = '--';
+        crimeRiskBar.style.width = '0%';
+        crowdRiskBar.style.width = '0%';
+        timeRiskBar.style.width = '0%';
+        alertReason.textContent = 'Reason: Low lighting, crime history, and low crowd support indicators will appear here when needed.';
+        safetySuggestion.className = 'safety-suggestion safe';
+        safetySuggestion.textContent = 'We prioritize your safety over shortest distance.';
+        setFloatingAlert(false);
+        return;
+      }
+
+      const scorePercent = Math.round(profile.safetyScore * 100);
+      const averageCrowdLevel = profile.segments.length
+        ? profile.segments.reduce((sum, segment) => sum + segment.crowdDensity, 0) / profile.segments.length
+        : 0;
+      const crimeAverage = profile.segments.length
+        ? profile.segments.reduce((sum, segment) => sum + segment.crimeRisk, 0) / profile.segments.length
+        : 0;
+      const crowdAverage = profile.segments.length
+        ? profile.segments.reduce((sum, segment) => sum + segment.crowdDensity, 0) / (profile.segments.length * 3)
+        : 0;
+      const timeAverage = profile.segments.length
+        ? profile.segments.reduce((sum, segment) => sum + segment.timeRisk, 0) / profile.segments.length
+        : 0;
+
+      safetyScoreValue.textContent = `${scorePercent}%`;
+      safetyScoreBar.style.width = `${scorePercent}%`;
+      crowdLevelValue.textContent = averageCrowdLevel >= 2.4 ? 'High' : averageCrowdLevel >= 1.7 ? 'Medium' : 'Low';
+      areaSafetyValue.textContent = profile.safetyLevel.label === 'High'
+        ? 'Low'
+        : profile.safetyLevel.label === 'Moderate'
+          ? 'Medium'
+          : 'High';
+      routeRiskLabel.textContent = profile.safetyLevel.label === 'High'
+        ? 'Safe'
+        : profile.safetyLevel.label === 'Moderate'
+          ? 'Medium'
+          : 'High Risk';
+
+      crimeRiskValue.textContent = `${Math.round(crimeAverage * 100)}%`;
+      crowdRiskValue.textContent = `${Math.round(crowdAverage * 100)}%`;
+      timeRiskValue.textContent = `${Math.round(timeAverage * 100)}%`;
+      crimeRiskBar.style.width = `${Math.round(crimeAverage * 100)}%`;
+      crowdRiskBar.style.width = `${Math.round(crowdAverage * 100)}%`;
+      timeRiskBar.style.width = `${Math.round(timeAverage * 100)}%`;
+
+      if (profile.averageRisk > 0.5) {
+        safetySuggestion.className = 'safety-suggestion risky';
+        safetySuggestion.textContent = '\u26A0\uFE0F This route may not be safe at night.';
+        alertReason.textContent = 'Reason: Low lighting + crime history + limited crowd support increase risk on this route.';
+        setFloatingAlert(true, '\u26A0\uFE0F This route may not be safe at night');
+        return;
+      }
+
+      if (profile.averageRisk > 0.25) {
+        safetySuggestion.className = 'safety-suggestion medium';
+        safetySuggestion.textContent = '\u26A0\uFE0F Caution advised. Stay alert in moderate-risk segments.';
+        alertReason.textContent = 'Reason: Moderate crowd variation and time-based risk suggest extra caution.';
+        setFloatingAlert(true, '\u26A0\uFE0F Stay alert: this route has moderate safety risk');
+        return;
+      }
+
+      safetySuggestion.className = 'safety-suggestion safe';
+      safetySuggestion.textContent = '\u2705 This route is recommended. Safety signals look favorable for this journey.';
+      alertReason.textContent = 'Reason: Better crowd support, lower crime risk, and safer timing make this route more favorable.';
+      setFloatingAlert(false);
+    }
+
+    function sanitizeRouteSnapshot(item) {
+      return {
+        source: item.source,
+        destination: item.destination,
+        mode: item.mode,
+        transportMode: item.transportMode,
+        distanceKm: Number(item.distanceKm.toFixed(2)),
+        totalMinutes: item.totalMinutes,
+        safetyScore: item.safetyScore,
+        riskLabel: item.riskLabel,
+        createdAt: item.createdAt
+      };
+    }
+
+    function renderRecentSearches() {
+      if (!appState.recentSearches.length) {
+        recentSearchesList.innerHTML = '<div class="empty-state">Your recent searches will appear here after route analysis.</div>';
+        return;
+      }
+
+      recentSearchesList.innerHTML = appState.recentSearches.map((item, index) => `
+        <button class="utility-item" type="button" data-recent-index="${index}">
+          <strong>${item.source} to ${item.destination}</strong>
+          <small>${item.mode} via ${item.transportMode} · ${item.distanceKm} km · ${item.totalMinutes} min · ${Math.round(item.safetyScore * 100)}% safety</small>
+        </button>
+      `).join('');
+    }
+
+    function renderSavedRoutes() {
+      if (!appState.savedRoutes.length) {
+        savedRoutesList.innerHTML = '<div class="empty-state">Sign in and save routes for one-tap access later.</div>';
+        return;
+      }
+
+      savedRoutesList.innerHTML = appState.savedRoutes.map((item, index) => `
+        <button class="utility-item" type="button" data-saved-index="${index}">
+          <strong>${item.source} to ${item.destination}</strong>
+          <small>${item.mode} · ${item.riskLabel} · ${Math.round(item.safetyScore * 100)}% safety</small>
+        </button>
+      `).join('');
+    }
+
+    function updateUserInterface() {
+      const normalizedUser = normalizeUserRecord(appState.user);
+      appState.user = normalizedUser;
+      const isSignedIn = Boolean(normalizedUser);
+      userChip.classList.toggle('visible', isSignedIn);
+      authTrigger.textContent = isSignedIn ? 'Manage Account' : 'Sign In / Sign Up';
+      authAccountCard.classList.toggle('visible', isSignedIn);
+
+      if (isSignedIn) {
+        const initials = (normalizedUser.name || 'ES')
+          .split(' ')
+          .map((part) => part[0] || '')
+          .join('')
+          .slice(0, 2)
+          .toUpperCase();
+        userAvatar.textContent = initials || 'ES';
+        userName.textContent = normalizedUser.name;
+        userStatus.textContent = normalizedUser.phoneNumber
+          ? `Verified via OTP - ${normalizedUser.phoneNumber}`
+          : 'Verified via OTP';
+        authAccountName.textContent = normalizedUser.name;
+        if (normalizedUser.userId && normalizedUser.phoneNumber) {
+          authAccountMeta.textContent = `User ID: ${normalizedUser.userId} - Phone: ${normalizedUser.phoneNumber}`;
+        } else if (normalizedUser.userId) {
+          authAccountMeta.textContent = `User ID: ${normalizedUser.userId}`;
+        } else if (normalizedUser.phoneNumber) {
+          authAccountMeta.textContent = `Phone: ${normalizedUser.phoneNumber}`;
+        } else {
+          authAccountMeta.textContent = 'Profile details are not available yet.';
+        }
+      } else {
+        userAvatar.textContent = 'ES';
+        userName.textContent = 'No user logged in';
+        userStatus.textContent = 'Secure mode available';
+        authAccountName.textContent = 'No user logged in';
+        authAccountMeta.textContent = 'Login with OTP to save safer routes.';
+      }
+
+      nightModePreference.checked = Boolean(appState.preferences.preferNightMode);
+      renderRecentSearches();
+      renderSavedRoutes();
+    }
+
+    function pushRecentSearch(snapshot) {
+      appState.recentSearches = [snapshot, ...appState.recentSearches.filter((item) => !(item.source === snapshot.source && item.destination === snapshot.destination && item.mode === snapshot.mode))].slice(0, 6);
+      persistAppState();
+      renderRecentSearches();
+    }
+
+    function saveCurrentRouteSnapshot() {
+      if (!currentSelectedProfile || !routeInsightPayload) {
+        statusText.textContent = 'Analyze a route before saving it.';
+        return;
+      }
+
+      if (!appState.user) {
+        statusText.textContent = 'Sign in to save routes and sync your preferences.';
+        openAuthModal('login');
+        return;
+      }
+
+      const snapshot = sanitizeRouteSnapshot(routeInsightPayload);
+      appState.savedRoutes = [snapshot, ...appState.savedRoutes.filter((item) => !(item.source === snapshot.source && item.destination === snapshot.destination && item.mode === snapshot.mode))].slice(0, 6);
+      persistAppState();
+      renderSavedRoutes();
+      statusText.textContent = `Saved ${snapshot.mode.toLowerCase()} for quick access.`;
+    }
+
+    function applySnapshot(snapshot) {
+      sourceNode.value = snapshot.source;
+      destinationNode.value = snapshot.destination;
+      currentTransportMode = snapshot.transportMode.toLowerCase() === 'two-wheeler' ? 'twoWheeler' : snapshot.transportMode.toLowerCase();
+      modeSelector.querySelectorAll('.mode-button').forEach((item) => {
+        item.classList.toggle('active', item.dataset.transport === currentTransportMode);
+      });
+      statusText.textContent = `Loaded ${snapshot.source} to ${snapshot.destination}. Resolve locations to analyze again.`;
+    }
+
+    function setModalVisibility(modal, isVisible) {
+      modal.classList.toggle('visible', isVisible);
+    }
+
+    function openWhyRouteDetails() {
+      if (!currentSelectedProfile || !routeInsightPayload) {
+        whyRouteSummary.textContent = 'Run a route analysis first to see the reasoning breakdown.';
+        whyRouteDetails.innerHTML = '<div class="empty-state">Safety reasoning will appear here after route analysis.</div>';
+        setModalVisibility(whyRouteModal, true);
+        return;
+      }
+
+      whyRouteSummary.textContent = `${routeInsightPayload.mode} was selected because it balances distance, time, and safety signals for ${routeInsightPayload.transportMode.toLowerCase()} travel.`;
+      whyRouteDetails.innerHTML = `
+        <div class="breakdown-item">
+          <div class="breakdown-row"><span>Crime risk contribution</span><strong>${crimeRiskValue.textContent}</strong></div>
+          <div class="mini-progress"><span style="width:${crimeRiskBar.style.width}; background:#ef4444;"></span></div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-row"><span>Crowd density contribution</span><strong>${crowdRiskValue.textContent}</strong></div>
+          <div class="mini-progress"><span style="width:${crowdRiskBar.style.width}; background:#f59e0b;"></span></div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-row"><span>Time risk contribution</span><strong>${timeRiskValue.textContent}</strong></div>
+          <div class="mini-progress"><span style="width:${timeRiskBar.style.width}; background:#3b82f6;"></span></div>
+        </div>
+      `;
+      setModalVisibility(whyRouteModal, true);
+    }
+
+    function resetRouteSummary(message = 'Distance, time, safety, and road details will appear here after route analysis.') {
+      routeSummary.innerHTML = `
+        <div class="segment-card">
+          <strong>Route details</strong>
+          <div class="segment-meta">${message}</div>
+        </div>
+      `;
+    }
+
+    function resetComparisonGrid(message = 'Shortest, safest, and fastest route cards will appear here after analysis.') {
+      comparisonGrid.innerHTML = `
+        <div class="result-card">
+          <div class="result-title">Waiting for routes</div>
+          <div class="result-line">${message}</div>
+        </div>
+      `;
+    }
+
+    function formatLatLng(point) {
+      return `${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`;
+    }
+
+    function refreshMapSize() {
+      if (!map) {
+        return;
+      }
+      window.setTimeout(() => {
+        map.invalidateSize({ pan: false, animate: false });
+      }, 120);
+    }
+
+    function buildOverlayZones() {
+      const zones = [
+        { lat: 28.6139, lng: 77.2090, radius: 1600, color: '#ef4444', fillOpacity: 0.2, label: 'Crime hotspot', kind: 'crime' },
+        { lat: 19.0760, lng: 72.8777, radius: 1400, color: '#f59e0b', fillOpacity: 0.18, label: 'Crowd fluctuation', kind: 'crowd' },
+        { lat: 12.9716, lng: 77.5946, radius: 1700, color: '#22c55e', fillOpacity: 0.14, label: 'Safer transit zone', kind: 'crime' },
+        { lat: 17.3850, lng: 78.4867, radius: 1500, color: '#22c55e', fillOpacity: 0.12, label: 'Balanced movement zone', kind: 'crowd' }
+      ];
+
+      crimeLayerGroup = L.layerGroup();
+      crowdLayerGroup = L.layerGroup();
+
+      zones.forEach((zone) => {
+        const layer = L.circle([zone.lat, zone.lng], {
+          radius: zone.radius,
+          color: zone.color,
+          fillColor: zone.color,
+          fillOpacity: zone.fillOpacity,
+          weight: 1.5
+        }).bindPopup(zone.label);
+
+        if (zone.kind === 'crime') {
+          crimeLayerGroup.addLayer(layer);
+        } else {
+          crowdLayerGroup.addLayer(layer);
+        }
+      });
+    }
+
+    function syncOverlayLayers() {
+      if (!map || !crimeLayerGroup || !crowdLayerGroup) {
+        return;
+      }
+
+      if (crimeLayerToggle.checked) {
+        crimeLayerGroup.addTo(map);
+      } else {
+        map.removeLayer(crimeLayerGroup);
+      }
+
+      if (crowdLayerToggle.checked) {
+        crowdLayerGroup.addTo(map);
+      } else {
+        map.removeLayer(crowdLayerGroup);
+      }
+    }
+
+    function normalizeQuery(value) {
+      return value.trim().toLowerCase().replace(/\s+/g, ' ');
+    }
+
+    function clampRisk(value) {
+      return Number(Math.min(1, Math.max(0, value)).toFixed(2));
+    }
+
+    function createAreaRiskStore(seedData) {
+      return seedData.reduce((store, item) => {
+        const key = normalizeQuery(item.area_name);
+        store[key] = {
+          area_name: item.area_name,
+          base_crime_rate: clampRisk(item.base_crime_rate),
+          incident_weight: 0,
+          aggregated_risk: clampRisk(item.base_crime_rate)
+        };
+        return store;
+      }, {});
+    }
+
+    const areaRiskStore = createAreaRiskStore(areaCrimeSeedData);
+
+    function getAreaRiskRecord(locationName) {
+      const normalized = normalizeQuery(locationName || '');
+      const matchedKey = Object.keys(areaRiskStore).find((key) => normalized.includes(key));
+      return matchedKey ? areaRiskStore[matchedKey] : null;
+    }
+
+    function updateAreaRisk(areaName, incidentWeight = 0.12) {
+      const key = normalizeQuery(areaName || '');
+      if (!key) {
+        return null;
+      }
+      if (!areaRiskStore[key]) {
+        areaRiskStore[key] = {
+          area_name: areaName,
+          base_crime_rate: 0.45,
+          incident_weight: 0,
+          aggregated_risk: 0.45
+        };
+      }
+      const record = areaRiskStore[key];
+      record.incident_weight = clampRisk(record.incident_weight + incidentWeight);
+      record.aggregated_risk = clampRisk((record.base_crime_rate * 0.75) + (record.incident_weight * 0.25));
+      return record;
+    }
+
+    function simulateIncidentUpdate(areaName, severity = 'medium') {
+      const severityWeights = {
+        low: 0.08,
+        medium: 0.14,
+        high: 0.24
+      };
+      return updateAreaRisk(areaName, severityWeights[severity] || severityWeights.medium);
+    }
+
+    function getCrimeRisk(locationName) {
+      const normalized = normalizeQuery(locationName || '');
+      const keywordMatch = crimeDataset.find((item) => normalized.includes(item.keyword));
+      const areaRecord = getAreaRiskRecord(locationName);
+      const baseRisk = areaRecord ? areaRecord.aggregated_risk : keywordMatch ? keywordMatch.risk : 0.5;
+      return clampRisk(baseRisk);
+    }
+
+    function getTimeRisk() {
+      const hour = new Date().getHours();
+      return (hour >= 19 || hour < 6) ? 0.3 : 0;
+    }
+
+    function locationMatchesQuery(result, query) {
+      const address = result.address || {};
+      const normalized = normalizeQuery(query);
+      const candidates = [
+        result.name,
+        address.city,
+        address.town,
+        address.village,
+        address.municipality,
+        address.county,
+        address.state_district
+      ].filter(Boolean).map(normalizeQuery);
+      return candidates.some((candidate) => candidate === normalized);
+    }
+
+    function updateOverlayText() {
+      const transportLabel = transportConfigs[currentTransportMode].label;
+      if (!sourceLocation) {
+        mapOverlay.innerHTML = `<strong>Selection mode</strong>Search an Indian city or click the map to place the source location for ${transportLabel.toLowerCase()} routing.`;
+        return;
+      }
+      if (!destinationLocation) {
+        mapOverlay.innerHTML = '<strong>Source locked</strong>Set the destination city to compare shortest, safest, and fastest routes.';
+        return;
+      }
+      mapOverlay.innerHTML = `<strong>Routes ready</strong>Choose a route type to compare real ${transportLabel.toLowerCase()} options.`;
+    }
+
+    function getLocationIcon(type, label) {
+      const normalized = normalizeQuery(label || '');
+      if (normalized.includes('hospital')) return 'H';
+      if (normalized.includes('police')) return 'P';
+      if (normalized.includes('fire')) return 'F';
+      if (normalized.includes('airport')) return 'A';
+      if (normalized.includes('station')) return 'T';
+      return type === 'source' ? 'S' : 'D';
+    }
+
+    function createMarkerIcon(type, label) {
+      const iconText = getLocationIcon(type, label);
+      return L.divIcon({
+        className: '',
+        html: `<div class="location-pin ${type}">${iconText}</div>`,
+        iconSize: [42, 42],
+        iconAnchor: [21, 21],
+        popupAnchor: [0, -18]
+      });
+    }
+
+    function placeMarker(point, type, label) {
+      const title = type === 'source' ? 'Source Location' : 'Destination Location';
+      const marker = L.marker([point.lat, point.lng], {
+        icon: createMarkerIcon(type, label),
+        title
+      }).addTo(map);
+      marker.bindPopup(`<strong>${title}</strong><br>${label}<br><span style="color:#bfd1e5;">${formatLatLng(point)}</span>`);
+      return marker;
+    }
+
+    function stopRouteAnimation() {
+      animationFrame += 1;
+    }
+
+    function clearRouteLayers() {
+      stopRouteAnimation();
+      routeLayers.forEach((layer) => map.removeLayer(layer));
+      routeLayers = [];
+    }
+
+    function closeSuggestionLists() {
+      sourceSuggestions.classList.remove('visible');
+      destinationSuggestions.classList.remove('visible');
+    }
+
+    async function geocodeCityIndia(cityName) {
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&countrycodes=in&q=${encodeURIComponent(`${cityName}, India`)}`;
+      const response = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!response.ok) {
+        throw new Error('Geocoding failed');
+      }
+      const data = await response.json();
+      if (!Array.isArray(data) || !data.length) {
+        return null;
+      }
+      const normalizedCity = normalizeQuery(cityName);
+      const match = data.find((result) => locationMatchesQuery(result, cityName))
+        || data.find((result) => normalizeQuery(result.display_name || '').startsWith(`${normalizedCity},`));
+      if (!match || !match.address || match.address.country_code !== 'in') {
+        return null;
+      }
+      return {
+        lat: Number(match.lat),
+        lng: Number(match.lon),
+        label: match.display_name,
+        shortLabel: match.name || cityName
+      };
+    }
+
+    async function fetchCitySuggestions(query) {
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&countrycodes=in&q=${encodeURIComponent(`${query}, India`)}`;
+      const response = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!response.ok) {
+        throw new Error('Autocomplete failed');
+      }
+      const data = await response.json();
+      return (Array.isArray(data) ? data : [])
+        .filter((item) => item.address && item.address.country_code === 'in')
+        .map((item) => ({
+          lat: Number(item.lat),
+          lng: Number(item.lon),
+          label: item.display_name,
+          shortLabel: item.name || item.display_name.split(',')[0]
+        }));
+    }
+
+    async function reverseGeocodeIndia(point) {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&lat=${encodeURIComponent(point.lat)}&lon=${encodeURIComponent(point.lng)}`;
+      const response = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!response.ok) {
+        throw new Error('Reverse geocoding failed');
+      }
+      const data = await response.json();
+      const address = data.address || {};
+      const shortLabel = address.city || address.town || address.village || address.suburb || address.county || 'Current location';
+      return {
+        label: data.display_name || `Current location (${formatLatLng(point)})`,
+        shortLabel
+      };
+    }
+
+    function renderSuggestions(type, items) {
+      const container = type === 'source' ? sourceSuggestions : destinationSuggestions;
+      if (!items.length) {
+        container.classList.remove('visible');
+        container.innerHTML = '';
+        return;
+      }
+      container.innerHTML = items.map((item) => `
+        <button class="autocomplete-item" type="button" data-type="${type}" data-lat="${item.lat}" data-lng="${item.lng}" data-label="${encodeURIComponent(item.label)}" data-short="${encodeURIComponent(item.shortLabel)}">
+          ${item.shortLabel}
+          <small>${item.label}</small>
+        </button>
+      `).join('');
+      container.classList.add('visible');
+    }
+
+    function scheduleAutocomplete(type) {
+      const input = type === 'source' ? sourceNode : destinationNode;
+      const query = input.value.trim();
+      input._autocompleteRunId = (input._autocompleteRunId || 0) + 1;
+      const runId = input._autocompleteRunId;
+      if (query.length < 3) {
+        renderSuggestions(type, []);
+        return;
+      }
+      window.clearTimeout(input._autocompleteTimer);
+      input._autocompleteTimer = window.setTimeout(async () => {
+        try {
+          const items = await fetchCitySuggestions(query);
+          if (runId !== input._autocompleteRunId) {
+            return;
+          }
+          renderSuggestions(type, items);
+        } catch (error) {
+          renderSuggestions(type, []);
+        }
+      }, 280);
+    }
+
+    function updateLocation(type, point, label, shortLabel) {
+      clearRouteLayers();
+      resetComparisonGrid('Route cards will update after you run a route comparison.');
+      resetRouteSummary('Choose a route mode to see travel time, safety, and segment details.');
+      updateSafetyStatusPanel();
+      lastSelectedRouteMode = null;
+
+      const displayLabel = shortLabel || label;
+      if (type === 'source') {
+        if (sourceMarker) {
+          map.removeLayer(sourceMarker);
+        }
+        sourceLocation = { lat: point.lat, lng: point.lng, label, shortLabel: displayLabel };
+        sourceMarker = placeMarker(point, 'source', displayLabel);
+        sourceNode.value = displayLabel;
+        selectingDestination = true;
+      } else {
+        if (destinationMarker) {
+          map.removeLayer(destinationMarker);
+        }
+        destinationLocation = { lat: point.lat, lng: point.lng, label, shortLabel: displayLabel };
+        destinationMarker = placeMarker(point, 'destination', displayLabel);
+        destinationNode.value = displayLabel;
+        selectingDestination = false;
+      }
+
+      const points = [];
+      if (sourceLocation) points.push([sourceLocation.lat, sourceLocation.lng]);
+      if (destinationLocation) points.push([destinationLocation.lat, destinationLocation.lng]);
+      if (points.length === 2) {
+        map.flyToBounds(points, { padding: [44, 44], duration: 0.85, maxZoom: 12 });
+      } else {
+        map.flyTo([point.lat, point.lng], 10, { duration: 0.85 });
+      }
+
+      updateOverlayText();
+      refreshMapSize();
+    }
+
+    async function useCurrentLocationAsSource(options = {}) {
+      const { auto = false } = options;
+      if (!navigator.geolocation) {
+        setRouteHealth('red', 'Geolocation is not available on this device.');
+        statusText.textContent = 'Location access denied. Please enter manually.';
+        visualHint.textContent = 'Geolocation unavailable';
+        setLocationIndicator(false);
+        return;
+      }
+      try {
+        setLoadingState(true, 'Fetching your location...');
+        statusText.textContent = auto ? 'Fetching your location automatically...' : 'Fetching your location...';
+        visualHint.textContent = 'Fetching current location';
+        setLocationIndicator(false);
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 12000,
+            maximumAge: 30000
+          });
+        });
+        const point = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        let locationDetails = {
+          label: `Current location (${formatLatLng(point)})`,
+          shortLabel: 'Current location'
+        };
+        try {
+          locationDetails = await reverseGeocodeIndia(point);
+        } catch (error) {
+          // Keep coordinate fallback when reverse geocoding is unavailable.
+        }
+        updateLocation('source', point, locationDetails.label, locationDetails.shortLabel);
+        setRouteHealth('green', 'Current location set as source.');
+        statusText.textContent = auto
+          ? 'Current location detected and added as your source point.'
+          : 'Current location added as your source point.';
+        visualHint.textContent = 'Current location selected';
+        setLocationIndicator(true, 'Using current location');
+      } catch (error) {
+        setRouteHealth('red', 'Location access denied. Please enter manually.');
+        statusText.textContent = 'Location access denied. Please enter manually.';
+        visualHint.textContent = 'Manual source required';
+        setLocationIndicator(false);
+      } finally {
+        setLoadingState(false);
+      }
+    }
+
+    async function setLocationFromCity(type) {
+      const input = type === 'source' ? sourceNode : destinationNode;
+      const city = input.value.trim();
+      closeSuggestionLists();
+      if (!city) {
+        statusText.textContent = `Enter a ${type} city name first.`;
+        visualHint.textContent = 'Missing city name';
+        setRouteHealth('red', `Please enter a ${type} city in India.`);
+        return;
+      }
+      try {
+        setLoadingState(true, `Finding ${type} city in India...`);
+        statusText.textContent = `Searching for ${city} in India...`;
+        visualHint.textContent = 'Finding location';
+        const result = await geocodeCityIndia(city);
+        if (!result) {
+          statusText.textContent = `Location not found for "${city}" in India.`;
+          visualHint.textContent = 'Location not found';
+          setRouteHealth('red', `We could not find a reliable India match for "${city}".`);
+          return;
+        }
+        updateLocation(type, { lat: result.lat, lng: result.lng }, result.label, result.shortLabel);
+        statusText.textContent = `${type === 'source' ? 'Source' : 'Destination'} city set to ${result.label}.`;
+        visualHint.textContent = `${type === 'source' ? 'Source' : 'Destination'} city found`;
+        setRouteHealth('green', `${type === 'source' ? 'Source' : 'Destination'} location selected successfully.`);
+      } catch (error) {
+        statusText.textContent = `Unable to find "${city}" right now. Please try again.`;
+        visualHint.textContent = 'Location lookup failed';
+        setRouteHealth('red', 'Location lookup failed. Please check the city name or try again.');
+      } finally {
+        setLoadingState(false);
+      }
+    }
+
+    function handleMapClick(event) {
+      const point = event.latlng;
+      if (!sourceLocation || (sourceLocation && destinationLocation)) {
+        if (destinationMarker) {
+          map.removeLayer(destinationMarker);
+          destinationMarker = null;
+          destinationLocation = null;
+          destinationNode.value = '';
+        }
+        updateLocation('source', point, `Pinned source (${formatLatLng(point)})`, 'Pinned source');
+        statusText.textContent = `Source selected at ${formatLatLng(point)}. Choose destination next.`;
+        visualHint.textContent = 'Source marker placed';
+      } else if (selectingDestination) {
+        updateLocation('destination', point, `Pinned destination (${formatLatLng(point)})`, 'Pinned destination');
+        statusText.textContent = `Destination selected at ${formatLatLng(point)}.`;
+        visualHint.textContent = 'Destination marker placed';
+      }
+    }
+
+    function validateLatLngPoints() {
+      if (!sourceLocation || !destinationLocation) {
+        statusText.textContent = 'Set both source and destination cities before selecting a route.';
+        visualHint.textContent = 'Missing map points';
+        return false;
+      }
+      return true;
+    }
+
+    function getTrafficPreset(seed) {
+      const presets = [
+        { density: 'Low', multiplier: 1.0 },
+        { density: 'Medium', multiplier: 1.45 },
+        { density: 'High', multiplier: 2.05 }
+      ];
+      return presets[seed % presets.length];
+    }
+
+    function getHistoricalTrafficProfile(name) {
+      const normalized = normalizeQuery(name || '');
+      return historicalTrafficDataset.find((item) => normalized.includes(item.keyword)) || {
+        averageDensity: 'Medium',
+        multiplier: 1.3,
+        riskBoost: 0.06
+      };
+    }
+
+    function classifyDensity(multiplier) {
+      if (multiplier > 1.65) return { density: 'High', color: '#fb7185' };
+      if (multiplier > 1.2) return { density: 'Medium', color: '#fbbf24' };
+      return { density: 'Low', color: '#7cf3d0' };
+    }
+
+    function getCrowdDensityValue(density) {
+      if (density === 'High') return 3;
+      if (density === 'Medium') return 2;
+      return 1;
+    }
+
+    function getSafetyLevel(risk) {
+      if (risk <= 0.25) return { label: 'High', colorClass: 'green', badgeClass: 'badge-good' };
+      if (risk <= 0.5) return { label: 'Moderate', colorClass: 'yellow', badgeClass: 'badge-watch' };
+      return { label: 'Low', colorClass: 'red', badgeClass: 'badge-risk' };
+    }
+
+    function getNightRiskMultiplier() {
+      return getTimeRisk() > 0 ? 1.7 : 1;
+    }
+
+    function getSegmentPenalty(instruction) {
+      const normalized = normalizeQuery(instruction || '');
+      return highRiskPenaltyKeywords.reduce((total, keyword) => {
+        return normalized.includes(keyword) ? total + 0.28 : total;
+      }, 0);
+    }
+
+    function getRouteIdentity(profile) {
+      const coordinates = (((profile.route || {}).geometry || {}).coordinates || []);
+      if (!coordinates.length) {
+        return `route-${profile.routeIndex}`;
+      }
+      const start = coordinates[0];
+      const end = coordinates[coordinates.length - 1];
+      return `${start[0].toFixed(4)},${start[1].toFixed(4)}-${end[0].toFixed(4)},${end[1].toFixed(4)}-${Number(profile.totalDistanceKm).toFixed(2)}`;
+    }
+
+    function warnIfRoutesLookSimilar(profiles) {
+      const uniqueRouteIds = new Set(profiles.map(getRouteIdentity));
+      if (uniqueRouteIds.size <= 1) {
+        console.warn('Public Safety Warning: routing service returned effectively the same route for shortest, fastest, and safest.');
+      }
+    }
+
+    function getRouteExplanation(mode, profile) {
+      const transportLabel = transportConfigs[currentTransportMode].label.toLowerCase();
+      if (mode === 'shortest') {
+        return `This is the most direct ${transportLabel} route at ${profile.totalDistanceKm.toFixed(1)} km, which is useful when keeping travel distance low matters most.`;
+      }
+      if (mode === 'safest') {
+        return `This ${transportLabel} route is recommended using crime indicators, crowd density, and time-of-day safety scoring.`;
+      }
+      if (currentTransportMode === 'twoWheeler') {
+        return 'This route favors roads where a two-wheeler can move efficiently while avoiding higher-risk segments.';
+      }
+      if (currentTransportMode === 'walking') {
+        return 'This route focuses on pedestrian-friendly movement and gives added weight to safer segments during route selection.';
+      }
+      return 'This route balances movement efficiency with public safety signals such as crime risk, crowd density, and time of day.';
+    }
+
+    function buildRouteProfile(route, index) {
+      const transportConfig = transportConfigs[currentTransportMode];
+      const timeRisk = getTimeRisk();
+      const nightRiskMultiplier = getNightRiskMultiplier();
+      const steps = (((route || {}).legs || [])[0] || {}).steps || [];
+      const segments = steps.map((step, stepIndex) => {
+        const instruction = step.name || `Road segment ${stepIndex + 1}`;
+        const current = getTrafficPreset(stepIndex + Math.round((step.distance || 0) / 140) + index);
+        const historical = getHistoricalTrafficProfile(instruction);
+        const adjustedCurrent = 1 + ((current.multiplier - 1) * transportConfig.trafficFactor);
+        const adjustedHistorical = 1 + ((historical.multiplier - 1) * transportConfig.trafficFactor);
+        const crowdMultiplier = Number(((adjustedCurrent * 0.55) + (adjustedHistorical * 0.45)).toFixed(2));
+        const densityInfo = classifyDensity(crowdMultiplier);
+        const crowdDensity = getCrowdDensityValue(densityInfo.density);
+        const crimeRisk = getCrimeRisk(instruction);
+        const areaRiskRecord = getAreaRiskRecord(instruction);
+        const areaCrimeRisk = areaRiskRecord ? areaRiskRecord.aggregated_risk : crimeRisk;
+        const penaltyRisk = getSegmentPenalty(instruction);
+        const risk = Number(
+          Math.min(
+            1,
+            Math.max(
+              0.05,
+              (((areaCrimeRisk * 0.72) + ((2 - crowdDensity) * 0.18) + (timeRisk * 0.65) + penaltyRisk) * nightRiskMultiplier) * transportConfig.riskFactor
+            )
+          ).toFixed(2)
+        );
+        const durationMin = Math.max(1, Math.round(((step.duration || 0) / 60) * transportConfig.durationFactor));
+        return {
+          instruction,
+          distanceKm: Number(((step.distance || 0) / 1000).toFixed(2)),
+          durationMin,
+          currentDensity: current.density,
+          historicalDensity: historical.averageDensity,
+          density: densityInfo.density,
+          color: densityInfo.color,
+          crowdDensity,
+          crowdMultiplier,
+          crimeRisk,
+          areaCrimeRisk,
+          penaltyRisk,
+          timeRisk,
+          risk
+        };
+      });
+
+      const averageRisk = segments.length ? segments.reduce((sum, item) => sum + item.risk, 0) / segments.length : 0;
+      const weightedTime = Number(segments.reduce((sum, item) => sum + item.durationMin * item.crowdMultiplier, 0).toFixed(2));
+      const penaltyScore = Number(segments.reduce((sum, item) => sum + item.penaltyRisk, 0).toFixed(2));
+      const riskScore = Number((((averageRisk * 100) + (penaltyScore * 25)) * nightRiskMultiplier).toFixed(2));
+      return {
+        route,
+        routeIndex: index,
+        segments,
+        totalDistanceKm: Number(((route.distance || 0) / 1000).toFixed(2)),
+        totalMinutes: Math.max(1, Math.round(((route.duration || 0) / 60) * transportConfig.durationFactor)),
+        averageRisk,
+        weightedTime,
+        penaltyScore,
+        riskScore,
+        nightRiskMultiplier,
+        safetyScore: Number((1 - averageRisk).toFixed(2)),
+        safetyLevel: getSafetyLevel(averageRisk),
+        transportMode: currentTransportMode
+      };
+    }
+
+    async function fetchOsrmRoutes() {
+      const transportConfig = transportConfigs[currentTransportMode];
+      const coords = `${sourceLocation.lng},${sourceLocation.lat};${destinationLocation.lng},${destinationLocation.lat}`;
+      const url = `https://router.project-osrm.org/route/v1/${transportConfig.osrmProfile}/${coords}?overview=full&geometries=geojson&steps=true&alternatives=true`;
+      const response = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!response.ok) {
+        throw new Error('Routing failed');
+      }
+      const data = await response.json();
+      if (data.code !== 'Ok' || !Array.isArray(data.routes) || !data.routes.length) {
+        return null;
+      }
+      const candidateRoutes = data.routes.slice(0, 3).map((route, index) => buildRouteProfile(route, index));
+      if (candidateRoutes.length < 2) {
+        console.warn('Public Safety Warning: fewer than 2 alternative routes were returned by the routing service.');
+      }
+      warnIfRoutesLookSimilar(candidateRoutes);
+      return candidateRoutes;
+    }
+
+    function selectRouteProfile(profiles, mode) {
+      const scored = profiles.map((profile) => {
+        let score = profile.totalDistanceKm;
+        if (mode === 'fastest') {
+          score = profile.weightedTime;
+        }
+        if (mode === 'safest') {
+          score = Number((profile.riskScore + (profile.penaltyScore * 10)).toFixed(2));
+        }
+        return { ...profile, mode, score: Number(score.toFixed(2)) };
+      });
+      scored.sort((a, b) => a.score - b.score);
+      if (mode === 'safest' && scored.length > 1 && scored[0].score === scored[1].score) {
+        console.warn('Public Safety Warning: safest-route scores are tied across alternatives.');
+      }
+      return scored[0];
+    }
+
+    function buildComparisons(profiles) {
+      return {
+        shortest: selectRouteProfile(profiles, 'shortest'),
+        safest: selectRouteProfile(profiles, 'safest'),
+        fastest: selectRouteProfile(profiles, 'fastest')
+      };
+    }
+
+    function renderComparisonGrid(comparisons, activeMode) {
+      const transportLabel = transportConfigs[currentTransportMode].label;
+      const modes = ['safest', 'fastest', 'shortest'];
+      comparisonGrid.innerHTML = modes.map((mode) => {
+        const profile = comparisons[mode];
+        const config = routeConfigs[mode];
+        const activeClass = mode === activeMode ? `active ${mode}` : mode;
+        const routeLabel = profile.safetyLevel.label === 'High' ? 'Low Risk' : profile.safetyLevel.label === 'Moderate' ? 'Medium Risk' : 'High Risk';
+        return `
+          <div class="result-card ${activeClass}">
+            <span class="result-chip"><span class="legend-swatch" style="background:${config.color};"></span>${config.title}</span>
+            <div class="result-metric">${profile.totalDistanceKm.toFixed(1)} km</div>
+            <div class="result-meta-grid">
+              <div class="result-meta"><span>Time</span><strong>${profile.totalMinutes} min</strong></div>
+              <div class="result-meta"><span>Safety Score</span><strong>${Math.round(profile.safetyScore * 100)}%</strong></div>
+              <div class="result-meta"><span>Mode</span><strong>${transportLabel}</strong></div>
+              <div class="result-meta"><span>Risk</span><strong>${routeLabel}</strong></div>
+            </div>
+            <span class="result-badge ${profile.safetyLevel.badgeClass}">${routeLabel}</span>
+            <div class="result-line">${config.description}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderRouteSummary(mode, profile) {
+      const config = routeConfigs[mode];
+      const transportLabel = transportConfigs[currentTransportMode].label;
+      const explanation = getRouteExplanation(mode, profile);
+      const routeLabel = profile.safetyLevel.label === 'High' ? 'Low Risk' : profile.safetyLevel.label === 'Moderate' ? 'Medium Risk' : 'High Risk';
+      routeSummary.innerHTML = `
+        <div class="result-card active ${mode}">
+          <span class="result-chip"><span class="legend-swatch" style="background:${config.color};"></span>${config.title}</span>
+          <div class="result-title">${sourceLocation.shortLabel || 'Source'} to ${destinationLocation.shortLabel || 'Destination'}</div>
+          <div class="result-meta-grid">
+            <div class="result-meta"><span>Mode</span><strong>${transportLabel}</strong></div>
+            <div class="result-meta"><span>Distance</span><strong>${profile.totalDistanceKm.toFixed(2)} km</strong></div>
+            <div class="result-meta"><span>Estimated Time</span><strong>${profile.totalMinutes} min</strong></div>
+            <div class="result-meta"><span>Risk Label</span><strong>${routeLabel}</strong></div>
+          </div>
+          <div class="result-line">${explanation}</div>
+        </div>
+        ${profile.segments.slice(0, 8).map((segment, index) => {
+          const densityClass = segment.density === 'Low' ? 'density-low' : segment.density === 'Medium' ? 'density-medium' : 'density-high';
+          return `
+            <div class="segment-card ${densityClass}">
+              <strong>Road ${index + 1}: ${segment.instruction}</strong>
+              <div class="segment-meta">Crowd density now: ${segment.density} | Historical pattern: ${segment.historicalDensity}</div>
+              <div class="segment-meta">Distance: ${segment.distanceKm.toFixed(2)} km | Time: ${segment.durationMin} min</div>
+              <div class="segment-meta">Safety Score: ${(1 - segment.risk).toFixed(2)} | Crime risk: ${segment.crimeRisk.toFixed(2)} | Time risk: ${segment.timeRisk.toFixed(2)}</div>
+            </div>
+          `;
+        }).join('')}
+      `;
+    }
+
+    function addStaticRouteLayer(profile, mode, activeMode) {
+      const coordinates = (((profile.route || {}).geometry || {}).coordinates || []).map((coordinate) => [coordinate[1], coordinate[0]]);
+      if (!coordinates.length) {
+        return null;
+      }
+      const color = routeConfigs[mode].color;
+      const isActive = mode === activeMode;
+      const layer = L.polyline(coordinates, {
+        color,
+        weight: isActive ? 6 : 4,
+        opacity: isActive ? 0.12 : 0.35,
+        dashArray: isActive ? '10 8' : '12 10',
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(map);
+      routeLayers.push(layer);
+      return { layer, coordinates };
+    }
+
+    async function animateRouteDrawing(coordinates, color) {
+      if (!coordinates.length) {
+        return null;
+      }
+      const animationId = animationFrame;
+      const animatedLayer = L.polyline([], {
+        color,
+        weight: 6,
+        opacity: 0.95,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(map);
+      routeLayers.push(animatedLayer);
+      const total = coordinates.length;
+      const chunkSize = Math.max(3, Math.ceil(total / 55));
+      for (let index = 0; index < total; index += chunkSize) {
+        if (animationId !== animationFrame) {
+          return null;
+        }
+        animatedLayer.setLatLngs(coordinates.slice(0, Math.min(total, index + chunkSize)));
+        await new Promise((resolve) => window.setTimeout(resolve, 18));
+      }
+      animatedLayer.setLatLngs(coordinates);
+      return animatedLayer;
+    }
+
+    async function drawRouteComparison(comparisons, activeMode) {
+      clearRouteLayers();
+      let activeCoordinates = [];
+      Object.keys(comparisons).forEach((mode) => {
+        const result = addStaticRouteLayer(comparisons[mode], mode, activeMode);
+        if (mode === activeMode && result) {
+          activeCoordinates = result.coordinates;
+        }
+      });
+      await animateRouteDrawing(activeCoordinates, routeConfigs[activeMode].color);
+      if (activeCoordinates.length) {
+        const bounds = L.latLngBounds(activeCoordinates);
+        map.flyToBounds(bounds, { padding: [42, 42], duration: 1.0, maxZoom: 12 });
+      }
+    }
+
+    async function runRouteSelection(mode) {
+      if (!validateLatLngPoints()) {
+        return;
+      }
+      const requestId = ++requestCounter;
+      const config = routeConfigs[mode];
+      const transportLabel = transportConfigs[currentTransportMode].label;
+      try {
+        setLoadingState(true, mode === 'safest' ? 'Analyzing safest route...' : `Calculating ${config.title.toLowerCase()} for ${transportLabel.toLowerCase()}...`);
+        statusText.textContent = `Comparing real ${transportLabel.toLowerCase()} routes for ${config.title.toLowerCase()}...`;
+        visualHint.textContent = 'Routing in progress';
+        const profiles = await fetchOsrmRoutes();
+        if (requestId !== requestCounter) {
+          return;
+        }
+        if (!profiles) {
+          clearRouteLayers();
+          setRouteHealth('red', 'No road route found for these locations.');
+          resetComparisonGrid('No route alternatives were returned by the routing service.');
+          resetRouteSummary('We could not find a valid road route between the selected locations.');
+          updateSafetyStatusPanel();
+          statusText.textContent = 'No route found for the selected locations.';
+          visualHint.textContent = 'No route found';
+          return;
+        }
+        const comparisons = buildComparisons(profiles);
+        const selectedProfile = comparisons[mode];
+        currentSelectedProfile = selectedProfile;
+        currentComparisons = comparisons;
+        routeInsightPayload = {
+          source: sourceLocation.shortLabel || sourceNode.value || 'Source',
+          destination: destinationLocation.shortLabel || destinationNode.value || 'Destination',
+          mode: config.title,
+          transportMode: transportLabel,
+          distanceKm: selectedProfile.totalDistanceKm,
+          totalMinutes: selectedProfile.totalMinutes,
+          safetyScore: selectedProfile.safetyScore,
+          riskLabel: selectedProfile.safetyLevel.label === 'High' ? 'Low Risk' : selectedProfile.safetyLevel.label === 'Moderate' ? 'Medium Risk' : 'High Risk',
+          createdAt: new Date().toISOString()
+        };
+        pushRecentSearch(sanitizeRouteSnapshot(routeInsightPayload));
+        lastSelectedRouteMode = mode;
+        renderComparisonGrid(comparisons, mode);
+        renderRouteSummary(mode, selectedProfile);
+        updateSafetyStatusPanel(selectedProfile);
+        await drawRouteComparison(comparisons, mode);
+        setRouteHealth(selectedProfile.safetyLevel.colorClass, `${config.title} for ${transportLabel}: ${selectedProfile.safetyLevel.label} safety level`);
+        statusText.textContent = `${config.title} ready for ${transportLabel.toLowerCase()}. ${selectedProfile.totalDistanceKm.toFixed(2)} km, about ${selectedProfile.totalMinutes} minutes, with ${selectedProfile.safetyLevel.label.toLowerCase()} safety confidence.`;
+        visualHint.textContent = `${config.title} displayed for ${transportLabel}`;
+      } catch (error) {
+        clearRouteLayers();
+        setRouteHealth('red', 'Routing failed. Please try again.');
+        resetComparisonGrid('Routing could not be completed right now.');
+        resetRouteSummary('Routing could not be completed right now. Check your internet connection and try again.');
+        updateSafetyStatusPanel();
+        statusText.textContent = 'Route request failed. Please try again.';
+        visualHint.textContent = 'Routing failed';
+      } finally {
+        setLoadingState(false);
+      }
+    }
+
+    function bindInputBehaviors() {
+      [
+        { input: sourceNode, type: 'source' },
+        { input: destinationNode, type: 'destination' }
+      ].forEach(({ input, type }) => {
+        input.addEventListener('input', () => scheduleAutocomplete(type));
+        input.addEventListener('focus', () => scheduleAutocomplete(type));
+        input.addEventListener('keydown', async (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            await setLocationFromCity(type);
+          }
+        });
+      });
+
+      document.addEventListener('click', (event) => {
+        const suggestion = event.target.closest('.autocomplete-item');
+        if (suggestion) {
+          const type = suggestion.dataset.type;
+          const label = decodeURIComponent(suggestion.dataset.label || '');
+          const shortLabel = decodeURIComponent(suggestion.dataset.short || '');
+          const point = {
+            lat: Number(suggestion.dataset.lat),
+            lng: Number(suggestion.dataset.lng)
+          };
+          updateLocation(type, point, label, shortLabel);
+          statusText.textContent = `${type === 'source' ? 'Source' : 'Destination'} city set to ${label}.`;
+          visualHint.textContent = `${type === 'source' ? 'Source' : 'Destination'} city found`;
+          setRouteHealth('green', `${type === 'source' ? 'Source' : 'Destination'} location selected successfully.`);
+          closeSuggestionLists();
+          return;
+        }
+
+        if (!event.target.closest('.field')) {
+          closeSuggestionLists();
+        }
+      });
+
+      modeSelector.addEventListener('click', (event) => {
+        const button = event.target.closest('.mode-button');
+        if (!button) {
+          return;
+        }
+        const previousRouteMode = lastSelectedRouteMode;
+        currentTransportMode = button.dataset.transport;
+        modeSelector.querySelectorAll('.mode-button').forEach((item) => {
+          item.classList.toggle('active', item === button);
+        });
+        clearRouteLayers();
+        resetComparisonGrid(`Route cards will update for ${transportConfigs[currentTransportMode].label.toLowerCase()} after analysis.`);
+        resetRouteSummary(`Choose a route mode to see ${transportConfigs[currentTransportMode].label.toLowerCase()} distance, time, safety, and segment details.`);
+        updateSafetyStatusPanel();
+        updateOverlayText();
+        setRouteHealth('green', `${transportConfigs[currentTransportMode].label} mode selected.`);
+        statusText.textContent = `${transportConfigs[currentTransportMode].label} mode is active. Select a route type to refresh the map and timings.`;
+        visualHint.textContent = `${transportConfigs[currentTransportMode].label} mode active`;
+        if (previousRouteMode && sourceLocation && destinationLocation) {
+          runRouteSelection(previousRouteMode);
+        }
+      });
+
+      useCurrentLocationBtn.addEventListener('click', async () => {
+        await useCurrentLocationAsSource();
+      });
+
+      whyRouteBtn.addEventListener('click', openWhyRouteDetails);
+      saveRouteBtn.addEventListener('click', saveCurrentRouteSnapshot);
+
+      authTrigger.addEventListener('click', () => {
+        openAuthModal(appState.user ? currentAuthView : 'login');
+      });
+
+      closeAuthModal.addEventListener('click', closeAuthAndResetMessage);
+      closeWhyRouteModal.addEventListener('click', () => setModalVisibility(whyRouteModal, false));
+
+      [authModal, whyRouteModal].forEach((modal) => {
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) {
+            if (modal === authModal) {
+              closeAuthAndResetMessage();
+            } else {
+              setModalVisibility(modal, false);
+            }
+          }
+        });
+      });
+
+      authTabs.forEach((button) => {
+        button.addEventListener('click', () => {
+          switchAuthView(button.dataset.authView);
+        });
+      });
+
+      registerPhone.addEventListener('input', () => {
+        registerPhone.value = sanitizeDigits(registerPhone.value).slice(0, 10);
+      });
+
+      registerOtp.addEventListener('input', () => {
+        registerOtp.value = sanitizeDigits(registerOtp.value).slice(0, 6);
+      });
+
+      loginOtp.addEventListener('input', () => {
+        loginOtp.value = sanitizeDigits(loginOtp.value).slice(0, 6);
+      });
+
+      registerRequestForm.addEventListener('submit', handleRegisterOtpRequest);
+      loginRequestForm.addEventListener('submit', handleLoginOtpRequest);
+
+      registerVerifyForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await verifyOtp('register', registerOtp.value);
+      });
+
+      loginVerifyForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await verifyOtp('login', loginOtp.value);
+      });
+
+      nightModePreference.addEventListener('change', () => {
+        appState.preferences.preferNightMode = nightModePreference.checked;
+        persistAppState();
+      });
+
+      loginBackBtn.addEventListener('click', () => {
+        resetAuthFlow('login');
+        updateAuthPanels();
+        clearAuthMessage();
+      });
+
+      registerBackBtn.addEventListener('click', () => {
+        resetAuthFlow('register');
+        updateAuthPanels();
+        clearAuthMessage();
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        appState.user = null;
+        persistAppState();
+        updateUserInterface();
+        resetAuthFlow('login');
+        resetAuthFlow('register');
+        updateAuthPanels();
+        setAuthMessage('You have been logged out successfully.', 'success');
+      });
+
+      document.addEventListener('click', (event) => {
+        const recentItem = event.target.closest('[data-recent-index]');
+        const savedItem = event.target.closest('[data-saved-index]');
+
+        if (recentItem) {
+          applySnapshot(appState.recentSearches[Number(recentItem.dataset.recentIndex)]);
+        }
+
+        if (savedItem) {
+          applySnapshot(appState.savedRoutes[Number(savedItem.dataset.savedIndex)]);
+        }
+      });
+    }
+
+    function resetApp() {
+      sourceNode.value = '';
+      destinationNode.value = '';
+      sourceLocation = null;
+      destinationLocation = null;
+      selectingDestination = false;
+      clearRouteLayers();
+      closeSuggestionLists();
+      if (sourceMarker) map.removeLayer(sourceMarker);
+      if (destinationMarker) map.removeLayer(destinationMarker);
+      sourceMarker = null;
+      destinationMarker = null;
+      setLoadingState(false);
+      setLocationIndicator(false);
+      setRouteHealth('green', 'Map reset complete. Select points again.');
+      resetComparisonGrid();
+      resetRouteSummary();
+      updateSafetyStatusPanel();
+      currentSelectedProfile = null;
+      currentComparisons = null;
+      routeInsightPayload = null;
+      lastSelectedRouteMode = null;
+      updateOverlayText();
+      statusText.textContent = 'Selections cleared. Enter new locations or click the map to choose source and destination again.';
+      visualHint.textContent = 'Selections cleared';
+      map.flyTo([22.9734, 78.6569], 5, { duration: 0.9 });
+    }
+
+    function initMap() {
+      map = L.map('map', {
+        zoomControl: true,
+        tap: true,
+        tapTolerance: 18,
+        zoomSnap: 0.25,
+        wheelDebounceTime: 40
+      }).setView([22.9734, 78.6569], 5);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+      buildOverlayZones();
+      map.on('click', handleMapClick);
+      bindInputBehaviors();
+      crimeLayerToggle.addEventListener('change', syncOverlayLayers);
+      crowdLayerToggle.addEventListener('change', syncOverlayLayers);
+      window.addEventListener('resize', refreshMapSize);
+      window.addEventListener('orientationchange', refreshMapSize);
+      updateOverlayText();
+      resetComparisonGrid();
+      resetRouteSummary('Map point selection is active. Choose Shortest, Safest, or Fastest Route after selecting locations.');
+      updateSafetyStatusPanel();
+      updateUserInterface();
+      syncOverlayLayers();
+      setRouteHealth('green', 'Map is ready. Select your source and destination points.');
+      statusText.textContent = 'Map ready. Search locations, use your current location, and compare route options in a few taps.';
+      visualHint.textContent = 'Map ready';
+      useCurrentLocationBtn.textContent = '📍 Use My Location';
+      const sourceLabel = document.querySelector('label[for="sourceNode"]');
+      const destinationLabel = document.querySelector('label[for="destinationNode"]');
+      useCurrentLocationBtn.textContent = '\u{1F4CD} Use My Location';
+      if (sourceLabel) sourceLabel.textContent = 'Source';
+      if (destinationLabel) destinationLabel.textContent = 'Destination';
+      refreshMapSize();
+      if (!hasAutoLocationAttempted) {
+        hasAutoLocationAttempted = true;
+        window.setTimeout(() => {
+          useCurrentLocationAsSource({ auto: true });
+        }, 500);
+      }
+    }
+
+    document.getElementById('shortestRouteBtn').addEventListener('click', () => runRouteSelection('shortest'));
+    document.getElementById('safestRouteBtn').addEventListener('click', () => runRouteSelection('safest'));
+    document.getElementById('fastestRouteBtn').addEventListener('click', () => runRouteSelection('fastest'));
+    document.getElementById('setSourceBtn').addEventListener('click', async () => { await setLocationFromCity('source'); });
+    document.getElementById('setDestinationBtn').addEventListener('click', async () => { await setLocationFromCity('destination'); });
+    document.getElementById('resetView').addEventListener('click', resetApp);
+
+    updateAuthPanels();
+    updateUserInterface();
+
+    if (typeof L === 'undefined') {
+      statusText.textContent = 'Leaflet failed to load. Check internet access for OpenStreetMap tiles and Leaflet assets.';
+      visualHint.textContent = 'Map load failed';
+      mapOverlay.innerHTML = '<strong>Leaflet not loaded</strong>Check network access so the OpenStreetMap map and Leaflet library can load.';
+    } else {
+      initMap();
+    }
+
+  </script>
+</body>
+</html>
