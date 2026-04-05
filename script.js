@@ -1,60 +1,44 @@
-// Initialize localStorage "users" if not exist
-if (!localStorage.getItem("users")) {
-    localStorage.setItem("users", JSON.stringify({}));
+const BASE_URL = "https://e-suraksha.onrender.com";
+
+// Send OTP
+async function sendOTP() {
+    const phone = document.getElementById("phone").value;
+
+    if (phone.length !== 10) {
+        alert("Enter valid 10-digit phone number");
+        return;
+    }
+
+    const res = await fetch(`${BASE_URL}/send-otp`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ phone })
+    });
+
+    const data = await res.json();
+    alert(data.message);
 }
 
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-const loginContainer = document.getElementById("loginFormContainer");
-const registerContainer = document.getElementById("registerFormContainer");
+// Verify OTP
+async function verifyOTP() {
+    const phone = document.getElementById("phone").value;
+    const otp = document.getElementById("otp").value;
 
-const showRegister = document.getElementById("showRegister");
-const showLogin = document.getElementById("showLogin");
+    const res = await fetch(`${BASE_URL}/verify-otp`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ phone, otp })
+    });
 
-// Toggle forms
-showRegister.addEventListener("click", e => {
-    e.preventDefault();
-    loginContainer.style.display = "none";
-    registerContainer.style.display = "block";
-});
+    const data = await res.json();
 
-showLogin.addEventListener("click", e => {
-    e.preventDefault();
-    registerContainer.style.display = "none";
-    loginContainer.style.display = "block";
-});
-
-// Login
-loginForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const username = document.getElementById("loginUsername").value;
-    const password = document.getElementById("loginPassword").value;
-
-    let users = JSON.parse(localStorage.getItem("users"));
-    if (users[username] && users[username] === password) {
-        alert("Login Successful!");
-        loginForm.reset();
+    if (data.success) {
+        alert("Login Successful ✅");
     } else {
-        alert("Invalid username or password!");
+        alert("Invalid OTP ❌");
     }
-});
-
-// Register
-registerForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const username = document.getElementById("registerUsername").value;
-    const password = document.getElementById("registerPassword").value;
-
-    let users = JSON.parse(localStorage.getItem("users"));
-    if (users[username]) {
-        alert("Username already exists!");
-    } else {
-        users[username] = password;
-        localStorage.setItem("users", JSON.stringify(users));
-        alert("Registration Successful! You can now login.");
-        registerForm.reset();
-        // Switch to login form
-        registerContainer.style.display = "none";
-        loginContainer.style.display = "block";
-    }
-});
+}
