@@ -1,77 +1,61 @@
-const BASE_URL = "https://e-suraksha.onrender.com";
-
-// Send Register OTP
-async function sendRegisterOTP() {
-    const name = document.getElementById("name").value;
-    const userId = document.getElementById("userId").value;
-    const phone = document.getElementById("phone").value;
-
-    const res = await fetch(`${BASE_URL}/send-register-otp`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, userId, phone })
-    });
-
-    const data = await res.json();
-    alert(data.message);
-
-    window.otpRequestId = data.otpRequestId;
+// Initialize localStorage "users" if not exist
+if (!localStorage.getItem("users")) {
+    localStorage.setItem("users", JSON.stringify({}));
 }
 
-// Verify Register OTP
-async function verifyRegisterOTP() {
-    const otp = document.getElementById("otp").value;
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const loginContainer = document.getElementById("loginFormContainer");
+const registerContainer = document.getElementById("registerFormContainer");
 
-    const res = await fetch(`${BASE_URL}/verify-register-otp`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            otpRequestId: window.otpRequestId,
-            otp: otp
-        })
-    });
+const showRegister = document.getElementById("showRegister");
+const showLogin = document.getElementById("showLogin");
 
-    const data = await res.json();
-    alert(data.message);
-}
+// Toggle forms
+showRegister.addEventListener("click", e => {
+    e.preventDefault();
+    loginContainer.style.display = "none";
+    registerContainer.style.display = "block";
+});
 
-// Send Login OTP
-async function sendLoginOTP() {
-    const identifier = document.getElementById("loginId").value;
+showLogin.addEventListener("click", e => {
+    e.preventDefault();
+    registerContainer.style.display = "none";
+    loginContainer.style.display = "block";
+});
 
-    const res = await fetch(`${BASE_URL}/send-login-otp`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ identifier })
-    });
+// Login
+loginForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const username = document.getElementById("loginUsername").value;
+    const password = document.getElementById("loginPassword").value;
 
-    const data = await res.json();
-    alert(data.message);
+    let users = JSON.parse(localStorage.getItem("users"));
+    if (users[username] && users[username] === password) {
+        alert("Login Successful!");
+        loginForm.reset();
+    } else {
+        alert("Invalid username or password!");
+    }
+});
 
-    window.loginOtpId = data.otpRequestId;
-}
+// Register
+registerForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const username = document.getElementById("registerUsername").value;
+    const password = document.getElementById("registerPassword").value;
 
-// Verify Login OTP
-async function verifyLoginOTP() {
-    const otp = document.getElementById("loginOtp").value;
+    let users = JSON.parse(localStorage.getItem("users"));
+    if (users[username]) {
+        alert("Username already exists!");
+    } else {
+        users[username] = password;
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Registration Successful! You can now login.");
+        registerForm.reset();
+        // Switch to login form
+        registerContainer.style.display = "none";
+        loginContainer.style.display = "block";
+    }
+});
 
-    const res = await fetch(`${BASE_URL}/verify-login-otp`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            otpRequestId: window.loginOtpId,
-            otp: otp
-        })
-    });
-
-    const data = await res.json();
-    alert(data.message);
-}
