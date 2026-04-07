@@ -58,4 +58,3 @@ registerForm.addEventListener("submit", e => {
         loginContainer.style.display = "block";
     }
 });
-
