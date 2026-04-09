@@ -30,7 +30,7 @@ html[data-theme="light"] .mobile-menu{background:linear-gradient(180deg, rgba(25
 .btn-secondary{background:linear-gradient(135deg, rgba(255,255,255,.11), rgba(255,255,255,.04))!important;border-color:rgba(255,255,255,.12)!important}
 .btn-secondary:hover,.btn-ghost:hover{background:linear-gradient(135deg, rgba(141,91,255,.16), rgba(37,215,199,.08))!important}
 .eyebrow,.auth-tab.is-active,.mode-btn.is-active{background:linear-gradient(135deg, rgba(141,91,255,.22), rgba(217,79,255,.16) 48%, rgba(37,215,199,.1))!important;border-color:rgba(255,255,255,.12)!important}
-.text-gradient{background:linear-gradient(135deg, #7dffdc 0%, #68d3ff 24%, #b16bff 52%, #ff73ba 76%, #ffbf67 100%)!important;-webkit-background-clip:text;background-clip:text;color:transparent}
+.text-gradient{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;-webkit-text-fill-color:#7dffdc!important;color:#7dffdc!important;display:inline!important}
 .hero{background:radial-gradient(circle at 12% 12%, rgba(217,79,255,.24), transparent 24%),radial-gradient(circle at 88% 14%, rgba(37,215,199,.18), transparent 22%),radial-gradient(circle at 76% 82%, rgba(255,123,104,.14), transparent 22%),radial-gradient(circle at 18% 86%, rgba(185,255,83,.1), transparent 18%),linear-gradient(135deg, rgba(18,20,34,.96), rgba(23,18,41,.92) 48%, rgba(11,25,35,.92))!important}
 html[data-theme="light"] .hero{background:radial-gradient(circle at 12% 12%, rgba(217,68,220,.14), transparent 24%),radial-gradient(circle at 88% 14%, rgba(34,189,231,.14), transparent 22%),radial-gradient(circle at 76% 82%, rgba(242,107,92,.11), transparent 22%),radial-gradient(circle at 18% 86%, rgba(138,202,52,.08), transparent 18%),linear-gradient(135deg, rgba(255,255,255,.9), rgba(250,245,255,.92) 50%, rgba(241,250,255,.94))!important}
 .hero-note{background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03)),linear-gradient(135deg, rgba(141,91,255,.14), rgba(217,79,255,.1), rgba(37,215,199,.06))!important;box-shadow:0 16px 34px rgba(10,12,34,.16)}
@@ -2131,5 +2131,19 @@ html[data-theme="light"] .admin-incident-card strong{
 }
 
 .hero-copy-block h1 + *:not(p):not(.hero-actions):not(.hero-route-form):not(.hero-meta):not(.hero-note-strip) {
+  display: none !important;
+}
+
+/* Dark theme only */
+html,
+body {
+  color-scheme: dark;
+}
+
+.mode-btn,
+.mode-toggle,
+.theme-toggle,
+[data-theme-toggle],
+[data-theme-switch] {
   display: none !important;
 }
