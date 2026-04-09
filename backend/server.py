@@ -5,6 +5,7 @@ import time
 import uuid
 from pathlib import Path
 
+import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -17,6 +18,11 @@ DATA_DIR = BASE_DIR / "data"
 USERS_FILE = DATA_DIR / "users.json"
 OTP_EXPIRY_SECONDS = 300
 OTP_STORE = {}
+MSG91_AUTH_KEY = "507139AdLkp8NcIL3C69d7114eP1"
+MSG91_SENDER_ID = "ESURAK"
+MSG91_ROUTE = "4"
+MSG91_COUNTRY = "91"
+MSG91_SEND_URL = "https://api.msg91.com/api/sendhttp.php"
 
 
 def ensure_data_files():
@@ -60,6 +66,17 @@ def is_valid_phone(phone):
 
 def mask_phone(phone):
     return f"{phone[:2]}******{phone[-2:]}"
+
+
+def is_valid_msg91_phone(phone):
+    return len(phone) == 12 and phone.isdigit() and phone.startswith("91")
+
+
+def normalize_msg91_phone(phone):
+    digits = normalize_phone(phone)
+    if len(digits) == 10:
+        return f"91{digits}"
+    return digits
 
 
 def generate_otp():
@@ -279,6 +296,64 @@ def verify_login_otp():
     return json_response(200, {"success": True, "message": "Login successful.", "user": build_public_user(user)})
 
 
+@app.route("/send-sos", methods=["POST"])
+def send_sos():
+    body = request.get_json(silent=True) or {}
+    print(f"[HIT] /send-sos -> {body}")
+
+    phone = normalize_msg91_phone(body.get("phone", ""))
+    lat = body.get("lat")
+    lng = body.get("lng")
+
+    if not is_valid_msg91_phone(phone):
+        return json_response(400, {"success": False, "message": "Phone number must be in 91XXXXXXXXXX format."})
+    if lat is None or lng is None:
+        return json_response(400, {"success": False, "message": "Latitude and longitude are required."})
+
+    try:
+        lat_value = float(lat)
+        lng_value = float(lng)
+    except (TypeError, ValueError):
+        return json_response(400, {"success": False, "message": "Latitude and longitude must be valid numbers."})
+
+    if not MSG91_AUTH_KEY or MSG91_AUTH_KEY == "PASTE_MSG91_AUTH_KEY_HERE":
+        return json_response(500, {"success": False, "message": "MSG91 auth key is not configured in server.py."})
+    if len(MSG91_SENDER_ID) != 6:
+        return json_response(500, {"success": False, "message": "MSG91 sender ID must be exactly 6 characters."})
+
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    message = (
+        "I am in trouble. Please help me.\n"
+        f"Location: https://maps.google.com/?q={lat_value},{lng_value}\n"
+        f"Time: {timestamp}"
+    )
+
+    params = {
+        "authkey": MSG91_AUTH_KEY,
+        "mobiles": phone,
+        "message": message,
+        "sender": MSG91_SENDER_ID,
+        "route": MSG91_ROUTE,
+        "country": MSG91_COUNTRY,
+    }
+
+    try:
+        response = requests.get(MSG91_SEND_URL, params=params, timeout=15)
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        return json_response(502, {"success": False, "message": f"MSG91 request failed: {exc}"})
+
+    response_text = (response.text or "").strip()
+    lowered = response_text.lower()
+    rejection_markers = ["error", "invalid", "failed", "denied", "unauthor", "reject", "missing"]
+    if not response_text:
+        return json_response(502, {"success": False, "message": "MSG91 returned an empty response."})
+    if any(marker in lowered for marker in rejection_markers):
+        return json_response(502, {"success": False, "message": f"MSG91 rejected SMS: {response_text}"})
+
+    return json_response(200, {"status": "sent", "providerResponse": response_text})
+
+
 @app.route("/", methods=["GET"])
 def home():
     return json_response(200, {"success": True, "message": "E-SURAKSHA OTP backend is running."})
@@ -289,5 +364,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     print(f"E-SURAKSHA OTP backend started successfully on http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)
-
 
