@@ -1221,17 +1221,19 @@
 
       <div class="topbar-center">
         <ul class="nav-links" id="public-nav">
-          <li><a href="#overview" data-nav-target="overview">Overview</a></li>
-          <li><a href="#auth" data-nav-target="auth">Access</a></li>
+          <li><a href="#overview" data-nav-target="overview">Home</a></li>
           <li><a href="#routes-preview" data-nav-target="routes-preview">Routes</a></li>
-          <li><a href="#auth" data-nav-target="auth">Launch</a></li>
+          <li><a href="#auth" data-nav-target="auth">Safety Map</a></li>
+          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
+          <li><a href="#auth" data-nav-target="auth">Dashboard</a></li>
         </ul>
 
         <ul class="nav-links hidden" id="dashboard-nav">
+          <li><a href="#planner" data-nav-target="planner">Home</a></li>
+          <li><a href="#planner" data-nav-target="planner">Routes</a></li>
+          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
+          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
           <li><a href="#dashboard-top" data-nav-target="dashboard-top">Dashboard</a></li>
-          <li><a href="#planner" data-nav-target="planner">Planner</a></li>
-          <li><a href="#map-panel" data-nav-target="map-panel">Map</a></li>
-          <li><a href="#insights" data-nav-target="insights">Insights</a></li>
           <li class="hidden" id="admin-nav-item"><a href="#admin-panel" data-nav-target="admin-panel">Admin</a></li>
         </ul>
       </div>
@@ -1297,17 +1299,19 @@
       </div>
       <div class="mobile-menu-body">
         <ul class="mobile-nav-links" id="mobile-public-nav">
-          <li><a href="#overview" data-nav-target="overview">Overview</a></li>
-          <li><a href="#auth" data-nav-target="auth">Access</a></li>
+          <li><a href="#overview" data-nav-target="overview">Home</a></li>
           <li><a href="#routes-preview" data-nav-target="routes-preview">Routes</a></li>
-          <li><a href="#auth" data-nav-target="auth">Launch</a></li>
+          <li><a href="#auth" data-nav-target="auth">Safety Map</a></li>
+          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
+          <li><a href="#auth" data-nav-target="auth">Dashboard</a></li>
         </ul>
 
         <ul class="mobile-nav-links hidden" id="mobile-dashboard-nav">
+          <li><a href="#planner" data-nav-target="planner">Home</a></li>
+          <li><a href="#planner" data-nav-target="planner">Routes</a></li>
+          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
+          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
           <li><a href="#dashboard-top" data-nav-target="dashboard-top">Dashboard</a></li>
-          <li><a href="#planner" data-nav-target="planner">Planner</a></li>
-          <li><a href="#map-panel" data-nav-target="map-panel">Map</a></li>
-          <li><a href="#insights" data-nav-target="insights">Insights</a></li>
           <li class="hidden" id="mobile-admin-nav-item"><a href="#admin-panel" data-nav-target="admin-panel">Admin</a></li>
         </ul>
 
@@ -1326,7 +1330,7 @@
       </div>
     </aside>
 
-    <main id="landing-view">
+    <main class="app-start-screen" id="landing-view">
       <section class="hero-shell glass" id="overview">
         <div class="hero-read-column">
           <div class="hero-copy-block">
@@ -1611,6 +1615,39 @@
           </article>
         </div>
       </section>
+
+      <section class="about-project-section glass" id="about-project">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">About Project</span>
+            <h2>E-Suraksha</h2>
+            <p>Safe route planning for public safety, built to compare fast routes against safer, crowd-aware route options.</p>
+          </div>
+        </div>
+        <div class="about-project-grid">
+          <article class="about-project-card">
+            <span>Purpose</span>
+            <strong>Public safety navigation</strong>
+            <p>E-Suraksha helps users choose routes with better safety signals, lower incident exposure, and clearer emergency support.</p>
+          </article>
+          <article class="about-project-card">
+            <span>Main Features</span>
+            <strong>Route, SOS, Admin</strong>
+            <p>Source-destination search, safety score, safest route card, hold-to-send demo SOS, admin dashboard, and turn-by-turn steps.</p>
+          </article>
+          <article class="about-project-card">
+            <span>Algorithm Used</span>
+            <strong>SafeCost scoring</strong>
+            <p>Demo route ranking uses distance, incidents, severity, unsafe-zone score, travel mode risk, and crowd density.</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="project-footer">
+        <strong>E-Suraksha</strong>
+        <span>Team/Member: Trisha</span>
+        <span>College project for public safety route planning</span>
+      </footer>
     </main>
 
     <main class="dashboard hidden" id="dashboard-view">
@@ -1630,29 +1667,34 @@
 
         <div class="analytics-grid" style="margin-top:18px;">
           <div class="analytics-card">
-            <span>Route Type</span>
+            <span>Safety Overview</span>
             <strong id="analytics-route">Not selected</strong>
             <b id="analytics-route-sub">Awaiting route</b>
           </div>
           <div class="analytics-card">
-            <span>Safety Score</span>
+            <span>Route Safety</span>
             <strong id="analytics-safety">--</strong>
             <b id="analytics-safety-sub">No active result</b>
           </div>
           <div class="analytics-card">
-            <span>Incidents Nearby</span>
+            <span>Nearby Incidents</span>
             <strong id="analytics-incidents">0</strong>
             <b id="analytics-incidents-sub">No active scan</b>
           </div>
           <div class="analytics-card">
-            <span>Crowd Level</span>
+            <span>Crowd Density</span>
             <strong id="analytics-crowd">--</strong>
             <b id="analytics-crowd-sub">No active scan</b>
           </div>
           <div class="analytics-card">
-            <span>Remaining</span>
+            <span>Live Updates</span>
             <strong id="analytics-eta">--</strong>
             <b id="analytics-eta-sub">No live route</b>
+          </div>
+          <div class="analytics-card">
+            <span>Weather</span>
+            <strong>Clear</strong>
+            <b>Demo weather status</b>
           </div>
           <div class="analytics-card">
             <span>Travel Mode</span>
@@ -1792,14 +1834,176 @@
         <div class="dashboard-head">
           <div>
             <span class="eyebrow">Admin Control</span>
-            <h2>Admin Panel</h2>
-            <p>Manage users, monitor route activity, and update incident records.</p>
+            <h2>Admin Dashboard</h2>
+            <p>Monitor user activity, route safety, SOS events, unsafe zones, and incident reports.</p>
           </div>
           <div class="search-meta">
             <span id="admin-total-users">0 users</span>
             <span id="admin-recent-routes">0 recent routes</span>
             <span id="admin-total-incidents">0 incidents</span>
           </div>
+        </div>
+
+        <div class="admin-dashboard-shell">
+          <div class="admin-metric-grid">
+            <article class="admin-metric-card">
+              <span>Total Users</span>
+              <strong>128</strong>
+              <b>Demo registered accounts</b>
+            </article>
+            <article class="admin-metric-card">
+              <span>Total Route Searches</span>
+              <strong>342</strong>
+              <b>Shortest and safest comparisons</b>
+            </article>
+            <article class="admin-metric-card">
+              <span>SOS Alerts</span>
+              <strong>18</strong>
+              <b>Hold-confirmed demo alerts</b>
+            </article>
+            <article class="admin-metric-card">
+              <span>Unsafe Areas</span>
+              <strong>9</strong>
+              <b>Risk zones under watch</b>
+            </article>
+            <article class="admin-metric-card">
+              <span>Incident Reports</span>
+              <strong>47</strong>
+              <b>Mock reports this month</b>
+            </article>
+          </div>
+
+          <div class="admin-dashboard-grid">
+            <section class="admin-dashboard-panel">
+              <div class="section-head">
+                <div>
+                  <h3>Recent Activity</h3>
+                  <span>User route searches and selected safety outcomes</span>
+                </div>
+              </div>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Source</th>
+                      <th>Destination</th>
+                      <th>Route Type</th>
+                      <th>Safety Score</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Aarav</td>
+                      <td>Brainware University</td>
+                      <td>Barasat Station</td>
+                      <td>Safest</td>
+                      <td><span class="badge safe">82/100</span></td>
+                      <td>10:12 AM</td>
+                    </tr>
+                    <tr>
+                      <td>Ishita</td>
+                      <td>Dum Dum</td>
+                      <td>Salt Lake</td>
+                      <td>Shortest</td>
+                      <td><span class="badge watch">68/100</span></td>
+                      <td>09:48 AM</td>
+                    </tr>
+                    <tr>
+                      <td>Rohan</td>
+                      <td>Howrah</td>
+                      <td>Park Street</td>
+                      <td>Safest</td>
+                      <td><span class="badge safe">76/100</span></td>
+                      <td>Yesterday</td>
+                    </tr>
+                    <tr>
+                      <td>Meera</td>
+                      <td>New Town</td>
+                      <td>Sealdah</td>
+                      <td>Alternate</td>
+                      <td><span class="badge watch">61/100</span></td>
+                      <td>Yesterday</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="admin-dashboard-panel">
+              <div class="section-head">
+                <div>
+                  <h3>SOS History</h3>
+                  <span>Demo hold-confirmed emergency alerts</span>
+                </div>
+              </div>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Location</th>
+                      <th>Status</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Ananya</td>
+                      <td>22.76150, 88.48680</td>
+                      <td><span class="badge safe">Demo sent</span></td>
+                      <td>10:04 AM</td>
+                    </tr>
+                    <tr>
+                      <td>Rahul</td>
+                      <td>22.58670, 88.41710</td>
+                      <td><span class="badge watch">Reviewed</span></td>
+                      <td>08:31 AM</td>
+                    </tr>
+                    <tr>
+                      <td>Priya</td>
+                      <td>22.55310, 88.35080</td>
+                      <td><span class="badge info">Mock alert</span></td>
+                      <td>Yesterday</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <section class="admin-dashboard-panel">
+            <div class="section-head">
+              <div>
+                <h3>Unsafe Area Watchlist</h3>
+                <span>Mock risk zones for admin monitoring</span>
+              </div>
+            </div>
+            <div class="unsafe-area-list">
+              <article class="unsafe-area-item">
+                <div>
+                  <strong>Barasat Station Road</strong>
+                  <span>Low crowd density after 9 PM and repeated theft reports.</span>
+                </div>
+                <span class="badge risk">High Risk</span>
+              </article>
+              <article class="unsafe-area-item">
+                <div>
+                  <strong>Dum Dum Underpass</strong>
+                  <span>Poor lighting and intermittent congestion near the approach lane.</span>
+                </div>
+                <span class="badge watch">Medium Risk</span>
+              </article>
+              <article class="unsafe-area-item">
+                <div>
+                  <strong>New Town Service Road</strong>
+                  <span>Mostly clear, monitored for late-night low crowd conditions.</span>
+                </div>
+                <span class="badge safe">Low Risk</span>
+              </article>
+            </div>
+          </section>
         </div>
 
         <div class="admin-grid" style="margin-top:18px;">
@@ -1902,7 +2106,7 @@
         </div>
       </section>
 
-      <section class="dashboard-grid">
+      <section class="dashboard-grid app-start-screen">
         <section class="planner-card detail-card glass" id="planner">
           <div class="section-head">
             <div>
@@ -1911,7 +2115,7 @@
             </div>
           </div>
 
-          <form class="route-form" id="route-form" novalidate>
+          <form class="route-form route-search-panel" id="route-form" novalidate>
             <div class="planner-meta">
               <div class="planner-meta-top">
                 <div class="search-assist-row">
@@ -1928,11 +2132,11 @@
                   <button class="mode-btn" type="button" data-mode-btn="walk" data-ripple>Walk</button>
                 </div>
               </div>
-              <div class="search-grid">
+              <div class="search-grid search-input-row">
                 <div class="field">
                   <label for="source-input">Source Location</label>
                   <div class="input-with-action">
-                    <input id="source-input" name="source-input" type="text" placeholder="Example: village road, panchayat, town, or station">
+                    <input id="source-input" name="source-input" type="text" placeholder="Source location">
                     <button class="voice-btn" type="button" id="source-voice-btn" title="Speak source" aria-label="Speak source">Mic</button>
                   </div>
                   <div class="autocomplete-list hidden" id="source-suggestions"></div>
@@ -1940,7 +2144,7 @@
                 <div class="field">
                   <label for="destination-input">Destination Location</label>
                   <div class="input-with-action">
-                    <input id="destination-input" name="destination-input" type="text" placeholder="Example: market, village, school, block office">
+                    <input id="destination-input" name="destination-input" type="text" placeholder="Destination location">
                     <button class="voice-btn" type="button" id="destination-voice-btn" title="Speak destination" aria-label="Speak destination">Mic</button>
                   </div>
                   <div class="autocomplete-list hidden" id="destination-suggestions"></div>
@@ -1948,9 +2152,9 @@
               </div>
             </div>
             <div class="app-message is-hidden" id="planner-message" aria-live="polite"></div>
-            <div class="button-grid">
-              <button class="btn btn-primary" type="submit" id="find-routes-btn" data-ripple>Find Routes</button>
-              <button class="btn btn-ghost" type="button" id="reset-route-btn" data-ripple>Reset Route</button>
+            <div class="button-grid search-action-row">
+              <button class="btn btn-primary" type="submit" id="find-routes-btn" data-ripple><span class="btn-route-icon" aria-hidden="true"></span><span>Find Routes</span></button>
+              <button class="btn btn-ghost" type="button" id="reset-route-btn" data-ripple><span class="btn-reset-icon" aria-hidden="true"></span><span>Clear Search</span></button>
             </div>
           </form>
 
@@ -1961,7 +2165,7 @@
             </div>
           </div>
 
-          <div class="route-results-shell" id="route-results">
+          <div class="route-results-shell route-results hidden" id="route-results">
             <div class="route-switcher">
               <div class="route-switcher-copy">
                 <strong>Route Focus</strong>
@@ -1977,9 +2181,70 @@
             </div>
           </div>
 
+          <section class="floating-route-results route-results hidden" id="floating-route-results" aria-label="Route result summary">
+            <article class="floating-route-card route-result-shortest">
+              <div class="floating-route-head">
+                <div class="floating-route-title">
+                  <span class="floating-route-kicker">Shortest Route</span>
+                  <span class="route-status-badge route-status-fastest">Fastest</span>
+                </div>
+                <strong id="shortest-result-time">8 Min</strong>
+              </div>
+              <div class="floating-route-metrics">
+                <div>
+                  <span>Distance</span>
+                  <strong id="shortest-result-distance">2.4 KM</strong>
+                </div>
+                <div>
+                  <span>Time</span>
+                  <strong id="shortest-result-duration">8 Min</strong>
+                </div>
+              </div>
+              <p><span>Path</span><strong id="shortest-result-path">A &rarr; B &rarr; C &rarr; D</strong></p>
+            </article>
+
+            <article class="floating-route-card route-result-safest">
+              <div class="floating-route-head">
+                <div class="floating-route-title">
+                  <span class="floating-route-kicker">Safest Route</span>
+                  <span class="route-status-badge route-status-recommended">Recommended</span>
+                </div>
+                <strong id="safest-result-level" class="safety-level-badge safety-level-safe">Safe</strong>
+              </div>
+              <div class="floating-route-metrics">
+                <div>
+                  <span>Distance</span>
+                  <strong id="safest-result-distance">3.1 KM</strong>
+                </div>
+                <div>
+                  <span>Time</span>
+                  <strong id="safest-result-duration">12 Min</strong>
+                </div>
+                <div class="safety-score-metric">
+                  <span>Safety</span>
+                  <div class="safety-score-ring safety-level-safe" id="safest-score-ring" style="--score-value:82%;">
+                    <strong id="safest-result-safety">82/100</strong>
+                  </div>
+                </div>
+              </div>
+              <p><span>Reason</span><strong id="safest-result-reason">Lower crime reports and crowded roads</strong></p>
+            </article>
+          </section>
+
+          <section class="left-sos-panel route-results hidden" aria-label="SOS quick access">
+            <div>
+              <strong>SOS Safety</strong>
+              <span>Hold confirmation opens the emergency demo panel.</span>
+            </div>
+            <button class="btn sos-trigger sos-trigger-strong" type="button" id="dashboard-sos-inline-btn" data-ripple>
+              <span class="sos-dot"></span>
+              <span>Open SOS</span>
+            </button>
+          </section>
+
         </section>
 
-        <section class="map-card glass" id="map-panel">
+        <section class="map-card glass map-view hidden" id="map-panel">
           <div class="map-head">
             <div>
               <h3>Live Map</h3>
@@ -1987,7 +2252,12 @@
             </div>
           </div>
 
-          <div class="navigation-controls" aria-label="Map controls">
+            <div class="navigation-controls" aria-label="Map controls">
+            <div class="map-mode-controls" aria-label="Map display mode">
+              <button class="map-mode-pill is-active" type="button">Map</button>
+              <button class="map-mode-pill" type="button">Satellite</button>
+              <button class="map-mode-pill" type="button">Heatmap</button>
+            </div>
             <div class="map-toolbar-actions">
               <button class="btn btn-primary" type="button" id="start-navigation-live-btn" disabled data-ripple>Start Navigation</button>
               <button class="btn btn-secondary" type="button" id="stop-navigation-live-btn" disabled data-ripple>Stop Navigation</button>
@@ -2073,9 +2343,34 @@
             <span class="legend-pill"><span class="legend-dot" style="background:#df7a88;"></span>High severity incident</span>
           </div>
         </section>
+
+        <aside class="right-route-panel glass hidden" id="right-route-panel" aria-label="Turn by turn route panel">
+          <section class="route-steps-panel turn-panel is-collapsed hidden" id="route-steps-panel" aria-label="Turn-by-turn route steps">
+            <div class="route-steps-head">
+              <div>
+                <span>Turn-by-turn</span>
+                <strong id="route-steps-title">Shortest Route Steps</strong>
+              </div>
+              <button class="route-steps-collapse" type="button" id="route-steps-collapse-btn" aria-expanded="false" data-ripple>Show</button>
+            </div>
+            <div class="route-steps-body">
+              <div class="route-steps-toggle-group">
+                <button class="route-steps-toggle is-active" type="button" id="show-shortest-steps-btn" data-route-steps="shortest" data-ripple>Shortest Steps</button>
+                <button class="route-steps-toggle" type="button" id="show-safest-steps-btn" data-route-steps="safest" data-ripple>Safest Steps</button>
+              </div>
+              <ol class="route-steps-list" id="route-steps-list"></ol>
+            </div>
+          </section>
+
+          <section class="right-progress-card">
+            <span>Route Progress</span>
+            <strong id="right-progress-title">Ready</strong>
+            <p id="right-progress-copy">Generate a route to begin navigation guidance.</p>
+          </section>
+        </aside>
       </section>
 
-      <section class="detail-grid" id="insights">
+      <section class="detail-grid hidden" id="insights">
         <section class="detail-stack">
           <section class="detail-card glass">
             <div class="section-head">
@@ -2160,7 +2455,10 @@
             </a>
           </div>
           <div class="sos-compact-warning hidden" id="sos-warning">No alternate emergency number saved.</div>
-          <button class="btn btn-primary sos-send-btn" type="button" id="sos-send-btn" data-ripple>Send SOS</button>
+          <button class="btn btn-primary sos-send-btn" type="button" id="sos-send-btn" data-ripple>
+            <span class="sos-hold-fill" aria-hidden="true"></span>
+            <span class="sos-hold-label">Hold 3s to send SOS</span>
+          </button>
           <div class="app-message is-hidden" id="sos-feedback" aria-live="polite"></div>
         </div>
       </div>
@@ -2173,7 +2471,10 @@
     crossorigin=""
   ></script>
   <script>
-    window.FIREBASE_CONFIG ={
+    // Firebase Phone Authentication setup:
+    // Paste your Firebase Web App config here from Firebase Console > Project settings > Your apps.
+    // Use only the public web config. Never paste Admin SDK private keys, service account JSON, or server secrets into frontend code.
+    window.FIREBASE_CONFIG = {
     apiKey: "AIzaSyB7KcquWWjzY33xMT-Og9VP2NbADQJRlhU",
     authDomain: "e-suraksha-93f5b.firebaseapp.com",
     projectId: "e-suraksha-93f5b",
@@ -2264,6 +2565,38 @@
         { id: "rur-18", city: "Kerala", area: "Wayanad", label: "Kalpetta New Bus Stand", lat: 11.6109, lng: 76.0820, keywords: ["kalpetta", "bus stand", "wayanad", "hill town"] }
       ];
 
+      const DEMO_LOCATION_DATASET = [
+        { id: "demo-barasat", city: "Kolkata Metropolitan Area", area: "Barasat", label: "Barasat", lat: 22.7215, lng: 88.4819, keywords: ["barasat", "north 24 parganas"], aliases: ["barasat", "barasat kolkata metropolitan area", "barasat station area"] },
+        { id: "demo-barasat-metro", city: "Kolkata Metropolitan Area", area: "Barasat", label: "Barasat, Kolkata Metropolitan Area", shortLabel: "Barasat", lat: 22.7215, lng: 88.4819, keywords: ["barasat", "kolkata metropolitan area", "north 24 parganas"], aliases: ["barasat", "barasat kolkata metropolitan area", "barasat station area"] },
+        { id: "demo-brainware", city: "Barasat", area: "Kazipara", label: "Brainware University", lat: 22.7615, lng: 88.4868, keywords: ["brainware", "university", "college"], aliases: ["brainware", "brainware university", "brainware college", "brainware barasat"] },
+        { id: "demo-barasat-station", city: "Barasat", area: "Station Road", label: "Barasat Station", lat: 22.7220, lng: 88.4830, keywords: ["barasat", "station", "railway"], aliases: ["barasat station", "barasat railway station", "barasat station area"] },
+        { id: "demo-kolkata", city: "Kolkata", area: "Central Kolkata", label: "Kolkata", lat: 22.5726, lng: 88.3639, keywords: ["kolkata", "calcutta", "city"], aliases: ["kolkata", "calcutta", "kolkata metropolitan area", "central kolkata"] },
+        { id: "demo-madhyamgram", city: "North 24 Parganas", area: "Madhyamgram", label: "Madhyamgram", lat: 22.6894, lng: 88.4459, keywords: ["madhyamgram", "north 24 parganas"], aliases: ["madhyamgram", "madhyamgram station", "madhyamgram kolkata"] },
+        { id: "demo-new-town", city: "Kolkata", area: "New Town", label: "New Town", lat: 22.5797, lng: 88.4795, keywords: ["new town", "rajarhat"], aliases: ["new town", "newtown", "rajarhat new town"] },
+        { id: "demo-salt-lake", city: "Kolkata", area: "Bidhannagar", label: "Salt Lake", lat: 22.5867, lng: 88.4171, keywords: ["salt lake", "bidhannagar"], aliases: ["salt", "salt lake", "bidhannagar", "salt lake city"] },
+        { id: "demo-dum-dum", city: "Kolkata", area: "Dum Dum", label: "Dum Dum", lat: 22.6420, lng: 88.4312, keywords: ["dum dum", "airport", "metro"], aliases: ["dum dum", "dumdum", "dum dum metro", "dum dum airport"] },
+        { id: "demo-sealdah", city: "Kolkata", area: "Sealdah", label: "Sealdah", lat: 22.5677, lng: 88.3697, keywords: ["sealdah", "station", "railway"], aliases: ["sealdah", "sealdah station", "sealdah railway station"] },
+        { id: "demo-howrah", city: "Howrah", area: "Howrah Station", label: "Howrah", lat: 22.5958, lng: 88.2636, keywords: ["howrah", "station", "bridge"], aliases: ["howrah", "howrah station", "howrah bridge"] },
+        { id: "demo-park-street", city: "Kolkata", area: "Park Street", label: "Park Street", lat: 22.5531, lng: 88.3508, keywords: ["park street", "metro", "central"], aliases: ["park street", "park st", "park street metro"] }
+      ];
+
+      const DEMO_ROUTE_STEPS = {
+        shortest: [
+          "Start from source",
+          "Move through main road",
+          "Continue 800m",
+          "Turn left near market",
+          "Reach destination"
+        ],
+        safest: [
+          "Start from source",
+          "Move through crowded road",
+          "Avoid low-light area",
+          "Continue through safer zone",
+          "Reach destination"
+        ]
+      };
+
       const appState = {
         currentUser: null,
         map: null,
@@ -2279,6 +2612,9 @@
         routeRequestInFlight: false,
         routeCandidates: null,
         selectedRouteKey: null,
+        routeStepsMode: "shortest",
+        routeStepsCollapsed: true,
+        routeViewVisible: false,
         travelMode: "car",
         sourcePlace: null,
         destinationPlace: null,
@@ -2296,6 +2632,13 @@
         voiceRecognition: null,
         voiceListeningKey: null,
         sosLocationError: "",
+        sosHold: {
+          active: false,
+          completed: false,
+          elapsedSeconds: 0,
+          intervalId: null,
+          timeoutId: null
+        },
         editingIncidentId: null,
         firebaseReady: false,
         otpConfirmationResult: null,
@@ -2342,7 +2685,12 @@
         mobileSosBtn: document.getElementById("mobile-sos-btn"),
         dashboardSosBtn: document.getElementById("dashboard-sos-btn"),
         floatingSosBtn: document.getElementById("floating-sos-btn"),
+        dashboardInlineSosBtn: document.getElementById("dashboard-sos-inline-btn"),
         plannerSection: document.getElementById("planner"),
+        mapPanel: document.getElementById("map-panel"),
+        dashboardGrid: document.querySelector(".dashboard-grid"),
+        insightsSection: document.getElementById("insights"),
+        rightRoutePanel: document.getElementById("right-route-panel"),
         welcomeTitle: document.getElementById("welcome-title"),
         adminRolePill: document.getElementById("admin-role-pill"),
         dashboardModePill: document.getElementById("dashboard-mode-pill"),
@@ -2385,6 +2733,11 @@
         mapModeText: document.getElementById("map-mode-text"),
         mapRiskText: document.getElementById("map-risk-text"),
         mapOverlay: document.getElementById("map-overlay"),
+        routeStepsPanel: document.getElementById("route-steps-panel"),
+        routeStepsCollapseBtn: document.getElementById("route-steps-collapse-btn"),
+        routeStepsTitle: document.getElementById("route-steps-title"),
+        routeStepsList: document.getElementById("route-steps-list"),
+        routeStepButtons: Array.from(document.querySelectorAll("[data-route-steps]")),
         loginPanel: document.getElementById("login-panel"),
         registerPanel: document.getElementById("register-panel"),
         loginMethodTabs: Array.from(document.querySelectorAll("[data-login-method]")),
@@ -2396,6 +2749,7 @@
         loginOtp: document.getElementById("login-otp"),
         sendOtpBtn: document.getElementById("send-otp-btn"),
         verifyOtpBtn: document.getElementById("verify-otp-btn"),
+        recaptchaContainer: document.getElementById("recaptcha-container"),
         usernameLoginBtn: document.getElementById("username-login-btn"),
         otpLoginMessage: document.getElementById("otp-login-message"),
         registerName: document.getElementById("register-name"),
@@ -2503,13 +2857,28 @@
         safestRouteBtn: document.getElementById("safest-route-btn"),
         resetRouteBtn: document.getElementById("reset-route-btn"),
         routeResults: document.getElementById("route-results"),
+        floatingRouteResults: document.getElementById("floating-route-results"),
+        leftSosPanel: document.querySelector(".left-sos-panel"),
         compactRouteList: document.getElementById("compact-route-list"),
         routeDetailPanel: document.getElementById("route-detail-panel"),
         crowdPanel: document.getElementById("crowd-panel"),
         incidentList: document.getElementById("incident-list"),
         recentSearches: document.getElementById("recent-searches"),
         mapLegend: document.getElementById("map-legend"),
-        mapCrowdScoreText: document.getElementById("map-crowd-score-text")
+        mapCrowdScoreText: document.getElementById("map-crowd-score-text"),
+        rightProgressTitle: document.getElementById("right-progress-title"),
+        rightProgressCopy: document.getElementById("right-progress-copy"),
+        shortestResultDistance: document.getElementById("shortest-result-distance"),
+        shortestResultTime: document.getElementById("shortest-result-time"),
+        shortestResultDuration: document.getElementById("shortest-result-duration"),
+        shortestResultPath: document.getElementById("shortest-result-path"),
+        safestResultDistance: document.getElementById("safest-result-distance"),
+        safestResultScore: document.getElementById("safest-result-score"),
+        safestScoreRing: document.getElementById("safest-score-ring"),
+        safestResultLevel: document.getElementById("safest-result-level"),
+        safestResultDuration: document.getElementById("safest-result-duration"),
+        safestResultSafety: document.getElementById("safest-result-safety"),
+        safestResultReason: document.getElementById("safest-result-reason")
       };
 
       const getStoredArray = (key) => {
@@ -2671,7 +3040,12 @@
         }
       };
 
-      const tokenizeSearch = (value) => normalizeUserId(value).split(/\s+/).filter(Boolean).slice(0, 3);
+      const normalizeLocationText = (value) => String(value || "")
+        .toLowerCase()
+        .replace(/,/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      const tokenizeSearch = (value) => normalizeLocationText(value).split(/\s+/).filter(Boolean).slice(0, 6);
       const getStoredObject = (key) => {
         try {
           const raw = window.localStorage.getItem(key);
@@ -2697,13 +3071,14 @@
           country: String(place.country || address.country || "India").trim(),
           type: String(place.type || address.type || source),
           keywords: Array.isArray(place.keywords) ? place.keywords : [],
+          aliases: Array.isArray(place.aliases) ? place.aliases : [],
           source,
           searchable: ""
         };
       };
       const withSearchablePlace = (place) => ({
         ...place,
-        searchable: normalizeUserId([place.label, place.shortLabel, place.area, place.city, place.state, ...(place.keywords || [])].join(" "))
+        searchable: normalizeLocationText([place.label, place.shortLabel, place.area, place.city, place.state, ...(place.keywords || []), ...(place.aliases || [])].join(" "))
       });
       const loadPlaceCache = () => {
         const stored = getStoredObject(STORAGE_KEYS.placeCache);
@@ -2715,7 +3090,7 @@
       const mergeUniquePlaces = (...groups) => {
         const seen = new Set();
         return groups.flat().filter(Boolean).filter((place) => {
-          const key = `${normalizeUserId(place.label)}|${Number(place.lat).toFixed(4)}|${Number(place.lng).toFixed(4)}`;
+          const key = `${normalizeLocationText(place.label)}|${Number(place.lat).toFixed(4)}|${Number(place.lng).toFixed(4)}`;
           if (seen.has(key)) return false;
           seen.add(key);
           return true;
@@ -2731,24 +3106,32 @@
       const rankPlaceMatch = (place, query) => {
         const tokens = tokenizeSearch(query);
         if (!tokens.length) return { score: 0, distanceKm: Number.POSITIVE_INFINITY };
-        const haystack = place.searchable || normalizeUserId([place.label, place.area, place.city, ...(place.keywords || [])].join(" "));
+        const normalizedQuery = normalizeLocationText(query);
+        const haystack = place.searchable || normalizeLocationText([place.label, place.area, place.city, ...(place.keywords || []), ...(place.aliases || [])].join(" "));
+        const candidates = [place.label, place.shortLabel, place.area, place.city, ...(place.keywords || []), ...(place.aliases || [])]
+          .map(normalizeLocationText)
+          .filter(Boolean);
+        const directMatch = candidates.some((candidate) => candidate.includes(normalizedQuery) || normalizedQuery.includes(candidate));
         const allMatched = tokens.every((token) => haystack.includes(token));
-        if (!allMatched) return { score: -1, distanceKm: Number.POSITIVE_INFINITY };
-        const exactBoost = normalizeUserId(place.label).startsWith(tokens.join(" ")) ? 28 : 0;
-        const labelBoost = tokens.reduce((sum, token) => sum + (normalizeUserId(place.label).includes(token) ? 12 : 0), 0);
-        const areaBoost = tokens.reduce((sum, token) => sum + (normalizeUserId(place.area).includes(token) ? 8 : 0), 0);
-        const cityBoost = tokens.reduce((sum, token) => sum + (normalizeUserId(place.city).includes(token) ? 4 : 0), 0);
+        const partialMatched = tokens.some((token) => haystack.includes(token));
+        if (!directMatch && !allMatched && !partialMatched) return { score: -1, distanceKm: Number.POSITIVE_INFINITY };
+        const exactBoost = candidates.some((candidate) => candidate === normalizedQuery) ? 36 : 0;
+        const startsWithBoost = candidates.some((candidate) => candidate.startsWith(normalizedQuery) || normalizedQuery.startsWith(candidate)) ? 28 : 0;
+        const labelBoost = tokens.reduce((sum, token) => sum + (normalizeLocationText(place.label).includes(token) ? 12 : 0), 0);
+        const areaBoost = tokens.reduce((sum, token) => sum + (normalizeLocationText(place.area).includes(token) ? 8 : 0), 0);
+        const cityBoost = tokens.reduce((sum, token) => sum + (normalizeLocationText(place.city).includes(token) ? 4 : 0), 0);
+        const aliasBoost = candidates.some((candidate) => candidate.includes(normalizedQuery) || normalizedQuery.includes(candidate)) ? 16 : 0;
         const sourceBoost = place.source === "remote" ? 4 : place.source === "cache" ? 3 : 2;
         const biasPoint = getBiasPoint();
         const distanceKm = biasPoint ? getDistanceKm(biasPoint, [place.lat, place.lng]) : Number.POSITIVE_INFINITY;
         const proximityBoost = Number.isFinite(distanceKm) ? Math.max(0, 22 - Math.min(distanceKm, 22)) : 0;
         return {
-          score: exactBoost + labelBoost + areaBoost + cityBoost + sourceBoost + proximityBoost,
+          score: exactBoost + startsWithBoost + aliasBoost + labelBoost + areaBoost + cityBoost + sourceBoost + proximityBoost,
           distanceKm
         };
       };
       const locationSearch = {
-        dataset: [...LOCATION_DATASET, ...RURAL_LOCATION_DATASET].map((location) => withSearchablePlace(normalizePlaceRecord(location, "local"))),
+        dataset: DEMO_LOCATION_DATASET.map((location) => withSearchablePlace(normalizePlaceRecord(location, "demo"))),
         search(query, limit = 6) {
           const tokens = tokenizeSearch(query);
           if (!tokens.length) return [];
@@ -2772,15 +3155,34 @@
       const updateFloatingSosVisibility = () => {
         if (!elements.floatingSosBtn) return;
         const dashboardVisible = !elements.dashboardView?.classList.contains("hidden") && Boolean(appState.currentUser);
-        const plannerRect = elements.plannerSection?.getBoundingClientRect();
-        const plannerVisible = plannerRect
-          ? plannerRect.top < window.innerHeight - 40 && plannerRect.bottom > 120
-          : false;
         const sosOpen = !elements.sosModal?.classList.contains("hidden");
-        elements.floatingSosBtn.classList.toggle("hidden", !dashboardVisible || plannerVisible || sosOpen);
+        elements.floatingSosBtn.classList.toggle("hidden", !dashboardVisible || !appState.routeViewVisible || sosOpen);
       };
       const setMapFocusMode = (isActive) => {
         elements.dashboardView?.classList.toggle("map-focus-mode", !!isActive);
+      };
+      const setRouteLayoutVisible = (isVisible) => {
+        appState.routeViewVisible = Boolean(isVisible);
+        elements.dashboardView?.classList.toggle("has-route-view", appState.routeViewVisible);
+        elements.dashboardView?.classList.toggle("app-start-screen", !appState.routeViewVisible);
+        elements.dashboardGrid?.classList.toggle("app-start-screen", !appState.routeViewVisible);
+        elements.mapPanel?.classList.toggle("hidden", !appState.routeViewVisible);
+        elements.routeResults?.classList.toggle("hidden", !appState.routeViewVisible);
+        elements.floatingRouteResults?.classList.toggle("hidden", !appState.routeViewVisible);
+        elements.leftSosPanel?.classList.toggle("hidden", !appState.routeViewVisible);
+        elements.rightRoutePanel?.classList.toggle("hidden", !appState.routeViewVisible);
+        elements.routeStepsPanel?.classList.toggle("hidden", !appState.routeViewVisible);
+        elements.insightsSection?.classList.toggle("hidden", !appState.routeViewVisible);
+        if (!appState.routeViewVisible) {
+          appState.routeStepsCollapsed = true;
+          elements.mapOverlay?.classList.remove("hidden");
+        } else {
+          window.setTimeout(() => {
+            refreshMapSize();
+            appState.map?.invalidateSize?.();
+          }, 80);
+        }
+        updateFloatingSosVisibility();
       };
       const applyTheme = (theme) => {
         const resolvedTheme = "dark";
@@ -2812,6 +3214,9 @@
         elements.loginOtpPanel.hidden = !showOtp;
         hideMessage(elements.loginMessage);
         hideMessage(elements.otpLoginMessage);
+        if (showOtp) {
+          initializeFirebaseAuth();
+        }
       };
       const showMessage = (node, type, text) => {
         if (!node) return;
@@ -3160,6 +3565,7 @@
         parts.push(`Time: ${timestamp}.`);
         return parts.join(" ");
       };
+      const buildDemoSosMessage = (location) => `I need help. My location is: ${location.latitude}, ${location.longitude}`;
       const renderSosStatusCard = () => {
         const alternate = getAlternateEmergencyContact();
         const latestAlert = readSosLog().find((item) => item.type === "emergency-alert" && (item.userKey === getCurrentSosUserKey() || item.userKey === "guest"));
@@ -3214,6 +3620,10 @@
         `;
       };
       const setSosModalOpen = async (isOpen) => {
+        if (!isOpen) {
+          cancelSosHold();
+          resetSosHoldUi();
+        }
         elements.sosModal.classList.toggle("hidden", !isOpen);
         elements.sosModalBackdrop.classList.toggle("hidden", !isOpen);
         elements.sosModal.setAttribute("aria-hidden", String(!isOpen));
@@ -3257,31 +3667,41 @@
         if (backendMessage.startsWith("MSG91 rejected SMS:")) return backendMessage;
         return backendMessage;
       };
+      const setSosHoldProgress = (percent) => {
+        const fill = elements.sosSendBtn?.querySelector(".sos-hold-fill");
+        if (fill) fill.style.transform = `scaleX(${Math.max(0, Math.min(1, percent / 100))})`;
+      };
+      const setSosHoldLabel = (text) => {
+        const label = elements.sosSendBtn?.querySelector(".sos-hold-label");
+        if (label) label.textContent = text;
+        else if (elements.sosSendBtn) elements.sosSendBtn.textContent = text;
+      };
+      const resetSosHoldUi = () => {
+        elements.sosSendBtn?.classList.remove("is-holding", "is-sent");
+        setSosHoldProgress(0);
+        setSosHoldLabel("Hold 3s to send SOS");
+      };
+      const clearSosHoldTimers = () => {
+        window.clearInterval(appState.sosHold.intervalId);
+        window.clearTimeout(appState.sosHold.timeoutId);
+        appState.sosHold.intervalId = null;
+        appState.sosHold.timeoutId = null;
+      };
       const sendSOS = async () => {
-        const alternate = getAlternateEmergencyContact();
-        if (!alternate) {
-          showMessage(elements.sosFeedback, "error", "No alternate emergency number saved.");
-          refreshSosPanel();
-          return;
-        }
         const locationResult = await fetchSosGeolocation();
         const location = getSosLocationPayload();
         if (!locationResult.ok) {
-          showMessage(elements.sosFeedback, "info", `${location.status}. Sending SOS with available route/place coordinates.`);
-        }
-        const phone = normalizeSosPhoneForMsg91(alternate.phone);
-        if (!phone || phone.length !== 12 || !phone.startsWith("91")) {
-          showMessage(elements.sosFeedback, "error", getSosPhoneErrorMessage(phone));
-          refreshSosPanel();
-          return;
+          showMessage(elements.sosFeedback, "info", `${location.status}. Demo SOS will use available route/place coordinates.`);
         }
         const lat = Number(location.latitude);
         const lng = Number(location.longitude);
         if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-          showMessage(elements.sosFeedback, "error", "No usable coordinates found. Turn on location permission or search a route first.");
+          showMessage(elements.sosFeedback, "error", "Demo SOS needs browser location permission or a selected route location.");
+          resetSosHoldUi();
+          refreshSosPanel();
           return;
         }
-        const message = buildSimpleSosMessage();
+        const message = buildDemoSosMessage(location);
         try {
           if (navigator.clipboard?.writeText) {
             await navigator.clipboard.writeText(message);
@@ -3289,38 +3709,64 @@
         } catch (error) {
           // Clipboard access is optional for this compact SOS flow.
         }
-        try {
-          const response = await fetch("http://127.0.0.1:5000/send-sos", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              phone,
-              lat,
-              lng
-            })
-          });
-          const payload = await response.json().catch(() => ({}));
-          console.log("[SOS] /send-sos response", {
-            ok: response.ok,
-            status: response.status,
-            payload
-          });
-          if (!response.ok) {
-            throw Object.assign(new Error(payload.message || "SOS sending failed."), { payload });
+        pushSosLog({
+          title: "Demo Emergency SOS",
+          summary: message,
+          sharedItems: ["Demo alert", "Current location", "No SMS sent"],
+          type: "emergency-alert"
+        });
+        elements.sosSendBtn?.classList.add("is-sent");
+        setSosHoldProgress(100);
+        setSosHoldLabel("Emergency alert sent");
+        showMessage(elements.sosFeedback, "success", `Emergency alert sent with current location. ${message}`);
+        refreshSosPanel();
+      };
+      const completeSosHold = async () => {
+        if (!appState.sosHold.active || appState.sosHold.completed) return;
+        appState.sosHold.completed = true;
+        appState.sosHold.active = false;
+        clearSosHoldTimers();
+        setSosHoldProgress(100);
+        setSosHoldLabel("Sending SOS...");
+        showMessage(elements.sosFeedback, "info", "Sending SOS...");
+        await sendSOS();
+      };
+      const cancelSosHold = () => {
+        if (!appState.sosHold.active || appState.sosHold.completed) return;
+        appState.sosHold.active = false;
+        clearSosHoldTimers();
+        resetSosHoldUi();
+        showMessage(elements.sosFeedback, "info", "SOS cancelled");
+      };
+      const startSosHold = (event) => {
+        event.preventDefault();
+        if (appState.sosHold.active) return;
+        appState.sosHold = {
+          active: true,
+          completed: false,
+          elapsedSeconds: 0,
+          intervalId: null,
+          timeoutId: null
+        };
+        elements.sosSendBtn?.classList.add("is-holding");
+        elements.sosSendBtn?.classList.remove("is-sent");
+        setSosHoldProgress(0);
+        setSosHoldLabel("Hold... 1s");
+        hideMessage(elements.sosFeedback);
+        appState.sosHold.intervalId = window.setInterval(() => {
+          if (!appState.sosHold.active) return;
+          appState.sosHold.elapsedSeconds += 1;
+          const elapsed = appState.sosHold.elapsedSeconds;
+          setSosHoldProgress((elapsed / 3) * 100);
+          if (elapsed < 3) {
+            setSosHoldLabel(`Hold... ${elapsed + 1}s`);
+          } else {
+            setSosHoldLabel("Sending SOS...");
           }
-          pushSosLog({
-            title: "Emergency SOS",
-            summary: `Emergency message sent to ${alternate.phone}.`,
-            sharedItems: ["Alternate number", "Live location", "Timestamp"],
-            type: "emergency-alert"
-          });
-          showMessage(elements.sosFeedback, "success", "SOS sent successfully");
-          refreshSosPanel();
-        } catch (error) {
-          console.error("[SOS] /send-sos error", error?.payload || error);
-          const messageText = getBackendSosErrorMessage(error, error.payload);
-          showMessage(elements.sosFeedback, "error", messageText);
-        }
+        }, 1000);
+        appState.sosHold.timeoutId = window.setTimeout(() => {
+          completeSosHold();
+        }, 3000);
       };
 
       const setAuthTab = (tabName) => {
@@ -3362,6 +3808,41 @@
         if (digits.length === 12 && digits.startsWith("91")) return `+${digits}`;
         return value.trim();
       };
+      const getFirebaseOtpErrorMessage = (error, phase = "send") => {
+        const code = error?.code || "";
+        if (code === "auth/invalid-phone-number" || code === "auth/missing-phone-number") return "Invalid phone number. Use +919876543210 format.";
+        if (code === "auth/captcha-check-failed" || code === "auth/missing-app-credential") return "reCAPTCHA verification failed. Refresh the page and try again.";
+        if (code === "auth/too-many-requests") return "OTP send failed because too many attempts were made. Wait a while and try again.";
+        if (code === "auth/quota-exceeded") return "OTP send failed because the Firebase SMS quota was exceeded.";
+        if (code === "auth/network-request-failed") return "OTP send failed due to a network problem. Check your connection.";
+        if (code === "auth/code-expired") return "Expired OTP. Send a new OTP and try again.";
+        if (code === "auth/invalid-verification-code") return "Wrong OTP. Check the 6-digit code and try again.";
+        if (code === "auth/session-expired") return "Expired OTP session. Send OTP again.";
+        if (phase === "verify") return error?.message || "OTP verification failed. Check the code and try again.";
+        return error?.message || "OTP send failed. Check Firebase Phone Auth setup.";
+      };
+      const resetRecaptchaVerifier = () => {
+        if (appState.recaptchaVerifier) {
+          try { appState.recaptchaVerifier.clear(); } catch (error) {}
+        }
+        appState.recaptchaVerifier = null;
+      };
+      const ensureRecaptchaVerifier = async () => {
+        if (!appState.firebaseReady || !window.firebase?.auth || !elements.recaptchaContainer) return null;
+        if (!appState.recaptchaVerifier) {
+          appState.recaptchaVerifier = new window.firebase.auth.RecaptchaVerifier("recaptcha-container", {
+            size: "normal",
+            callback: () => hideMessage(elements.otpLoginMessage),
+            "expired-callback": () => {
+              showMessage(elements.otpLoginMessage, "error", "Expired reCAPTCHA. Verify again before sending OTP.");
+              resetRecaptchaVerifier();
+              ensureRecaptchaVerifier();
+            }
+          });
+        }
+        await appState.recaptchaVerifier.render();
+        return appState.recaptchaVerifier;
+      };
       const initializeFirebaseAuth = () => {
         try {
           if (!window.firebase?.apps) {
@@ -3377,14 +3858,10 @@
           }
           appState.firebaseReady = true;
           window.auth = window.firebase.auth();
-          if (!appState.recaptchaVerifier) {
-            appState.recaptchaVerifier = new window.firebase.auth.RecaptchaVerifier("recaptcha-container", {
-              size: "normal"
-            });
-            appState.recaptchaVerifier.render().catch(() => {
-              showMessage(elements.otpLoginMessage, "error", "reCAPTCHA could not be initialized. Check authorized domains in Firebase.");
-            });
-          }
+          window.auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+          ensureRecaptchaVerifier().catch(() => {
+            showMessage(elements.otpLoginMessage, "error", "reCAPTCHA could not be initialized. Check authorized domains in Firebase.");
+          });
         } catch (error) {
           appState.firebaseReady = false;
           showMessage(elements.otpLoginMessage, "error", error.message || "Firebase setup failed. Check your config and domain settings.");
@@ -3443,18 +3920,22 @@
         }
         try {
           elements.sendOtpBtn.disabled = true;
-          const confirmationResult = await window.auth.signInWithPhoneNumber(phoneValue, appState.recaptchaVerifier);
+          elements.verifyOtpBtn.disabled = true;
+          const verifier = await ensureRecaptchaVerifier();
+          if (!verifier) throw new Error("reCAPTCHA is not ready. Refresh the page and try again.");
+          const confirmationResult = await window.auth.signInWithPhoneNumber(phoneValue, verifier);
           appState.otpConfirmationResult = confirmationResult;
+          elements.loginOtp.value = "";
+          elements.loginOtp.focus();
           showMessage(elements.otpLoginMessage, "success", `OTP sent to ${phoneValue}. Enter the code to verify.`);
         } catch (error) {
-          showMessage(elements.otpLoginMessage, "error", error.message || "OTP could not be sent. Check Firebase Phone Auth setup.");
-          if (appState.recaptchaVerifier) {
-            try { appState.recaptchaVerifier.clear(); } catch (clearError) {}
-            appState.recaptchaVerifier = null;
-            initializeFirebaseAuth();
-          }
+          appState.otpConfirmationResult = null;
+          showMessage(elements.otpLoginMessage, "error", getFirebaseOtpErrorMessage(error, "send"));
+          resetRecaptchaVerifier();
+          initializeFirebaseAuth();
         } finally {
           elements.sendOtpBtn.disabled = false;
+          elements.verifyOtpBtn.disabled = false;
         }
       };
       const handleVerifyOtp = async (event) => {
@@ -3481,8 +3962,14 @@
           setCurrentUser(user);
           appState.otpConfirmationResult = null;
           elements.loginOtp.value = "";
+          elements.loginPhone.value = "";
         } catch (error) {
-          showMessage(elements.otpLoginMessage, "error", error.message || "OTP verification failed.");
+          showMessage(elements.otpLoginMessage, "error", getFirebaseOtpErrorMessage(error, "verify"));
+          if (error?.code === "auth/code-expired" || error?.code === "auth/session-expired") {
+            appState.otpConfirmationResult = null;
+            resetRecaptchaVerifier();
+            initializeFirebaseAuth();
+          }
         } finally {
           elements.verifyOtpBtn.disabled = false;
         }
@@ -3524,12 +4011,50 @@
         appState.autocompleteState[key] = [];
       };
 
+      const findLocationMatch = (value) => locationSearch.search(value, 1)[0] || null;
+      const locationMatchesValue = (location, value) => {
+        if (!location || !normalizeLocationText(value)) return false;
+        const normalizedValue = normalizeLocationText(value);
+        return [location.label, location.shortLabel, location.area, location.city, ...(location.keywords || []), ...(location.aliases || [])]
+          .map(normalizeLocationText)
+          .filter(Boolean)
+          .some((candidate) => candidate.includes(normalizedValue) || normalizedValue.includes(candidate));
+      };
+      const getRouteLocationValue = (key) => {
+        const input = key === "source" ? elements.sourceInput : elements.destinationInput;
+        const selected = appState.selectedLocations[key];
+        return locationMatchesValue(selected, input.value) ? selected : findLocationMatch(input.value);
+      };
+      const isRouteSearchReady = () => {
+        const source = getRouteLocationValue("source");
+        const destination = getRouteLocationValue("destination");
+        return Boolean(
+          source
+          && destination
+          && normalizeLocationText(source.label) !== normalizeLocationText(destination.label)
+        );
+      };
+
+      const updateRouteSearchState = () => {
+        if (!elements.findRoutesBtn) return;
+        elements.findRoutesBtn.disabled = appState.routeRequestInFlight || !isRouteSearchReady();
+      };
+
       const applyLocationSelection = (key, location) => {
         const binding = autocompleteBindings.find((item) => item.key === key);
         if (!binding || !location) return;
         binding.input.value = location.label;
         appState.selectedLocations[key] = location;
+        if (key === "heroSource") {
+          elements.sourceInput.value = location.label;
+          appState.selectedLocations.source = location;
+        } else if (key === "heroDestination") {
+          elements.destinationInput.value = location.label;
+          appState.selectedLocations.destination = location;
+        }
         hideSuggestionList(key);
+        hideMessage(elements.plannerMessage);
+        updateRouteSearchState();
       };
 
       const formatNearbyBadge = (place) => {
@@ -3543,7 +4068,11 @@
         if (!binding) return;
         appState.autocompleteState[key] = matches;
         if (!matches.length) {
-          hideSuggestionList(key);
+          binding.list.innerHTML = `<div class="autocomplete-empty">No matching location found.</div>`;
+          binding.list.classList.remove("hidden");
+          if (key === "source" || key === "destination") {
+            showMessage(elements.plannerMessage, "error", "No matching location found. Try one of the demo locations.");
+          }
           return;
         }
         binding.list.innerHTML = matches.map((location, index) => `
@@ -3642,32 +4171,22 @@
       };
 
       const searchPlaces = async (query, { limit = 6 } = {}) => {
-        const localMatches = locationSearch.search(query, limit + 2);
-        try {
-          const remoteMatches = await remoteAutocompletePlaces(query);
-          return mergeUniquePlaces(remoteMatches, localMatches)
-            .map((place) => ({ place, rank: rankPlaceMatch(place, query) }))
-            .filter((item) => item.rank.score >= 0)
-            .sort((a, b) => b.rank.score - a.rank.score || a.rank.distanceKm - b.rank.distanceKm)
-            .slice(0, limit)
-            .map((item) => item.place);
-        } catch (error) {
-          return mergeUniquePlaces(localMatches)
-            .map((place) => ({ place, rank: rankPlaceMatch(place, query) }))
-            .filter((item) => item.rank.score >= 0)
-            .sort((a, b) => b.rank.score - a.rank.score || a.rank.distanceKm - b.rank.distanceKm)
-            .slice(0, limit)
-            .map((item) => item.place);
-        }
+        if (query.trim().length < 3) return [];
+        return locationSearch.search(query, limit);
       };
 
       const syncAutocompleteValue = async (key, value) => {
         const selected = appState.selectedLocations[key];
-        if (selected && normalizeUserId(selected.label) !== normalizeUserId(value)) {
+        if (selected && !locationMatchesValue(selected, value)) {
           appState.selectedLocations[key] = null;
+          if (key === "heroSource") appState.selectedLocations.source = null;
+          if (key === "heroDestination") appState.selectedLocations.destination = null;
         }
+        if (key === "source" && appState.selectedLocations.source && !locationMatchesValue(appState.selectedLocations.source, value)) appState.selectedLocations.source = null;
+        if (key === "destination" && appState.selectedLocations.destination && !locationMatchesValue(appState.selectedLocations.destination, value)) appState.selectedLocations.destination = null;
+        updateRouteSearchState();
         const query = value.trim();
-        if (!query) {
+        if (!query || query.length < 3) {
           hideSuggestionList(key);
           return;
         }
@@ -3675,11 +4194,49 @@
         appState.autocompleteState[`${key}-request`] = requestToken;
         const matches = await searchPlaces(query, { limit: 6 });
         if (appState.autocompleteState[`${key}-request`] !== requestToken) return;
+        if (matches.length) {
+          appState.selectedLocations[key] = matches[0];
+          if (key === "heroSource") appState.selectedLocations.source = matches[0];
+          if (key === "heroDestination") appState.selectedLocations.destination = matches[0];
+        }
         renderSuggestionList(key, matches);
+        updateRouteSearchState();
       };
 
       const SAFE_COST_FACTORS = { distance: 0.5, incidents: 4, severity: 3, unsafe: 5, mode: 2, crowd: -2 };
       const MODE_RISK_SCORES = { car: 1, bike: 2, walk: 3 };
+      const DEMO_SAFETY_RISK_VALUES = { crimeRisk: 10, nightRisk: 5, lowCrowdRisk: 3 };
+      const calculateDemoSafetyScore = () => 100 - (
+        DEMO_SAFETY_RISK_VALUES.crimeRisk
+        + DEMO_SAFETY_RISK_VALUES.nightRisk
+        + DEMO_SAFETY_RISK_VALUES.lowCrowdRisk
+      );
+      const getSafetyLevel = (score) => score >= 70 ? "Safe" : score >= 40 ? "Moderate" : "Risky";
+      const getSafetyLevelClass = (score) => score >= 70 ? "safe" : score >= 40 ? "moderate" : "risky";
+      const getSafetyReasonText = (score) => {
+        const level = getSafetyLevel(score);
+        if (level === "Safe") return "Low crime reports, good crowd density, safer road.";
+        if (level === "Moderate") return "Some caution needed due to mixed risk and crowd conditions.";
+        return "Higher crime, night, or low crowd risk detected for this route.";
+      };
+      const applyDemoSafetyScoreToSafestCard = () => {
+        const score = calculateDemoSafetyScore();
+        const level = getSafetyLevel(score);
+        const levelClass = getSafetyLevelClass(score);
+        if (elements.safestResultScore) elements.safestResultScore.textContent = `${score}/100`;
+        if (elements.safestResultSafety) elements.safestResultSafety.textContent = `${score}/100`;
+        if (elements.safestScoreRing) {
+          elements.safestScoreRing.style.setProperty("--score-value", `${score}%`);
+          elements.safestScoreRing.classList.remove("safety-level-safe", "safety-level-moderate", "safety-level-risky");
+          elements.safestScoreRing.classList.add(`safety-level-${levelClass}`);
+        }
+        if (elements.safestResultLevel) {
+          elements.safestResultLevel.textContent = level;
+          elements.safestResultLevel.classList.remove("safety-level-safe", "safety-level-moderate", "safety-level-risky");
+          elements.safestResultLevel.classList.add(`safety-level-${levelClass}`);
+        }
+        if (elements.safestResultReason) elements.safestResultReason.textContent = getSafetyReasonText(score);
+      };
       const getSeverityLabel = (score) => score >= 80 ? "Low Risk" : score >= 60 ? "Moderate Risk" : "High Risk";
       const getBadgeClass = (score) => score >= 80 ? "safe" : score >= 60 ? "watch" : "risk";
       const getCrowdLabel = (value) => value >= 2 ? "Medium" : value >= 1 ? "High" : "Low";
@@ -4313,6 +4870,7 @@
         elements.mobileDashboardNav.classList.remove("hidden");
         elements.landingView.classList.add("hidden");
         elements.dashboardView.classList.remove("hidden");
+        setRouteLayoutVisible(Boolean(appState.routeCandidates));
         setCurrentNavTarget(user.role === "admin" ? "admin-panel" : "dashboard-top");
         elements.sessionPill.textContent = `Session active for @${user.username}`;
         initMap();
@@ -4342,6 +4900,7 @@
         elements.mobileDashboardNav.classList.add("hidden");
         elements.dashboardView.classList.add("hidden");
         elements.landingView.classList.remove("hidden");
+        setRouteLayoutVisible(false);
         renderAdminPanel();
         setCurrentNavTarget("overview");
         appState.routeCandidates = null;
@@ -4416,8 +4975,12 @@
         destination: ["destination", "heroDestination"]
       };
 
+      const findDemoLocationByLabel = (value) => locationSearch.dataset.find((place) => locationMatchesValue(place, value))
+        || locationSearch.search(value, 1)[0]
+        || null;
+
       const resolveSelectedLocation = async (inputType, query) => {
-        const selected = (locationKeys[inputType] || []).map((key) => appState.selectedLocations[key]).find((item) => item && normalizeUserId(item.label) === normalizeUserId(query));
+        const selected = (locationKeys[inputType] || []).map((key) => appState.selectedLocations[key]).find((item) => locationMatchesValue(item, query));
         if (selected) {
           return selected;
         }
@@ -4680,6 +5243,46 @@
         return distinctRoutes.slice(0, 3);
       };
 
+      const buildDemoRoute = (source, destination, modeId, index, lateralKm, distanceFactor, durationFactor) => {
+        const modeConfig = getModeConfig(modeId);
+        const waypointA = buildMidpointWaypoint(source, destination, lateralKm, -0.18);
+        const waypointB = buildMidpointWaypoint(source, destination, lateralKm * 0.72, 0.16);
+        const coordinatePoints = [
+          source,
+          waypointA,
+          waypointB,
+          destination
+        ];
+        const geometryCoordinates = coordinatePoints.map((point) => [point.lng, point.lat]);
+        const segmentDistanceKm = coordinatePoints.slice(1).reduce((sum, point, pointIndex) => {
+          const previous = coordinatePoints[pointIndex];
+          return sum + getDistanceKm([previous.lat, previous.lng], [point.lat, point.lng]);
+        }, 0);
+        const distanceMeters = Math.max(900, segmentDistanceKm * distanceFactor * 1000);
+        const durationSeconds = Math.max(240, (distanceMeters / 1000 / modeConfig.averageSpeedKmh) * 3600 * durationFactor);
+        return {
+          distance: distanceMeters,
+          duration: durationSeconds,
+          geometry: {
+            type: "LineString",
+            coordinates: geometryCoordinates
+          },
+          legs: [],
+          weight_name: "demo",
+          route_name: `Demo Route ${index + 1}`
+        };
+      };
+
+      const buildDemoRouteAlternatives = (source, destination, modeId) => {
+        const baseDistanceKm = getDistanceKm([source.lat, source.lng], [destination.lat, destination.lng]);
+        const lateralBaseKm = Math.min(3.2, Math.max(0.45, baseDistanceKm * 0.12));
+        return [
+          buildDemoRoute(source, destination, modeId, 0, lateralBaseKm * 0.3, 1.02, 0.94),
+          buildDemoRoute(source, destination, modeId, 1, lateralBaseKm * -1.05, 1.14, 1.08),
+          buildDemoRoute(source, destination, modeId, 2, lateralBaseKm * 1.45, 1.24, 1.16)
+        ];
+      };
+
       const getNearestDistanceToRouteKm = (coordinates, incident) => {
         let minDistance = Number.POSITIVE_INFINITY;
         coordinates.forEach((point) => {
@@ -4892,7 +5495,7 @@
         const sortedBySafest = [...candidates].sort((a, b) => a.safetyCost - b.safetyCost || a.rawRiskScore - b.rawRiskScore || a.totalDistanceKm - b.totalDistanceKm);
         const sortedByBalanced = [...candidates].sort((a, b) => a.balancedCost - b.balancedCost || a.rawRiskScore - b.rawRiskScore || a.totalDistanceKm - b.totalDistanceKm);
         const shortest = sortedByShortest[0];
-        const routeRiskExists = candidates.some((route) => route.hasMeaningfulRisk);
+        const routeRiskExists = candidates.some((route) => route.hasMeaningfulRisk) || routes.some((route) => route.weight_name === "demo");
         let safest = sortedBySafest[0];
         if (routeRiskExists && candidates.length > 1) {
           safest = chooseDistinctFeaturedRoute(sortedBySafest, [shortest.routeKey], shortest) || sortedBySafest[0];
@@ -5012,6 +5615,11 @@
         appState.routeCandidates.displayedRoutes.forEach((route) => {
           const isNavigatingRoute = appState.navigation.active && route.routeKey === appState.navigation.routeKey;
           const isActive = route.routeKey === appState.selectedRouteKey || isNavigatingRoute;
+          const routeRoleClass = route.routeKey === appState.routeCandidates.featured.safestKey
+            ? "route-line-safest"
+            : route.routeKey === appState.routeCandidates.featured.shortestKey
+              ? "route-line-shortest"
+              : "route-line-alternate";
           const routeGroup = L.layerGroup().addTo(appState.map);
           if (isActive) {
             L.polyline(route.coordinates, {
@@ -5019,7 +5627,8 @@
               weight: isNavigatingRoute ? 20 : 18,
               opacity: isNavigatingRoute ? 0.34 : 0.26,
               lineJoin: "round",
-              lineCap: "round"
+              lineCap: "round",
+              className: `map-route-glow ${routeRoleClass}`
             }).addTo(routeGroup);
           }
           const casing = L.polyline(route.coordinates, {
@@ -5027,7 +5636,8 @@
             weight: isNavigatingRoute ? 14 : isActive ? 12 : 8,
             opacity: isActive ? 0.88 : 0.34,
             lineJoin: "round",
-            lineCap: "round"
+            lineCap: "round",
+            className: "map-route-casing"
           }).addTo(routeGroup);
           const polyline = L.polyline(route.coordinates, {
             color: route.style.color,
@@ -5035,7 +5645,8 @@
             opacity: isActive ? 1 : 0.5,
             dashArray: isActive ? null : route.style.dashArray,
             lineJoin: "round",
-            lineCap: "round"
+            lineCap: "round",
+            className: `map-route-line ${routeRoleClass}${isActive ? " is-active" : ""}`
           }).addTo(routeGroup);
         const popupHtml = makePopupHtml(route.routeLabel, `${route.totalDistanceKm.toFixed(2)} km | ${route.etaMinutes} min | ${route.safetyScore}/100 safety | ${route.travelMode} | ${route.bestUseCase}`);
           casing.bindPopup(popupHtml);
@@ -5086,6 +5697,7 @@
 
       const renderRouteResults = () => {
         renderRouteToggles();
+        renderFloatingRouteResults();
         if (!appState.routeCandidates?.displayedRoutes?.length) {
           if (elements.compactRouteList) {
             elements.compactRouteList.innerHTML = `<div class="empty-state">Search a source and destination to generate real route candidates and compare shortest versus safest travel.</div>`;
@@ -5097,6 +5709,66 @@
             .map((route) => buildCompactRouteItem(route, route.routeKey === appState.selectedRouteKey))
             .join("");
         }
+      };
+
+      const renderFloatingRouteResults = () => {
+        const shortest = appState.routeCandidates?.shortest;
+        const safest = appState.routeCandidates?.safest;
+        const sourceLabel = appState.sourcePlace?.shortLabel || "A";
+        const destinationLabel = appState.destinationPlace?.shortLabel || "D";
+        if (!shortest || !safest) {
+          if (elements.shortestResultDistance) elements.shortestResultDistance.textContent = "2.4 KM";
+          if (elements.shortestResultTime) elements.shortestResultTime.textContent = "8 Min";
+          if (elements.shortestResultDuration) elements.shortestResultDuration.textContent = "8 Min";
+          if (elements.shortestResultPath) elements.shortestResultPath.innerHTML = "A &rarr; B &rarr; C &rarr; D";
+          if (elements.safestResultDistance) elements.safestResultDistance.textContent = "3.1 KM";
+          if (elements.safestResultDuration) elements.safestResultDuration.textContent = "12 Min";
+          applyDemoSafetyScoreToSafestCard();
+          return;
+        }
+
+        if (elements.shortestResultDistance) elements.shortestResultDistance.textContent = `${shortest.totalDistanceKm.toFixed(1)} KM`;
+        if (elements.shortestResultTime) elements.shortestResultTime.textContent = `${shortest.etaMinutes} Min`;
+        if (elements.shortestResultDuration) elements.shortestResultDuration.textContent = `${shortest.etaMinutes} Min`;
+        if (elements.shortestResultPath) elements.shortestResultPath.textContent = `${sourceLabel} -> ${shortest.routeLabel} -> ${destinationLabel}`;
+        if (elements.safestResultDistance) elements.safestResultDistance.textContent = `${safest.totalDistanceKm.toFixed(1)} KM`;
+        if (elements.safestResultDuration) elements.safestResultDuration.textContent = `${safest.etaMinutes} Min`;
+        applyDemoSafetyScoreToSafestCard();
+      };
+
+      const formatDemoRouteStep = (step) => {
+        const sourceLabel = appState.sourcePlace?.shortLabel || appState.selectedLocations.source?.label || "source";
+        const destinationLabel = appState.destinationPlace?.shortLabel || appState.selectedLocations.destination?.label || "destination";
+        return step
+          .replace("source", sourceLabel)
+          .replace("destination", destinationLabel);
+      };
+
+      const renderRouteStepsPanel = () => {
+        if (!elements.routeStepsPanel || !elements.routeStepsList) return;
+        const mode = appState.routeStepsMode === "safest" ? "safest" : "shortest";
+        const isCollapsed = Boolean(appState.routeStepsCollapsed);
+        elements.routeStepsPanel.classList.toggle("is-collapsed", isCollapsed);
+        elements.routeStepsCollapseBtn?.setAttribute("aria-expanded", String(!isCollapsed));
+        if (elements.routeStepsCollapseBtn) elements.routeStepsCollapseBtn.textContent = isCollapsed ? "Show" : "Hide";
+        if (elements.routeStepsTitle) elements.routeStepsTitle.textContent = mode === "safest" ? "Safest Route Steps" : "Shortest Route Steps";
+        elements.routeStepButtons.forEach((button) => {
+          button.classList.toggle("is-active", button.dataset.routeSteps === mode);
+        });
+        elements.routeStepsList.innerHTML = DEMO_ROUTE_STEPS[mode]
+          .map((step) => `<li><span>${escapeHtml(formatDemoRouteStep(step))}</span></li>`)
+          .join("");
+      };
+
+      const setRouteStepsMode = (mode) => {
+        appState.routeStepsMode = mode === "safest" ? "safest" : "shortest";
+        appState.routeStepsCollapsed = false;
+        renderRouteStepsPanel();
+      };
+
+      const toggleRouteStepsPanel = () => {
+        appState.routeStepsCollapsed = !appState.routeStepsCollapsed;
+        renderRouteStepsPanel();
       };
 
       const renderRouteDetailPanel = () => {
@@ -5170,6 +5842,8 @@
           elements.mapModeText.textContent = "Map ready";
           elements.mapRiskText.textContent = "Risk insight pending";
           if (elements.mapCrowdScoreText) elements.mapCrowdScoreText.textContent = "Awaiting route";
+          if (elements.rightProgressTitle) elements.rightProgressTitle.textContent = "Ready";
+          if (elements.rightProgressCopy) elements.rightProgressCopy.textContent = "Generate a route to begin navigation guidance.";
           setNavigationUi(false);
           renderDashboardOverview(null);
           renderSosState();
@@ -5215,6 +5889,8 @@
         elements.mapRiskText.textContent = appState.navigation.active
           ? `${profile.riskLabel} | Live navigation active`
           : `${profile.riskLabel} | Crowd score ${profile.safetyBreakdown.crowdScore}`;
+        if (elements.rightProgressTitle) elements.rightProgressTitle.textContent = appState.navigation.active ? "Live navigation active" : `${profile.routeLabel} ready`;
+        if (elements.rightProgressCopy) elements.rightProgressCopy.textContent = `${profile.totalDistanceKm.toFixed(2)} km route, ${profile.etaMinutes} min ETA, ${profile.safetyScore}/100 safety.`;
         if (elements.mapCrowdScoreText) {
           elements.mapCrowdScoreText.textContent = `${profile.safetyBreakdown.crowdScore} score | ${profile.crowdLabel}`;
         }
@@ -5291,7 +5967,7 @@
 
       const setLoadingState = (isLoading, message) => {
         appState.routeRequestInFlight = isLoading;
-        elements.findRoutesBtn.disabled = isLoading;
+        updateRouteSearchState();
         elements.shortestRouteBtn.disabled = isLoading || !appState.routeCandidates;
         elements.safestRouteBtn.disabled = isLoading || !appState.routeCandidates;
         elements.resetRouteBtn.disabled = isLoading;
@@ -5299,12 +5975,15 @@
         elements.stopNavigationLiveBtn.disabled = isLoading || !appState.navigation.active;
         elements.recalculateRouteBtn.disabled = isLoading || !appState.navigation.active;
         elements.modeButtons.forEach((button) => { button.disabled = isLoading; });
+        elements.plannerMessage?.classList.toggle("is-loading-route", isLoading);
         if (message) showMessage(elements.plannerMessage, "info", message); else if (!isLoading) hideMessage(elements.plannerMessage);
       };
 
       const resetRouteUi = () => {
         setMapFocusMode(false);
+        setRouteLayoutVisible(false);
         renderRouteToggles();
+        renderFloatingRouteResults();
         if (elements.compactRouteList) {
           elements.compactRouteList.innerHTML = `<div class="empty-state">Search a source and destination to compare shortest and safest travel.</div>`;
         }
@@ -5315,6 +5994,7 @@
         updateDashboardMetrics();
         elements.mapOverlay.innerHTML = `<strong>E-SURAKSHA Routing</strong><span>Search source and destination to compare shortest and safest routes with incident-aware overlays.</span>`;
         renderMapLegend();
+        renderRouteStepsPanel();
       };
 
       const resetRoute = () => {
@@ -5325,14 +6005,19 @@
         appState.destinationPlace = null;
         appState.selectedLocations.source = null;
         appState.selectedLocations.destination = null;
+        appState.selectedLocations.heroSource = null;
+        appState.selectedLocations.heroDestination = null;
         elements.sourceInput.value = "";
         elements.destinationInput.value = "";
+        elements.heroSourceInput.value = "";
+        elements.heroDestinationInput.value = "";
         hideMessage(elements.plannerMessage);
         clearRouteLayers();
         renderIncidentMarkers(appState.incidents);
         resetRouteUi();
-        if (appState.map) appState.map.setView([28.6139, 77.2090], 11);
+        if (appState.map) appState.map.setView([22.5726, 88.3639], 11);
         refreshMapSize();
+        updateRouteSearchState();
       };
 
       const activateRouteMode = (mode) => {
@@ -5371,10 +6056,17 @@
         const destinationQuery = elements.destinationInput.value.trim();
         if (!sourceQuery || !destinationQuery) {
           showMessage(elements.plannerMessage, "error", "Enter both source and destination locations.");
+          updateRouteSearchState();
+          return;
+        }
+        if (!isRouteSearchReady()) {
+          showMessage(elements.plannerMessage, "error", "Select both source and destination from the suggestions before finding routes.");
+          updateRouteSearchState();
           return;
         }
         if (sourceQuery.toLowerCase() === destinationQuery.toLowerCase()) {
           showMessage(elements.plannerMessage, "error", "Source and destination must be different places.");
+          updateRouteSearchState();
           return;
         }
 
@@ -5383,14 +6075,17 @@
           appState.incidents = readIncidents();
           renderIncidentMarkers(appState.incidents);
           const modeConfig = getModeConfig(appState.travelMode);
-          setLoadingState(true, `Searching ${modeConfig.label.toLowerCase()} routes and scoring safer alternatives...`);
+          setLoadingState(true, `Finding safest route... Preparing demo ${modeConfig.label.toLowerCase()} options.`);
           const [sourcePlace, destinationPlace] = await Promise.all([resolveSelectedLocation("source", sourceQuery), resolveSelectedLocation("destination", destinationQuery)]);
           appState.sourcePlace = sourcePlace;
           appState.destinationPlace = destinationPlace;
-          const rawRoutes = await fetchRouteAlternatives(sourcePlace, destinationPlace, appState.travelMode);
+          const rawRoutes = buildDemoRouteAlternatives(sourcePlace, destinationPlace, appState.travelMode);
           const candidates = computeRouteModes(rawRoutes, appState.travelMode);
           appState.routeCandidates = candidates;
           appState.selectedRouteKey = candidates.featured.shortestKey;
+          setRouteLayoutVisible(true);
+          refreshMapSize();
+          appState.map?.invalidateSize?.();
           drawPlaceMarkers();
           drawRoutes();
           refreshMapSize();
@@ -5399,9 +6094,13 @@
           renderCrowdPanel();
           renderIncidentPanel();
           renderMapLegend();
+          appState.routeStepsCollapsed = false;
+          renderRouteStepsPanel();
           updateDashboardMetrics();
           setLoadingState(false);
           hideMessage(elements.plannerMessage);
+          setCurrentNavTarget("map-panel");
+          elements.mapPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
           speakText(`${candidates.shortest.routeLabel} ready from ${sourcePlace.shortLabel} to ${destinationPlace.shortLabel}. ${candidates.shortest.totalDistanceKm.toFixed(1)} kilometers and ${candidates.shortest.etaMinutes} minutes.`);
           pushRecentSearch({ source: sourcePlace.shortLabel, destination: destinationPlace.shortLabel, modeId: appState.travelMode, modeLabel: modeConfig.label, distanceKm: candidates.shortest.totalDistanceKm, etaMinutes: candidates.shortest.etaMinutes, riskLabel: candidates.shortest.riskLabel, sourceQuery, destinationQuery, username: appState.currentUser?.username || "guest" });
         } catch (error) {
@@ -5421,6 +6120,9 @@
         if (!item) return;
         elements.sourceInput.value = item.sourceQuery || item.source;
         elements.destinationInput.value = item.destinationQuery || item.destination;
+        appState.selectedLocations.source = findDemoLocationByLabel(elements.sourceInput.value);
+        appState.selectedLocations.destination = findDemoLocationByLabel(elements.destinationInput.value);
+        updateRouteSearchState();
         if (item.modeId && TRAVEL_MODES[item.modeId]) {
           appState.travelMode = item.modeId;
           renderModeButtons();
@@ -5493,6 +6195,17 @@
         if (modeButton) {
           event.preventDefault();
           await setTravelMode(modeButton.dataset.modeBtn, { recalculate: true });
+          return;
+        }
+        const routeStepsButton = event.target.closest("[data-route-steps]");
+        if (routeStepsButton) {
+          event.preventDefault();
+          setRouteStepsMode(routeStepsButton.dataset.routeSteps);
+          return;
+        }
+        if (event.target.closest("#route-steps-collapse-btn")) {
+          event.preventDefault();
+          toggleRouteStepsPanel();
           return;
         }
         const routeButton = event.target.closest("[data-route-key]");
@@ -5582,6 +6295,10 @@
       autocompleteBindings.forEach(({ key, input }) => {
         let debounceTimer = null;
         input.addEventListener("input", () => {
+          if (appState.selectedLocations[key] && normalizeUserId(appState.selectedLocations[key].label) !== normalizeUserId(input.value)) {
+            appState.selectedLocations[key] = null;
+          }
+          if (key === "source" || key === "destination") updateRouteSearchState();
           window.clearTimeout(debounceTimer);
           debounceTimer = window.setTimeout(() => {
             syncAutocompleteValue(key, input.value);
@@ -5633,7 +6350,7 @@
         resetRoute();
         jumpToPlanner();
       });
-      [elements.topbarSosBtn, elements.mobileSosBtn, elements.dashboardSosBtn, elements.floatingSosBtn]
+      [elements.topbarSosBtn, elements.mobileSosBtn, elements.dashboardSosBtn, elements.floatingSosBtn, elements.dashboardInlineSosBtn]
         .filter(Boolean)
         .forEach((button) => button.addEventListener("click", (event) => {
           event.preventDefault();
@@ -5650,9 +6367,18 @@
         hideMessage(elements.sosFeedback);
         setSosModalOpen(false);
       });
-      elements.sosSendBtn?.addEventListener("click", async (event) => {
+      elements.sosSendBtn?.addEventListener("click", (event) => {
         event.preventDefault();
-        await sendSOS();
+      });
+      elements.sosSendBtn?.addEventListener("pointerdown", startSosHold);
+      elements.sosSendBtn?.addEventListener("pointerup", cancelSosHold);
+      elements.sosSendBtn?.addEventListener("pointerleave", cancelSosHold);
+      elements.sosSendBtn?.addEventListener("pointercancel", cancelSosHold);
+      elements.sosSendBtn?.addEventListener("keydown", (event) => {
+        if (event.key === " " || event.key === "Enter") startSosHold(event);
+      });
+      elements.sosSendBtn?.addEventListener("keyup", (event) => {
+        if (event.key === " " || event.key === "Enter") cancelSosHold();
       });
       elements.quickReportIncident.addEventListener("click", handleQuickReportIncident);
       elements.shortestRouteBtn.addEventListener("click", () => activateRouteMode("shortest"));
@@ -5694,6 +6420,7 @@
       renderRecentSearches();
       renderAdminPanel();
       resetRouteUi();
+      renderRouteStepsPanel();
       renderSosState();
       restoreSession();
     });

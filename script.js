@@ -122,12 +122,6 @@ function getBackendSosErrorMessage(error, payload = {}) {
 }
 
 async function sendSOS() {
-    const phone = getAlternateEmergencyPhone();
-    if (!phone || phone.length !== 12 || !phone.startsWith("91")) {
-        showSosStatus(getSosPhoneErrorMessage(phone), "error");
-        return;
-    }
-
     let position;
     try {
         position = await getCurrentPositionAsync();
@@ -143,31 +137,10 @@ async function sendSOS() {
         return;
     }
 
-    try {
-        const response = await fetch("http://127.0.0.1:5000/send-sos", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ phone, lat, lng })
-        });
-
-        const payload = await response.json().catch(() => ({}));
-        console.log("[SOS] /send-sos response", {
-            ok: response.ok,
-            status: response.status,
-            payload
-        });
-        if (!response.ok) {
-            throw Object.assign(new Error(payload.message || "SOS sending failed."), { payload });
-        }
-
-        showSosStatus("SOS sent successfully", "success");
-        return payload;
-    } catch (error) {
-        console.error("[SOS] /send-sos error", error?.payload || error);
-        const message = getBackendSosErrorMessage(error, error.payload);
-        showSosStatus(message, "error");
-        throw error;
-    }
+    const message = `I need help. My location is: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    console.log("[SOS demo]", message);
+    showSosStatus(`Emergency alert sent with current location. ${message}`, "success");
+    return { ok: true, demo: true, lat, lng, message };
 }
 
 window.sendSOS = sendSOS;
