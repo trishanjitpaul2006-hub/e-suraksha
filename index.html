@@ -1207,36 +1207,20 @@
     }
   </style>
   <link rel="stylesheet" href="./theme-overhaul.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar glass">
-      <a class="brand" href="#overview" data-nav-target="overview">
-        <span class="brand-mark"></span>
-        <span class="brand-copy">
+    <header class="topbar app-header glass">
+      <a class="brand brand-area" href="#overview" data-nav-target="overview">
+        <span class="brand-mark brand-logo"></span>
+        <span class="brand-copy brand-text">
           <strong>E-SURAKSHA</strong>
           <span>Smart Safety Navigation</span>
         </span>
       </a>
 
-      <div class="topbar-center">
-        <ul class="nav-links" id="public-nav">
-          <li><a href="#overview" data-nav-target="overview">Home</a></li>
-          <li><a href="#routes-preview" data-nav-target="routes-preview">Routes</a></li>
-          <li><a href="#auth" data-nav-target="auth">Safety Map</a></li>
-          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
-          <li><a href="#auth" data-nav-target="auth">Dashboard</a></li>
-        </ul>
-
-        <ul class="nav-links hidden" id="dashboard-nav">
-          <li><a href="#planner" data-nav-target="planner">Route Planner</a></li>
-          <li><a href="#dashboard-top" data-nav-target="dashboard-top">Dashboard</a></li>
-          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
-          <li class="hidden" id="admin-nav-item"><a href="#admin-panel" data-nav-target="admin-panel">Admin</a></li>
-        </ul>
-      </div>
-
-      <div class="topbar-actions">
+      <div class="topbar-actions header-actions">
         <button class="btn sos-trigger sos-trigger-strong" type="button" id="topbar-sos-btn" data-ripple>
           <span class="sos-dot"></span>
           <span>SOS Alert</span>
@@ -1279,7 +1263,7 @@
         </div>
       </div>
 
-      <button class="mobile-nav-toggle" type="button" id="mobile-nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <button class="mobile-nav-toggle menu-toggle" type="button" id="mobile-nav-toggle" aria-label="Open menu" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
@@ -1287,28 +1271,22 @@
     </header>
 
     <div class="mobile-menu-backdrop" id="mobile-menu-backdrop"></div>
-    <aside class="mobile-menu glass" id="mobile-menu" aria-hidden="true">
+    <aside class="mobile-menu app-sidebar glass" id="mobile-menu" aria-hidden="true">
       <div class="mobile-menu-head">
         <span class="brand-copy">
           <strong>E-SURAKSHA</strong>
           <span>Smart Safety Navigation</span>
         </span>
-        <button class="mobile-menu-close" type="button" id="mobile-menu-close" aria-label="Close menu">X</button>
+        <button class="mobile-menu-close" type="button" id="mobile-menu-close" aria-label="Close menu">Close</button>
       </div>
       <div class="mobile-menu-body">
         <ul class="mobile-nav-links" id="mobile-public-nav">
-          <li><a href="#overview" data-nav-target="overview">Home</a></li>
-          <li><a href="#routes-preview" data-nav-target="routes-preview">Routes</a></li>
-          <li><a href="#auth" data-nav-target="auth">Safety Map</a></li>
-          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
-          <li><a href="#auth" data-nav-target="auth">Dashboard</a></li>
-        </ul>
-
-        <ul class="mobile-nav-links hidden" id="mobile-dashboard-nav">
-          <li><a href="#planner" data-nav-target="planner">Route Planner</a></li>
-          <li><a href="#dashboard-top" data-nav-target="dashboard-top">Dashboard</a></li>
-          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
-          <li class="hidden" id="mobile-admin-nav-item"><a href="#admin-panel" data-nav-target="admin-panel">Admin</a></li>
+          <li><a class="sidebar-link" href="#overview" data-section="overview" data-nav-target="overview">Home</a></li>
+          <li><a class="sidebar-link" href="#auth" data-section="planner" data-nav-target="auth" data-auth-open="login" id="sidebar-route-link">Route Planner</a></li>
+          <li><a class="sidebar-link" href="#auth" data-section="map-panel" data-nav-target="auth" id="sidebar-map-link">Safety Map</a></li>
+          <li><a class="sidebar-link" href="#about-project" data-section="about-project" data-nav-target="about-project">About</a></li>
+          <li><a class="sidebar-link" href="#auth" data-section="dashboard-top" data-nav-target="auth" id="sidebar-dashboard-link">Dashboard</a></li>
+          <li class="hidden" id="mobile-admin-nav-item"><a class="sidebar-link" href="#admin-panel" data-section="admin-panel" data-nav-target="admin-panel">Admin</a></li>
         </ul>
 
         <div class="mobile-menu-actions">
@@ -1327,7 +1305,7 @@
     </aside>
 
     <main class="app-start-screen" id="landing-view">
-      <section class="hero-shell glass" id="overview">
+      <section class="hero-shell glass page-section active" id="overview">
         <div class="hero-read-column">
           <div class="hero-copy-block">
             <span class="eyebrow">Color-rich safety navigation</span>
@@ -1340,7 +1318,7 @@
             <a class="btn btn-secondary" href="#routes-preview" data-nav-target="routes-preview" data-ripple>Explore Routes</a>
           </div>
 
-          <form class="hero-route-form hidden" id="hero-route-form" aria-hidden="true">
+          <form class="hero-route-form" id="hero-route-form">
             <div class="hero-route-input">
               <label for="hero-source-input">Source</label>
               <div class="input-with-action">
@@ -1432,7 +1410,7 @@
         </div>
       </section>
 
-      <section class="auth-block" id="auth">
+      <section class="auth-block page-section" id="auth">
         <section class="info-card glass">
           <div class="info-card-copy">
             <span class="eyebrow">Access the platform</span>
@@ -1552,7 +1530,7 @@
         </section>
       </section>
 
-      <section class="detail-card glass" id="routes-preview" style="margin-top:26px;">
+      <section class="detail-card glass hidden" id="routes-preview" style="margin-top:26px;">
         <div class="section-head">
           <div>
             <h3>Route Intelligence Preview</h3>
@@ -1612,7 +1590,7 @@
         </div>
       </section>
 
-      <section class="about-project-section glass" id="about-project">
+      <section class="about-project-section glass page-section" id="about-project">
         <div class="section-head">
           <div>
             <span class="eyebrow">About Project</span>
@@ -1647,7 +1625,7 @@
     </main>
 
     <main class="dashboard hidden" id="dashboard-view">
-      <section class="dashboard-card glass" id="dashboard-top">
+      <section class="dashboard-card glass route-stats-panel hidden page-section" id="dashboard-top">
         <div class="dashboard-head">
           <div>
             <span class="eyebrow">Mission Control</span>
@@ -1661,7 +1639,7 @@
           </div>
         </div>
 
-        <div class="analytics-grid" style="margin-top:18px;">
+        <div class="analytics-grid stats-row" style="margin-top:18px;">
           <div class="analytics-card">
             <span>Safety Overview</span>
             <strong id="analytics-route">Not selected</strong>
@@ -1826,7 +1804,7 @@
         </section>
       </section>
 
-      <section class="dashboard-card glass hidden" id="admin-panel">
+      <section class="dashboard-card glass hidden page-section" id="admin-panel">
         <div class="dashboard-head">
           <div>
             <span class="eyebrow">Admin Control</span>
@@ -2102,8 +2080,8 @@
         </div>
       </section>
 
-      <section class="dashboard-grid app-start-screen">
-        <section class="planner-card detail-card glass" id="planner">
+      <section class="dashboard-grid app-dashboard app-start-screen">
+        <section class="planner-card detail-card glass left-panel page-section" id="planner">
           <div class="section-head">
             <div>
               <h3>Route Planner</h3>
@@ -2190,7 +2168,7 @@
 
         </section>
 
-        <section class="map-card glass map-view hidden" id="map-panel">
+        <section class="map-card glass map-view map-panel hidden page-section" id="map-panel">
           <div class="map-head">
             <div>
               <h3>Live Map</h3>
@@ -2290,7 +2268,7 @@
           </div>
         </section>
 
-        <aside class="right-route-panel glass hidden" id="right-route-panel" aria-label="Turn by turn route panel">
+        <aside class="right-route-panel glass right-panel hidden" id="right-route-panel" aria-label="Turn by turn route panel">
           <section class="route-steps-panel turn-panel is-collapsed hidden" id="route-steps-panel" aria-label="Turn-by-turn route steps">
             <div class="route-steps-head">
               <div>
@@ -2615,6 +2593,9 @@
         mobilePublicNav: document.getElementById("mobile-public-nav"),
         mobileDashboardNav: document.getElementById("mobile-dashboard-nav"),
         mobileAdminNavItem: document.getElementById("mobile-admin-nav-item"),
+        sidebarRouteLink: document.getElementById("sidebar-route-link"),
+        sidebarMapLink: document.getElementById("sidebar-map-link"),
+        sidebarDashboardLink: document.getElementById("sidebar-dashboard-link"),
         mobileNavToggle: document.getElementById("mobile-nav-toggle"),
         mobileMenu: document.getElementById("mobile-menu"),
         mobileMenuBackdrop: document.getElementById("mobile-menu-backdrop"),
@@ -2635,6 +2616,7 @@
         plannerSection: document.getElementById("planner"),
         mapPanel: document.getElementById("map-panel"),
         dashboardGrid: document.querySelector(".dashboard-grid"),
+        dashboardTop: document.getElementById("dashboard-top"),
         insightsSection: document.getElementById("insights"),
         rightRoutePanel: document.getElementById("right-route-panel"),
         welcomeTitle: document.getElementById("welcome-title"),
@@ -3098,6 +3080,24 @@
         elements.mobileNavToggle.setAttribute("aria-expanded", String(isOpen));
         elements.mobileMenu.setAttribute("aria-hidden", String(!isOpen));
       };
+      const setSidebarDashboardTargets = (isLoggedIn) => {
+        const setLink = (link, targetId, authOpen = "") => {
+          if (!link) return;
+          link.href = `#${targetId}`;
+          link.dataset.navTarget = targetId;
+          if (authOpen) link.dataset.authOpen = authOpen;
+          else delete link.dataset.authOpen;
+        };
+        if (isLoggedIn) {
+          setLink(elements.sidebarRouteLink, "planner");
+          setLink(elements.sidebarMapLink, "map-panel");
+          setLink(elements.sidebarDashboardLink, "dashboard-top");
+        } else {
+          setLink(elements.sidebarRouteLink, "auth", "login");
+          setLink(elements.sidebarMapLink, "auth", "login");
+          setLink(elements.sidebarDashboardLink, "auth", "login");
+        }
+      };
       const updateFloatingSosVisibility = () => {
         if (!elements.floatingSosBtn) return;
         const dashboardVisible = !elements.dashboardView?.classList.contains("hidden") && Boolean(appState.currentUser);
@@ -3112,6 +3112,7 @@
         elements.dashboardView?.classList.toggle("has-route-view", appState.routeViewVisible);
         elements.dashboardView?.classList.toggle("app-start-screen", !appState.routeViewVisible);
         elements.dashboardGrid?.classList.toggle("app-start-screen", !appState.routeViewVisible);
+        elements.dashboardTop?.classList.toggle("hidden", !appState.routeViewVisible);
         elements.mapPanel?.classList.toggle("hidden", !appState.routeViewVisible);
         elements.routeResults?.classList.toggle("hidden", !appState.routeViewVisible);
         elements.floatingRouteResults?.classList.toggle("hidden", !appState.routeViewVisible);
@@ -3126,7 +3127,7 @@
           window.setTimeout(() => {
             refreshMapSize();
             appState.map?.invalidateSize?.();
-          }, 80);
+          }, 200);
         }
         updateFloatingSosVisibility();
       };
@@ -3180,12 +3181,134 @@
 
       const setCurrentNavTarget = (targetId) => {
         document.querySelectorAll(".nav-links a[data-nav-target], .mobile-nav-links a[data-nav-target]").forEach((link) => {
-          const isCurrent = link.dataset.navTarget === targetId;
+          const currentTarget = link.classList.contains("sidebar-link") ? link.dataset.section : link.dataset.navTarget;
+          const isCurrent = currentTarget === targetId;
           link.classList.toggle("is-current", isCurrent);
           if (isCurrent) link.setAttribute("aria-current", "page");
           else link.removeAttribute("aria-current");
         });
       };
+
+      const PAGE_SECTION_IDS = ["overview", "auth", "about-project", "dashboard-top", "admin-panel", "planner", "map-panel"];
+      const LANDING_SECTION_IDS = new Set(["overview", "auth", "about-project"]);
+      const DASHBOARD_SECTION_IDS = new Set(["dashboard-top", "admin-panel", "planner", "map-panel"]);
+
+      function setActiveSidebarLink(sectionId) {
+        document.querySelectorAll(".sidebar-link").forEach((link) => {
+          const isActive = link.dataset.section === sectionId;
+          link.classList.toggle("active", isActive);
+          link.classList.toggle("is-current", isActive);
+          if (isActive) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
+      }
+
+      function setVisiblePageSections(activeIds = []) {
+        const activeSet = new Set(activeIds);
+        PAGE_SECTION_IDS.forEach((sectionId) => {
+          const section = document.getElementById(sectionId);
+          if (!section) return;
+          const isActive = activeSet.has(sectionId);
+          section.classList.toggle("active", isActive);
+          section.classList.toggle("tab-hidden", !isActive);
+          section.classList.toggle("hidden", !isActive && DASHBOARD_SECTION_IDS.has(sectionId));
+        });
+      }
+
+      function showRouteDashboard(options = {}) {
+        elements.landingView.classList.add("hidden");
+        elements.dashboardView.classList.remove("hidden");
+        elements.dashboardGrid?.classList.remove("hidden");
+        elements.dashboardGrid?.classList.remove("map-only-view", "planner-only-view");
+        elements.dashboardView?.classList.add("has-route-view");
+        elements.dashboardView?.classList.remove("app-start-screen");
+        elements.dashboardGrid?.classList.remove("app-start-screen");
+        elements.rightRoutePanel?.classList.remove("hidden");
+        elements.routeStepsPanel?.classList.remove("hidden");
+        elements.routeResults?.classList.toggle("hidden", !appState.routeCandidates);
+        elements.leftSosPanel?.classList.toggle("hidden", !appState.routeCandidates);
+        elements.insightsSection?.classList.toggle("hidden", !appState.routeCandidates);
+        setVisiblePageSections(["planner", "map-panel", "dashboard-top"]);
+        setCurrentNavTarget("map-panel");
+        setActiveSidebarLink("map-panel");
+        updateFloatingSosVisibility();
+        if (!options.skipScroll) elements.mapPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.setTimeout(() => {
+          refreshMapSize();
+          appState.map?.invalidateSize?.();
+        }, 200);
+      }
+
+      function showSection(sectionId, options = {}) {
+        const requestedSectionId = sectionId || "overview";
+        let targetId = requestedSectionId;
+        const wantsDashboard = DASHBOARD_SECTION_IDS.has(targetId);
+
+        if (wantsDashboard && !appState.currentUser) {
+          targetId = "auth";
+          setAuthTab("login");
+        } else if (targetId === "map-panel" && !appState.routeViewVisible) {
+          targetId = "planner";
+          showMessage(elements.plannerMessage, "info", "Search a source and destination first, then the safety map opens with route overlays.");
+        }
+
+        const isLandingSection = LANDING_SECTION_IDS.has(targetId);
+        elements.landingView.classList.toggle("hidden", !isLandingSection);
+        elements.dashboardView.classList.toggle("hidden", isLandingSection);
+        elements.dashboardGrid?.classList.toggle("hidden", !(targetId === "planner" || targetId === "map-panel"));
+        elements.dashboardGrid?.classList.remove("map-only-view", "planner-only-view");
+
+        if (isLandingSection) {
+          setVisiblePageSections([targetId]);
+          elements.dashboardView?.classList.remove("has-route-view");
+          elements.dashboardView?.classList.add("app-start-screen");
+          elements.dashboardGrid?.classList.add("app-start-screen");
+          elements.rightRoutePanel?.classList.add("hidden");
+          elements.routeStepsPanel?.classList.add("hidden");
+          elements.insightsSection?.classList.add("hidden");
+        } else if (targetId === "planner") {
+          setVisiblePageSections(["planner"]);
+          elements.dashboardGrid?.classList.add("planner-only-view");
+          elements.dashboardView?.classList.add("app-start-screen");
+          elements.dashboardView?.classList.remove("has-route-view");
+          elements.dashboardGrid?.classList.add("app-start-screen");
+          elements.routeResults?.classList.toggle("hidden", !appState.routeCandidates);
+          elements.leftSosPanel?.classList.toggle("hidden", !appState.routeCandidates);
+          elements.rightRoutePanel?.classList.add("hidden");
+          elements.routeStepsPanel?.classList.add("hidden");
+          elements.insightsSection?.classList.add("hidden");
+        } else if (targetId === "map-panel") {
+          setVisiblePageSections(["map-panel"]);
+          elements.dashboardGrid?.classList.add("map-only-view");
+          elements.dashboardView?.classList.add("has-route-view");
+          elements.dashboardView?.classList.remove("app-start-screen");
+          elements.dashboardGrid?.classList.remove("app-start-screen");
+          elements.routeResults?.classList.add("hidden");
+          elements.leftSosPanel?.classList.add("hidden");
+          elements.rightRoutePanel?.classList.toggle("hidden", !appState.routeCandidates);
+          elements.routeStepsPanel?.classList.toggle("hidden", !appState.routeCandidates);
+          elements.insightsSection?.classList.add("hidden");
+          window.setTimeout(() => {
+            refreshMapSize();
+            appState.map?.invalidateSize?.();
+          }, 200);
+        } else {
+          setVisiblePageSections([targetId]);
+          elements.dashboardView?.classList.add("app-start-screen");
+          elements.dashboardView?.classList.remove("has-route-view");
+          elements.dashboardGrid?.classList.add("hidden");
+          elements.dashboardGrid?.classList.add("app-start-screen");
+          elements.rightRoutePanel?.classList.add("hidden");
+          elements.routeStepsPanel?.classList.add("hidden");
+          elements.insightsSection?.classList.add("hidden");
+        }
+
+        setCurrentNavTarget(targetId);
+        setActiveSidebarLink(requestedSectionId);
+        setMobileMenuOpen(false);
+        if (!options.skipScroll) document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        updateFloatingSosVisibility();
+      }
 
       const navObserver = new IntersectionObserver((entries) => {
         const visibleEntry = entries
@@ -3311,9 +3434,10 @@
 
       const renderAdminPanel = () => {
         const isAdmin = appState.currentUser?.role === "admin";
+        elements.dashboardView?.classList.toggle("admin-mode", isAdmin);
         elements.adminPanel.classList.toggle("hidden", !isAdmin);
-        elements.adminNavItem.classList.toggle("hidden", !isAdmin);
-        elements.mobileAdminNavItem.classList.toggle("hidden", !isAdmin);
+        elements.adminNavItem?.classList.toggle("hidden", !isAdmin);
+        elements.mobileAdminNavItem?.classList.toggle("hidden", !isAdmin);
         elements.adminRolePill.classList.toggle("hidden", !isAdmin);
         if (!isAdmin) return;
         renderAdminUserList(elements.adminUserSearch.value.trim());
@@ -3737,8 +3861,7 @@
 
       const openAuthSection = (tabName = "login") => {
         setAuthTab(tabName);
-        setCurrentNavTarget("auth");
-        document.getElementById("auth")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        showSection("auth");
         window.setTimeout(() => {
           if (tabName === "register") {
             elements.registerName?.focus();
@@ -4810,13 +4933,14 @@
         elements.mobileUserChip.classList.remove("hidden");
         elements.logoutBtn.classList.remove("hidden");
         elements.mobileLogoutBtn.classList.remove("hidden");
-        elements.publicNav.classList.add("hidden");
-        elements.mobilePublicNav.classList.add("hidden");
-        elements.dashboardNav.classList.remove("hidden");
-        elements.mobileDashboardNav.classList.remove("hidden");
+        elements.publicNav?.classList.add("hidden");
+        elements.mobilePublicNav?.classList.remove("hidden");
+        elements.dashboardNav?.classList.remove("hidden");
+        elements.mobileDashboardNav?.classList.remove("hidden");
+        setSidebarDashboardTargets(true);
         elements.landingView.classList.add("hidden");
         elements.dashboardView.classList.remove("hidden");
-        setRouteLayoutVisible(Boolean(appState.routeCandidates));
+        setRouteLayoutVisible(user.role === "admin" ? false : Boolean(appState.routeCandidates));
         setCurrentNavTarget(user.role === "admin" ? "admin-panel" : "dashboard-top");
         elements.sessionPill.textContent = `Session active for @${user.username}`;
         initMap();
@@ -4826,10 +4950,7 @@
         renderAdminPanel();
         renderSosState();
         refreshMapSize();
-        setMobileMenuOpen(false);
-        if (user.role === "admin") {
-          elements.adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        showSection(user.role === "admin" ? "admin-panel" : "planner", { skipScroll: true });
       };
 
       const logout = () => {
@@ -4840,10 +4961,11 @@
         elements.mobileUserChip.classList.add("hidden");
         elements.logoutBtn.classList.add("hidden");
         elements.mobileLogoutBtn.classList.add("hidden");
-        elements.publicNav.classList.remove("hidden");
-        elements.mobilePublicNav.classList.remove("hidden");
-        elements.dashboardNav.classList.add("hidden");
-        elements.mobileDashboardNav.classList.add("hidden");
+        elements.publicNav?.classList.remove("hidden");
+        elements.mobilePublicNav?.classList.remove("hidden");
+        elements.dashboardNav?.classList.add("hidden");
+        elements.mobileDashboardNav?.classList.add("hidden");
+        setSidebarDashboardTargets(false);
         elements.dashboardView.classList.add("hidden");
         elements.landingView.classList.remove("hidden");
         setRouteLayoutVisible(false);
@@ -4855,7 +4977,7 @@
         resetRouteUi();
         renderSosState();
         setSosModalOpen(false);
-        setMobileMenuOpen(false);
+        showSection("overview", { skipScroll: true });
       };
 
       const restoreSession = () => {
@@ -5881,13 +6003,11 @@
         }
       };
       const jumpToPlanner = () => {
-        setCurrentNavTarget("planner");
-        document.getElementById("planner")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        showSection("planner");
       };
       const handleQuickReportIncident = () => {
         if (appState.currentUser?.role === "admin") {
-          setCurrentNavTarget("admin-panel");
-          elements.adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          showSection("admin-panel");
           elements.adminIncidentLocation.focus();
           return;
         }
@@ -5985,10 +6105,12 @@
         elements.destinationInput.value = destinationValue;
         appState.selectedLocations.source = appState.selectedLocations.heroSource;
         appState.selectedLocations.destination = appState.selectedLocations.heroDestination;
-        setCurrentNavTarget("planner");
-        document.getElementById("planner")?.scrollIntoView({ behavior: "smooth", block: "start" });
         if (appState.currentUser) {
+          showSection("planner");
           await handleFindRoutes(new Event("submit", { cancelable: true }));
+        } else {
+          setAuthTab("login");
+          showSection("auth");
         }
       };
 
@@ -6045,8 +6167,7 @@
           updateDashboardMetrics();
           setLoadingState(false);
           hideMessage(elements.plannerMessage);
-          setCurrentNavTarget("map-panel");
-          elements.mapPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+          showRouteDashboard();
           speakText(`${candidates.shortest.routeLabel} ready from ${sourcePlace.shortLabel} to ${destinationPlace.shortLabel}. ${candidates.shortest.totalDistanceKm.toFixed(1)} kilometers and ${candidates.shortest.etaMinutes} minutes.`);
           pushRecentSearch({ source: sourcePlace.shortLabel, destination: destinationPlace.shortLabel, modeId: appState.travelMode, modeLabel: modeConfig.label, distanceKm: candidates.shortest.totalDistanceKm, etaMinutes: candidates.shortest.etaMinutes, riskLabel: candidates.shortest.riskLabel, sourceQuery, destinationQuery, username: appState.currentUser?.username || "guest" });
         } catch (error) {
@@ -6176,6 +6297,12 @@
           }
           return;
         }
+        const sidebarLink = event.target.closest(".sidebar-link");
+        if (sidebarLink) {
+          event.preventDefault();
+          showSection(sidebarLink.dataset.section || sidebarLink.dataset.navTarget || sidebarLink.getAttribute("href")?.slice(1) || "overview");
+          return;
+        }
         const anchor = event.target.closest('a[href^="#"]');
         if (!anchor) return;
         const href = anchor.getAttribute("href");
@@ -6184,7 +6311,11 @@
         const target = document.getElementById(targetId);
         if (!target) return;
         event.preventDefault();
-        if (anchor.dataset.authOpen) setAuthTab(anchor.dataset.authOpen);
+        if (anchor.dataset.authOpen) {
+          setAuthTab(anchor.dataset.authOpen);
+          showSection("auth");
+          return;
+        }
         setMobileMenuOpen(false);
         setCurrentNavTarget(targetId);
         target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -6366,9 +6497,11 @@
       renderRecentSearches();
       renderAdminPanel();
       resetRouteUi();
+      setSidebarDashboardTargets(false);
       renderRouteStepsPanel();
       renderSosState();
       restoreSession();
+      showSection("overview", { skipScroll: true });
     });
   </script>
 </body>

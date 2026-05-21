@@ -4584,6 +4584,263 @@ button:disabled{
   }
 }
 
+/* ChatGPT-style left sidebar navigation */
+:root{
+  --sidebar-width:280px;
+}
+
+body{
+  overflow-x:hidden!important;
+}
+
+.app-shell{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:18px 24px 32px calc(var(--sidebar-width) + 24px)!important;
+}
+
+.app-header{
+  margin:0 0 18px!important;
+}
+
+.app-header .topbar-center,
+.app-header .nav-links{
+  display:none!important;
+}
+
+.app-header .brand-area{
+  display:none!important;
+}
+
+.app-header .menu-toggle{
+  display:none!important;
+}
+
+.app-header .header-actions{
+  margin-left:auto!important;
+}
+
+.app-header #topbar-sos-btn,
+.app-header #theme-toggle-btn,
+.app-header .navbar-app-icon{
+  display:none!important;
+}
+
+.app-sidebar{
+  position:fixed!important;
+  top:0!important;
+  left:0!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:var(--sidebar-width)!important;
+  height:100vh!important;
+  max-height:none!important;
+  padding:18px!important;
+  border-radius:0!important;
+  border:0!important;
+  border-right:1px solid rgba(255,255,255,.12)!important;
+  background:linear-gradient(180deg, rgba(8,12,28,.98), rgba(10,15,34,.95))!important;
+  box-shadow:12px 0 34px rgba(0,0,0,.24)!important;
+  z-index:3000!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  transform:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+.app-sidebar .mobile-menu-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0 0 22px!important;
+  padding:0 2px 16px!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+}
+
+.app-sidebar .mobile-menu-head .brand-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:4px!important;
+  min-width:0!important;
+}
+
+.app-sidebar .mobile-menu-head .brand-copy::before{
+  content:"";
+  width:42px;
+  height:42px;
+  margin-bottom:8px;
+  border-radius:14px;
+  background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.7), transparent 17%), linear-gradient(145deg, rgba(37,215,199,.56), rgba(141,91,255,.62) 52%, rgba(255,123,104,.4));
+  box-shadow:0 16px 34px rgba(37,215,199,.14);
+}
+
+.app-sidebar .mobile-menu-head strong{
+  color:#fff!important;
+  font-size:.98rem!important;
+  letter-spacing:.12em!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+
+.app-sidebar .mobile-menu-head span span{
+  color:rgba(230,236,255,.66)!important;
+  font-size:.64rem!important;
+  letter-spacing:.12em!important;
+  line-height:1.15!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+}
+
+.app-sidebar .mobile-menu-close{
+  display:none!important;
+}
+
+.app-sidebar .mobile-menu-body{
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-height:0!important;
+  flex-direction:column!important;
+  gap:18px!important;
+}
+
+.app-sidebar .mobile-nav-links{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  padding:0!important;
+  margin:0!important;
+  list-style:none!important;
+}
+
+.app-sidebar .mobile-nav-links.hidden{
+  display:none!important;
+}
+
+.app-sidebar .mobile-nav-links a{
+  width:100%!important;
+  min-height:44px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  padding:9px 12px!important;
+  border-radius:12px!important;
+  border:1px solid transparent!important;
+  background:transparent!important;
+  color:rgba(236,241,255,.78)!important;
+  box-shadow:none!important;
+  text-decoration:none!important;
+  font-size:.9rem!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+  transition:background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease)!important;
+}
+
+.app-sidebar .mobile-nav-links a::before{
+  width:22px;
+  min-width:22px;
+  text-align:center;
+  color:rgba(236,241,255,.72);
+  font-size:1rem;
+  line-height:1;
+}
+
+.app-sidebar .mobile-nav-links li:nth-child(1) a::before{content:"⌂";}
+.app-sidebar .mobile-nav-links li:nth-child(2) a::before{content:"↱";}
+.app-sidebar .mobile-nav-links li:nth-child(3) a::before{content:"◇";}
+.app-sidebar .mobile-nav-links li:nth-child(4) a::before{content:"ⓘ";}
+.app-sidebar .mobile-nav-links li:nth-child(5) a::before{content:"▦";}
+.app-sidebar .mobile-nav-links li:nth-child(6) a::before{content:"⚙";}
+
+.app-sidebar .mobile-nav-links a:hover,
+.app-sidebar .mobile-nav-links a.is-current{
+  color:#fff!important;
+  background:rgba(255,255,255,.075)!important;
+  border-color:rgba(255,255,255,.08)!important;
+  transform:none!important;
+}
+
+.app-sidebar .mobile-menu-actions{
+  display:grid!important;
+  gap:10px!important;
+  margin-top:auto!important;
+  padding-top:16px!important;
+  border-top:1px solid rgba(255,255,255,.08)!important;
+}
+
+.app-sidebar .mobile-menu-actions .btn,
+.app-sidebar .mobile-menu-actions .user-chip{
+  width:100%!important;
+  min-height:44px!important;
+  border-radius:12px!important;
+}
+
+.app-sidebar .mobile-menu-actions .theme-toggle{
+  display:none!important;
+}
+
+.mobile-menu-backdrop{
+  display:none!important;
+}
+
+@media (max-width: 768px){
+  .app-shell{
+    padding:12px 12px 28px!important;
+  }
+
+  .app-header{
+    display:flex!important;
+    margin:0 0 14px!important;
+  }
+
+  .app-header .brand-area{
+    display:flex!important;
+  }
+
+  .app-header .menu-toggle{
+    display:inline-flex!important;
+    position:static!important;
+    margin-left:12px!important;
+  }
+
+  .app-sidebar{
+    width:min(86vw, 300px)!important;
+    transform:translateX(-100%)!important;
+    transition:transform .3s var(--ease)!important;
+    box-shadow:18px 0 48px rgba(0,0,0,.36)!important;
+  }
+
+  .app-sidebar.is-open{
+    transform:translateX(0)!important;
+  }
+
+  .app-sidebar .mobile-menu-close{
+    display:inline-flex!important;
+    flex:0 0 auto!important;
+  }
+
+  .mobile-menu-backdrop{
+    display:block!important;
+    position:fixed!important;
+    inset:0!important;
+    z-index:2990!important;
+    background:rgba(4,7,18,.56)!important;
+    opacity:0!important;
+    pointer-events:none!important;
+    transition:opacity .3s var(--ease)!important;
+  }
+
+  .mobile-menu-backdrop.is-open{
+    opacity:1!important;
+    pointer-events:auto!important;
+  }
+}
+
 /* Route flow collapse fix */
 .hidden{
   display:none!important;
@@ -5599,6 +5856,10 @@ button:disabled{
   display:grid!important;
 }
 
+.dashboard.has-route-view .compact-route-list{
+  display:grid!important;
+}
+
 .dashboard.has-route-view #map-panel .map-wrap{
   height:auto!important;
   min-height:0!important;
@@ -5686,5 +5947,860 @@ button:disabled{
   .dashboard.has-route-view .map-toolbar-actions .btn{
     max-width:none!important;
     width:100%!important;
+  }
+}
+
+/* Permanent overlap guard: one normal-flow dashboard */
+html,
+body{
+  overflow-x:hidden!important;
+}
+
+.topbar{
+  z-index:3000!important;
+}
+
+.mobile-menu,
+.mobile-menu-backdrop{
+  z-index:4000!important;
+}
+
+.autocomplete-list{
+  z-index:2500!important;
+}
+
+.floating-sos-btn{
+  position:fixed!important;
+  right:22px!important;
+  bottom:22px!important;
+  z-index:2000!important;
+}
+
+.sos-modal-backdrop,
+.sos-modal{
+  z-index:5000!important;
+}
+
+.dashboard.admin-mode #dashboard-top,
+.dashboard.admin-mode .app-dashboard,
+.dashboard.admin-mode #insights{
+  display:none!important;
+}
+
+.dashboard.admin-mode #admin-panel{
+  display:block!important;
+  width:min(1400px, calc(100% - 28px))!important;
+  margin:24px auto!important;
+}
+
+.dashboard.app-start-screen #dashboard-top,
+.dashboard.app-start-screen #admin-panel,
+.dashboard.app-start-screen #map-panel,
+.dashboard.app-start-screen #right-route-panel,
+.dashboard.app-start-screen #route-results,
+.dashboard.app-start-screen #insights,
+.dashboard.app-start-screen .route-results,
+.dashboard.app-start-screen .turn-panel,
+.dashboard.app-start-screen .navigation-controls,
+.dashboard.app-start-screen .navigation-instruction-bar,
+.dashboard.app-start-screen .navigation-stats-card,
+.dashboard.app-start-screen .navigation-toast,
+.dashboard.app-start-screen .location-permission-panel,
+.dashboard.app-start-screen .map-overlay,
+.dashboard.app-start-screen .map-legend{
+  display:none!important;
+}
+
+.dashboard.app-start-screen .app-dashboard{
+  display:block!important;
+  width:min(920px, calc(100% - 28px))!important;
+  margin:24px auto 36px!important;
+  padding:0!important;
+}
+
+.dashboard.app-start-screen #planner{
+  display:grid!important;
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  max-height:none!important;
+  overflow:visible!important;
+  transform:none!important;
+  z-index:auto!important;
+}
+
+.dashboard.has-route-view{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:20px!important;
+  padding:24px!important;
+  min-height:calc(100vh - 80px)!important;
+}
+
+.dashboard.has-route-view #admin-panel,
+.dashboard.has-route-view #insights,
+.dashboard.has-route-view #floating-route-results,
+.dashboard.has-route-view .map-toolbar-badges,
+.dashboard.has-route-view .map-overlay{
+  display:none!important;
+}
+
+.dashboard.has-route-view .app-dashboard{
+  order:1!important;
+  display:grid!important;
+  grid-template-columns:minmax(280px, .28fr) minmax(420px, .44fr) minmax(280px, .28fr)!important;
+  grid-template-areas:"left map right"!important;
+  gap:20px!important;
+  align-items:stretch!important;
+  width:100%!important;
+  max-width:1680px!important;
+  min-height:calc(100vh - 130px)!important;
+  margin:0 auto!important;
+  padding:0!important;
+}
+
+.dashboard.has-route-view .left-panel,
+.dashboard.has-route-view .map-panel,
+.dashboard.has-route-view .right-panel{
+  min-width:0!important;
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  z-index:auto!important;
+}
+
+.dashboard.has-route-view .left-panel{
+  grid-area:left!important;
+}
+
+.dashboard.has-route-view .map-panel{
+  grid-area:map!important;
+}
+
+.dashboard.has-route-view .right-panel{
+  grid-area:right!important;
+}
+
+.dashboard.has-route-view .left-panel,
+.dashboard.has-route-view .right-panel{
+  max-height:calc(100vh - 130px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  align-self:stretch!important;
+}
+
+.dashboard.has-route-view .map-panel{
+  display:grid!important;
+  grid-template-rows:auto auto minmax(620px, 1fr) auto!important;
+  min-height:620px!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  padding:14px!important;
+}
+
+.dashboard.has-route-view .planner-card,
+.dashboard.has-route-view .route-results-shell,
+.dashboard.has-route-view .left-sos-panel,
+.dashboard.has-route-view .right-route-panel,
+.dashboard.has-route-view .route-steps-panel,
+.dashboard.has-route-view .right-progress-card,
+.dashboard.has-route-view .navigation-controls{
+  position:relative!important;
+  inset:auto!important;
+  width:auto!important;
+  max-width:none!important;
+  transform:none!important;
+  z-index:auto!important;
+}
+
+.dashboard.has-route-view .left-sos-panel{
+  display:grid!important;
+  gap:12px!important;
+}
+
+.dashboard.has-route-view #route-results{
+  display:grid!important;
+}
+
+.dashboard.has-route-view .route-steps-panel{
+  display:grid!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+
+.dashboard.has-route-view .route-steps-panel .route-steps-body{
+  display:grid!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+
+.dashboard.has-route-view .route-steps-panel .route-steps-collapse{
+  display:none!important;
+}
+
+.dashboard.has-route-view .right-panel{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:16px!important;
+}
+
+.dashboard.has-route-view .right-progress-card{
+  flex:0 0 auto!important;
+}
+
+.dashboard.has-route-view .map-wrap{
+  position:relative!important;
+  min-height:620px!important;
+  height:100%!important;
+  overflow:hidden!important;
+}
+
+.dashboard.has-route-view #map{
+  width:100%!important;
+  height:100%!important;
+  min-height:620px!important;
+  border-radius:24px!important;
+  z-index:auto!important;
+}
+
+.dashboard.has-route-view .navigation-instruction-bar,
+.dashboard.has-route-view .navigation-stats-card,
+.dashboard.has-route-view .navigation-toast,
+.dashboard.has-route-view .location-permission-panel{
+  position:static!important;
+  inset:auto!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0 0 12px!important;
+  z-index:auto!important;
+}
+
+.dashboard.has-route-view #dashboard-top{
+  order:2!important;
+  display:block!important;
+  width:100%!important;
+  max-width:1680px!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+.dashboard.has-route-view #dashboard-top .dashboard-head,
+.dashboard.has-route-view #dashboard-top .dashboard-command-grid,
+.dashboard.has-route-view #dashboard-top .sos-dashboard-card{
+  display:none!important;
+}
+
+.dashboard.has-route-view .stats-row{
+  grid-column:1 / -1!important;
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit, minmax(160px, 1fr))!important;
+  gap:16px!important;
+  margin:0!important;
+}
+
+@media (max-width: 1100px){
+  .dashboard.has-route-view{
+    padding:18px!important;
+  }
+
+  .dashboard.has-route-view .app-dashboard{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"left" "map" "right"!important;
+    min-height:0!important;
+  }
+
+  .dashboard.has-route-view .left-panel,
+  .dashboard.has-route-view .right-panel{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  .dashboard.has-route-view .map-panel,
+  .dashboard.has-route-view .map-wrap,
+  .dashboard.has-route-view #map{
+    min-height:480px!important;
+  }
+
+  .dashboard.has-route-view .stats-row{
+    grid-template-columns:repeat(2, minmax(0, 1fr))!important;
+  }
+}
+
+@media (max-width: 600px){
+  .floating-sos-btn{
+    right:14px!important;
+    bottom:14px!important;
+  }
+
+  .dashboard.app-start-screen .app-dashboard,
+  .dashboard.admin-mode #admin-panel{
+    width:calc(100% - 20px)!important;
+    margin:14px auto 24px!important;
+  }
+
+  .dashboard.has-route-view{
+    padding:14px!important;
+    gap:14px!important;
+  }
+
+  .dashboard.has-route-view .app-dashboard{
+    gap:14px!important;
+  }
+
+  .dashboard.has-route-view .map-panel,
+  .dashboard.has-route-view .map-wrap,
+  .dashboard.has-route-view #map{
+    min-height:420px!important;
+  }
+
+  .dashboard.has-route-view .stats-row{
+    grid-template-columns:1fr!important;
+  }
+}
+
+#landing-view #hero-route-form{
+  display:grid!important;
+}
+
+.dashboard.admin-mode #dashboard-top,
+.dashboard.admin-mode .app-dashboard,
+.dashboard.admin-mode #insights{
+  display:none!important;
+}
+
+.dashboard.admin-mode #admin-panel{
+  display:block!important;
+}
+
+/* Header overlap fix: brand, nav, actions, and menu stay in flex flow */
+.app-header{
+  position:sticky!important;
+  top:16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:24px!important;
+  min-height:72px!important;
+  padding:12px 24px!important;
+  overflow:visible!important;
+  z-index:3000!important;
+}
+
+.app-header .brand-area{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  flex:0 0 auto!important;
+  min-width:max-content!important;
+  padding-left:0!important;
+  margin:0!important;
+  transform:none!important;
+}
+
+.app-header .brand-logo{
+  width:52px!important;
+  height:52px!important;
+  min-width:52px!important;
+  border-radius:16px!important;
+  flex:0 0 auto!important;
+}
+
+.app-header .brand-text{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  min-width:max-content!important;
+  overflow:visible!important;
+}
+
+.app-header .brand-text strong,
+.app-header .brand-text span{
+  max-width:none!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+}
+
+.app-header .topbar-center{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+}
+
+.app-header .nav-links{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:28px!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  margin:0!important;
+}
+
+.app-header .nav-links.hidden{
+  display:none!important;
+}
+
+.app-header .header-actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:10px!important;
+  flex:0 1 auto!important;
+  min-width:0!important;
+}
+
+.app-header .menu-toggle{
+  position:static!important;
+  inset:auto!important;
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  margin:0 0 0 16px!important;
+  padding:0!important;
+  flex:0 0 auto!important;
+  transform:none!important;
+  z-index:auto!important;
+}
+
+@media (min-width: 769px){
+  .app-header .menu-toggle{
+    display:none!important;
+  }
+}
+
+@media (max-width: 1100px){
+  .app-header{
+    gap:16px!important;
+    padding:12px 18px!important;
+  }
+
+  .app-header .nav-links{
+    gap:10px!important;
+  }
+
+  .app-header .nav-links a{
+    padding:9px 10px!important;
+  }
+
+  .app-header .header-actions .theme-toggle,
+  .app-header .header-actions .navbar-app-icon{
+    display:none!important;
+  }
+}
+
+@media (max-width: 768px){
+  .app-header{
+    position:sticky!important;
+    top:8px!important;
+    left:auto!important;
+    right:auto!important;
+    min-height:72px!important;
+    padding:10px 14px!important;
+    gap:12px!important;
+    margin-bottom:18px!important;
+    border-radius:18px!important;
+  }
+
+  .app-header .topbar-center,
+  .app-header .header-actions{
+    display:none!important;
+  }
+
+  .app-header .brand-area{
+    min-width:0!important;
+    flex:1 1 auto!important;
+  }
+
+  .app-header .brand-logo{
+    width:46px!important;
+    height:46px!important;
+    min-width:46px!important;
+  }
+
+  .app-header .brand-text{
+    min-width:0!important;
+  }
+
+  .app-header .brand-text strong{
+    max-width:calc(100vw - 136px)!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .app-header .brand-text span{
+    max-width:calc(100vw - 136px)!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    font-size:.68rem!important;
+  }
+
+  .app-header .menu-toggle{
+    display:inline-flex!important;
+    margin-left:12px!important;
+  }
+
+  .mobile-menu{
+    z-index:4000!important;
+  }
+}
+
+@media (max-width: 390px){
+  .app-header{
+    padding:9px 10px!important;
+    gap:10px!important;
+  }
+
+  .app-header .brand-logo{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+  }
+
+  .app-header .brand-text strong{
+    font-size:.88rem!important;
+    max-width:calc(100vw - 120px)!important;
+  }
+
+  .app-header .brand-text span{
+    display:block!important;
+    max-width:calc(100vw - 120px)!important;
+    font-size:.6rem!important;
+  }
+}
+
+/* Final sidebar authority: no horizontal nav, no full-width menu buttons */
+@media (min-width: 769px){
+  .app-header{
+    display:none!important;
+  }
+
+  .app-shell{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:18px 24px 32px calc(var(--sidebar-width) + 24px)!important;
+  }
+
+  .app-header .topbar-center,
+  .app-header .nav-links,
+  .app-header .brand-area,
+  .app-header .menu-toggle,
+  .app-header #topbar-sos-btn,
+  .app-header #theme-toggle-btn,
+  .app-header .navbar-app-icon{
+    display:none!important;
+  }
+
+  .app-header .header-actions{
+    display:flex!important;
+    margin-left:auto!important;
+  }
+
+  .app-sidebar{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    right:auto!important;
+    width:var(--sidebar-width)!important;
+    height:100vh!important;
+    transform:none!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+    z-index:3000!important;
+  }
+
+  .mobile-menu-backdrop{
+    display:none!important;
+  }
+}
+
+@media (max-width: 768px){
+  .app-shell{
+    padding:12px 12px 28px!important;
+  }
+
+  .app-header .topbar-center,
+  .app-header .header-actions,
+  .app-header .nav-links{
+    display:none!important;
+  }
+
+  .app-header .brand-area,
+  .app-header .menu-toggle{
+    display:flex!important;
+  }
+
+  .app-sidebar{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    width:min(86vw, 300px)!important;
+    height:100vh!important;
+    transform:translateX(-100%)!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+    z-index:4000!important;
+  }
+
+  .app-sidebar.is-open{
+    transform:translateX(0)!important;
+  }
+
+  .mobile-menu-backdrop{
+    display:block!important;
+    z-index:3990!important;
+  }
+}
+
+/* Final compact spacing pass: remove wasted vertical space */
+.app-shell{
+  min-height:auto!important;
+}
+
+#landing-view,
+.landing-screen,
+.app-start-screen{
+  min-height:auto!important;
+  height:auto!important;
+}
+
+#landing-view{
+  display:grid!important;
+  gap:16px!important;
+  align-content:start!important;
+}
+
+.hero-shell,
+.hero-section,
+.hero{
+  min-height:auto!important;
+  height:auto!important;
+  padding-top:24px!important;
+  padding-bottom:24px!important;
+  margin-bottom:0!important;
+  gap:16px!important;
+  align-items:flex-start!important;
+}
+
+.hero-read-column,
+.hero-copy-block,
+.hero-visual-column,
+.hero-glow-stage,
+.hero-visual-grid,
+.mock-grid,
+.feature-list{
+  gap:14px!important;
+  align-items:flex-start!important;
+}
+
+.hero-copy-block h1{
+  margin-bottom:0!important;
+}
+
+.hero-copy-block p{
+  margin:0!important;
+}
+
+.hero-actions,
+.hero-route-form{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  gap:12px!important;
+}
+
+.hero-route-form{
+  padding:14px!important;
+}
+
+.hero-preview-card,
+.hero-insight-card,
+.info-card,
+.auth-card,
+.dashboard-card,
+.detail-card,
+.about-project-section,
+.sos-dashboard-card{
+  padding:20px!important;
+}
+
+.mock-map-stage{
+  min-height:220px!important;
+}
+
+.auth-block{
+  margin-top:16px!important;
+  margin-bottom:0!important;
+  gap:16px!important;
+  align-items:flex-start!important;
+}
+
+.info-card-visual{
+  min-height:180px!important;
+}
+
+.section-wrapper,
+.dashboard-wrapper,
+.about-project-section,
+.project-footer,
+#routes-preview{
+  margin-top:16px!important;
+  margin-bottom:0!important;
+}
+
+.project-footer{
+  padding-top:14px!important;
+  padding-bottom:18px!important;
+}
+
+.dashboard{
+  min-height:auto!important;
+  height:auto!important;
+  gap:16px!important;
+  padding-top:0!important;
+  padding-bottom:20px!important;
+  align-content:start!important;
+}
+
+.dashboard.app-start-screen,
+.dashboard.has-route-view{
+  min-height:auto!important;
+  padding-top:16px!important;
+  padding-bottom:20px!important;
+  gap:16px!important;
+}
+
+.dashboard.app-start-screen .app-dashboard,
+.dashboard.app-start-screen .dashboard-grid{
+  min-height:auto!important;
+  margin-top:12px!important;
+  margin-bottom:16px!important;
+}
+
+.dashboard.has-route-view .app-dashboard,
+.dashboard.has-route-view .dashboard-grid{
+  min-height:auto!important;
+  gap:16px!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+
+.planner-card,
+.right-route-panel,
+.map-card{
+  padding:16px!important;
+}
+
+.planner-card,
+.route-form,
+.planner-meta,
+.route-results-shell,
+.right-route-panel,
+.route-steps-panel,
+.route-steps-body{
+  gap:12px!important;
+}
+
+.dashboard.has-route-view .map-panel,
+.dashboard.has-route-view .map-card{
+  min-height:520px!important;
+}
+
+.dashboard.has-route-view .map-wrap,
+.dashboard.has-route-view #map{
+  min-height:500px!important;
+  height:500px!important;
+}
+
+.dashboard.has-route-view .left-panel,
+.dashboard.has-route-view .right-panel{
+  max-height:calc(100vh - 96px)!important;
+}
+
+.stats-row,
+.analytics-grid{
+  gap:12px!important;
+}
+
+.analytics-card{
+  min-height:auto!important;
+  padding:14px!important;
+}
+
+.dashboard-command-grid,
+.admin-dashboard-shell,
+.admin-dashboard-grid,
+.admin-grid,
+.sos-dashboard-grid{
+  gap:14px!important;
+  margin-top:14px!important;
+}
+
+.empty-state{
+  padding:14px!important;
+}
+
+@media (max-width: 768px){
+  #landing-view{
+    gap:14px!important;
+  }
+
+  .hero-shell,
+  .hero-section,
+  .hero{
+    padding:18px!important;
+    gap:14px!important;
+  }
+
+  .hero-preview-card,
+  .hero-insight-card,
+  .info-card,
+  .auth-card,
+  .dashboard-card,
+  .detail-card,
+  .about-project-section,
+  .sos-dashboard-card{
+    padding:16px!important;
+  }
+
+  .mock-map-stage{
+    min-height:180px!important;
+  }
+
+  .auth-block,
+  .about-project-section,
+  .project-footer{
+    margin-top:14px!important;
+  }
+
+  .dashboard,
+  .dashboard.app-start-screen,
+  .dashboard.has-route-view{
+    padding-top:12px!important;
+    padding-bottom:16px!important;
+    gap:14px!important;
+  }
+
+  .dashboard.has-route-view .map-panel,
+  .dashboard.has-route-view .map-card{
+    min-height:auto!important;
+  }
+
+  .dashboard.has-route-view .map-wrap,
+  .dashboard.has-route-view #map{
+    min-height:360px!important;
+    height:360px!important;
+  }
+
+  .dashboard.has-route-view .left-panel,
+  .dashboard.has-route-view .right-panel{
+    max-height:none!important;
   }
 }

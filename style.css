@@ -1,0 +1,545 @@
+/* Final presentation cleanup for E-Suraksha. Loaded after legacy CSS. */
+:root {
+  --sidebar-width: 276px;
+  --content-pad: 18px;
+  --panel-gap: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden !important;
+}
+
+body {
+  min-height: auto !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.page-section {
+  display: none !important;
+}
+
+.page-section.active {
+  display: block !important;
+}
+
+#overview.page-section.active,
+#auth.page-section.active,
+#map-panel.page-section.active {
+  display: grid !important;
+}
+
+.page-section.tab-hidden {
+  display: none !important;
+}
+
+.app-sidebar .mobile-nav-links a.active,
+.app-sidebar .mobile-nav-links a[aria-current="page"] {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, .1) !important;
+  background: rgba(255, 255, 255, .09) !important;
+}
+
+.app-shell {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: auto !important;
+  margin: 0 !important;
+  padding: var(--content-pad) var(--content-pad) 24px calc(var(--sidebar-width) + var(--content-pad)) !important;
+}
+
+.app-header {
+  display: none !important;
+}
+
+.app-sidebar {
+  position: fixed !important;
+  inset: 0 auto auto 0 !important;
+  width: var(--sidebar-width) !important;
+  height: 100vh !important;
+  max-height: none !important;
+  padding: 16px !important;
+  border: 0 !important;
+  border-right: 1px solid rgba(255, 255, 255, .1) !important;
+  border-radius: 0 !important;
+  background: linear-gradient(180deg, rgba(8, 12, 28, .98), rgba(10, 15, 32, .96)) !important;
+  box-shadow: 12px 0 36px rgba(0, 0, 0, .22) !important;
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 3000 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.app-sidebar .mobile-menu-head {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin: 0 0 16px !important;
+  padding: 0 0 14px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .08) !important;
+}
+
+.app-sidebar .brand-copy {
+  display: grid !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+
+.app-sidebar .brand-copy::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+  border-radius: 13px;
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .72), transparent 18%),
+    linear-gradient(145deg, rgba(37, 215, 199, .6), rgba(141, 91, 255, .64) 52%, rgba(255, 123, 104, .42));
+  box-shadow: 0 14px 28px rgba(37, 215, 199, .12);
+}
+
+.app-sidebar .brand-copy strong {
+  color: #fff !important;
+  font-size: .96rem !important;
+  letter-spacing: .12em !important;
+  line-height: 1.1 !important;
+}
+
+.app-sidebar .brand-copy span {
+  color: rgba(231, 238, 255, .68) !important;
+  font-size: .62rem !important;
+  letter-spacing: .12em !important;
+  line-height: 1.15 !important;
+  text-transform: uppercase !important;
+}
+
+.app-sidebar .mobile-menu-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  min-height: calc(100vh - 96px) !important;
+}
+
+.app-sidebar .mobile-nav-links {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.app-sidebar .mobile-nav-links a {
+  width: 100% !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  padding: 9px 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: rgba(236, 241, 255, .8) !important;
+  font-size: .9rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-decoration: none !important;
+  transform: none !important;
+}
+
+.app-sidebar .mobile-nav-links a::before {
+  width: 22px;
+  min-width: 22px;
+  text-align: center;
+  color: rgba(236, 241, 255, .7);
+}
+
+.app-sidebar .mobile-nav-links li:nth-child(1) a::before { content: "H"; }
+.app-sidebar .mobile-nav-links li:nth-child(2) a::before { content: "R"; }
+.app-sidebar .mobile-nav-links li:nth-child(3) a::before { content: "M"; }
+.app-sidebar .mobile-nav-links li:nth-child(4) a::before { content: "i"; }
+.app-sidebar .mobile-nav-links li:nth-child(5) a::before { content: "D"; }
+.app-sidebar .mobile-nav-links li:nth-child(6) a::before { content: "A"; }
+
+.app-sidebar .mobile-nav-links a:hover,
+.app-sidebar .mobile-nav-links a.is-current {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, .08) !important;
+  background: rgba(255, 255, 255, .075) !important;
+}
+
+.app-sidebar .mobile-menu-actions {
+  display: grid !important;
+  gap: 10px !important;
+  margin-top: auto !important;
+  padding-top: 14px !important;
+  border-top: 1px solid rgba(255, 255, 255, .08) !important;
+}
+
+.app-sidebar .mobile-menu-actions .btn,
+.app-sidebar .mobile-menu-actions .user-chip {
+  width: 100% !important;
+  min-height: 44px !important;
+  border-radius: 12px !important;
+}
+
+.app-sidebar .theme-toggle,
+.app-sidebar .mobile-menu-close,
+.mobile-menu-backdrop {
+  display: none !important;
+}
+
+#landing-view,
+.landing-screen,
+.app-start-screen {
+  min-height: auto !important;
+  height: auto !important;
+}
+
+#landing-view {
+  display: grid !important;
+  gap: var(--panel-gap) !important;
+  align-content: start !important;
+}
+
+.hero-shell,
+.hero {
+  min-height: auto !important;
+  height: auto !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+  padding: 22px !important;
+  margin: 0 !important;
+}
+
+.hero-read-column,
+.hero-copy-block,
+.hero-visual-column,
+.hero-glow-stage,
+.hero-visual-grid,
+.mock-grid,
+.feature-list {
+  gap: 14px !important;
+  align-items: flex-start !important;
+}
+
+.hero-copy-block h1,
+.hero-copy-block p {
+  margin-bottom: 0 !important;
+}
+
+.hero-actions,
+.hero-route-form {
+  gap: 12px !important;
+  margin: 0 !important;
+}
+
+.hero-route-form {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto !important;
+  align-items: end !important;
+  gap: 12px !important;
+}
+
+.route-search-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.hero-route-form {
+  padding: 14px !important;
+}
+
+.input-with-action {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.voice-btn {
+  min-width: 46px !important;
+  width: 46px !important;
+  min-height: 46px !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+}
+
+.field input,
+.field select,
+.hero-route-input input {
+  min-height: 48px !important;
+}
+
+.planner-card .search-input-row,
+.planner-card .search-action-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.planner-card #find-routes-btn,
+.planner-card #reset-route-btn {
+  width: 100% !important;
+  min-height: 48px !important;
+}
+
+.hero-preview-card,
+.hero-insight-card,
+.info-card,
+.auth-card,
+.dashboard-card,
+.detail-card,
+.about-project-section,
+.sos-dashboard-card,
+.planner-card,
+.map-card,
+.right-route-panel {
+  padding: 18px !important;
+}
+
+.mock-map-stage {
+  min-height: 200px !important;
+}
+
+.info-card-visual {
+  min-height: 170px !important;
+}
+
+.auth-block,
+.about-project-section,
+.project-footer {
+  margin-top: 16px !important;
+  margin-bottom: 0 !important;
+  gap: 16px !important;
+  align-items: flex-start !important;
+}
+
+.project-footer {
+  padding: 14px 4px 18px !important;
+}
+
+#routes-preview,
+#floating-route-results,
+.dashboard.app-start-screen #dashboard-top:not(.active),
+.dashboard.app-start-screen #map-panel:not(.active),
+.dashboard.app-start-screen #right-route-panel,
+.dashboard.app-start-screen #route-results:not(.active),
+.dashboard.app-start-screen #insights,
+.dashboard.app-start-screen .route-results,
+.dashboard.app-start-screen .turn-panel,
+.dashboard.app-start-screen .navigation-controls,
+.dashboard.app-start-screen .map-legend,
+.dashboard.app-start-screen .map-overlay {
+  display: none !important;
+}
+
+#planner.active #route-results:not(.hidden),
+#planner.active .left-sos-panel:not(.hidden) {
+  display: grid !important;
+}
+
+.dashboard,
+.dashboard.app-start-screen,
+.dashboard.has-route-view {
+  min-height: auto !important;
+  height: auto !important;
+  align-content: start !important;
+  gap: var(--panel-gap) !important;
+  padding-top: 0 !important;
+  padding-bottom: 20px !important;
+}
+
+.dashboard.has-route-view .app-dashboard {
+  display: grid !important;
+  grid-template-columns: minmax(260px, .28fr) minmax(420px, .44fr) minmax(260px, .28fr) !important;
+  grid-template-areas: "left map right" !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+  min-height: auto !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#dashboard-view .app-dashboard.planner-only-view {
+  display: block !important;
+}
+
+#dashboard-view .app-dashboard.map-only-view {
+  display: grid !important;
+  grid-template-columns: minmax(420px, 1fr) minmax(260px, .32fr) !important;
+  grid-template-areas: "map right" !important;
+}
+
+.dashboard.has-route-view .left-panel,
+.dashboard.has-route-view .map-panel,
+.dashboard.has-route-view .right-panel {
+  min-width: 0 !important;
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  z-index: auto !important;
+}
+
+.dashboard.has-route-view .left-panel { grid-area: left !important; }
+.dashboard.has-route-view .map-panel { grid-area: map !important; }
+.dashboard.has-route-view .right-panel { grid-area: right !important; }
+
+.dashboard.has-route-view .left-panel,
+.dashboard.has-route-view .right-panel {
+  max-height: calc(100vh - 72px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.dashboard.has-route-view .map-panel {
+  display: grid !important;
+  grid-template-rows: auto auto minmax(460px, 1fr) auto !important;
+  min-height: 500px !important;
+  overflow: hidden !important;
+}
+
+.dashboard.has-route-view .map-wrap,
+.dashboard.has-route-view #map {
+  min-height: 460px !important;
+  height: 460px !important;
+}
+
+.dashboard.has-route-view .route-results-shell,
+.dashboard.has-route-view .route-steps-panel,
+.dashboard.has-route-view .right-progress-card,
+.dashboard.has-route-view .navigation-controls {
+  position: relative !important;
+  inset: auto !important;
+  width: auto !important;
+  max-width: none !important;
+  transform: none !important;
+  z-index: auto !important;
+}
+
+.dashboard.has-route-view #route-results,
+.dashboard.has-route-view .compact-route-list,
+.dashboard.has-route-view .left-sos-panel,
+.dashboard.has-route-view #route-steps-panel {
+  display: grid !important;
+}
+
+.dashboard.has-route-view .map-toolbar-badges,
+.dashboard.has-route-view .map-overlay {
+  display: none !important;
+}
+
+.stats-row,
+.analytics-grid {
+  gap: 12px !important;
+}
+
+.analytics-card,
+.empty-state {
+  min-height: auto !important;
+  padding: 14px !important;
+}
+
+@media (max-width: 1100px) {
+  .dashboard.has-route-view .app-dashboard,
+  #dashboard-view .app-dashboard.map-only-view {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "left" "map" "right" !important;
+  }
+
+  #dashboard-view .app-dashboard.map-only-view {
+    grid-template-areas: "map" "right" !important;
+  }
+
+  .dashboard.has-route-view .left-panel,
+  .dashboard.has-route-view .right-panel {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 12px !important;
+  }
+
+  .app-header {
+    display: flex !important;
+  }
+
+  .app-sidebar {
+    width: min(86vw, 300px) !important;
+    transform: translateX(-100%) !important;
+    transition: transform .3s var(--ease) !important;
+    z-index: 4000 !important;
+  }
+
+  .app-sidebar.is-open {
+    transform: translateX(0) !important;
+  }
+
+  .app-sidebar .mobile-menu-close {
+    display: inline-flex !important;
+  }
+
+  .mobile-menu-backdrop {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 3990 !important;
+    background: rgba(4, 7, 18, .56) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .mobile-menu-backdrop.is-open {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .hero-shell,
+  .hero {
+    padding: 16px !important;
+    gap: 14px !important;
+  }
+
+  .hero-route-form,
+  .planner-card .search-input-row,
+  .planner-card .search-action-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-preview-card,
+  .hero-insight-card,
+  .info-card,
+  .auth-card,
+  .dashboard-card,
+  .detail-card,
+  .about-project-section,
+  .sos-dashboard-card,
+  .planner-card,
+  .map-card,
+  .right-route-panel {
+    padding: 15px !important;
+  }
+
+  .dashboard.has-route-view .map-wrap,
+  .dashboard.has-route-view #map {
+    min-height: 340px !important;
+    height: 340px !important;
+  }
+}
