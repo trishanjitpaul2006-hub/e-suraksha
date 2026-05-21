@@ -1229,11 +1229,9 @@
         </ul>
 
         <ul class="nav-links hidden" id="dashboard-nav">
-          <li><a href="#planner" data-nav-target="planner">Home</a></li>
-          <li><a href="#planner" data-nav-target="planner">Routes</a></li>
-          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
-          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
+          <li><a href="#planner" data-nav-target="planner">Route Planner</a></li>
           <li><a href="#dashboard-top" data-nav-target="dashboard-top">Dashboard</a></li>
+          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
           <li class="hidden" id="admin-nav-item"><a href="#admin-panel" data-nav-target="admin-panel">Admin</a></li>
         </ul>
       </div>
@@ -1307,11 +1305,9 @@
         </ul>
 
         <ul class="mobile-nav-links hidden" id="mobile-dashboard-nav">
-          <li><a href="#planner" data-nav-target="planner">Home</a></li>
-          <li><a href="#planner" data-nav-target="planner">Routes</a></li>
-          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
-          <li><a href="#about-project" data-nav-target="about-project">About</a></li>
+          <li><a href="#planner" data-nav-target="planner">Route Planner</a></li>
           <li><a href="#dashboard-top" data-nav-target="dashboard-top">Dashboard</a></li>
+          <li><a href="#map-panel" data-nav-target="map-panel">Safety Map</a></li>
           <li class="hidden" id="mobile-admin-nav-item"><a href="#admin-panel" data-nav-target="admin-panel">Admin</a></li>
         </ul>
 
@@ -1344,7 +1340,7 @@
             <a class="btn btn-secondary" href="#routes-preview" data-nav-target="routes-preview" data-ripple>Explore Routes</a>
           </div>
 
-          <form class="hero-route-form" id="hero-route-form">
+          <form class="hero-route-form hidden" id="hero-route-form" aria-hidden="true">
             <div class="hero-route-input">
               <label for="hero-source-input">Source</label>
               <div class="input-with-action">
@@ -1645,7 +1641,7 @@
 
       <footer class="project-footer">
         <strong>E-Suraksha</strong>
-        <span>Team/Member: Trisha</span>
+        <span>Team/Member: Trishanjit Paul</span>
         <span>College project for public safety route planning</span>
       </footer>
     </main>
@@ -2180,56 +2176,6 @@
               <div class="empty-state">Search a source and destination to generate real route candidates and compare shortest versus safest travel.</div>
             </div>
           </div>
-
-          <section class="floating-route-results route-results hidden" id="floating-route-results" aria-label="Route result summary">
-            <article class="floating-route-card route-result-shortest">
-              <div class="floating-route-head">
-                <div class="floating-route-title">
-                  <span class="floating-route-kicker">Shortest Route</span>
-                  <span class="route-status-badge route-status-fastest">Fastest</span>
-                </div>
-                <strong id="shortest-result-time">8 Min</strong>
-              </div>
-              <div class="floating-route-metrics">
-                <div>
-                  <span>Distance</span>
-                  <strong id="shortest-result-distance">2.4 KM</strong>
-                </div>
-                <div>
-                  <span>Time</span>
-                  <strong id="shortest-result-duration">8 Min</strong>
-                </div>
-              </div>
-              <p><span>Path</span><strong id="shortest-result-path">A &rarr; B &rarr; C &rarr; D</strong></p>
-            </article>
-
-            <article class="floating-route-card route-result-safest">
-              <div class="floating-route-head">
-                <div class="floating-route-title">
-                  <span class="floating-route-kicker">Safest Route</span>
-                  <span class="route-status-badge route-status-recommended">Recommended</span>
-                </div>
-                <strong id="safest-result-level" class="safety-level-badge safety-level-safe">Safe</strong>
-              </div>
-              <div class="floating-route-metrics">
-                <div>
-                  <span>Distance</span>
-                  <strong id="safest-result-distance">3.1 KM</strong>
-                </div>
-                <div>
-                  <span>Time</span>
-                  <strong id="safest-result-duration">12 Min</strong>
-                </div>
-                <div class="safety-score-metric">
-                  <span>Safety</span>
-                  <div class="safety-score-ring safety-level-safe" id="safest-score-ring" style="--score-value:82%;">
-                    <strong id="safest-result-safety">82/100</strong>
-                  </div>
-                </div>
-              </div>
-              <p><span>Reason</span><strong id="safest-result-reason">Lower crime reports and crowded roads</strong></p>
-            </article>
-          </section>
 
           <section class="left-sos-panel route-results hidden" aria-label="SOS quick access">
             <div>

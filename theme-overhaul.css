@@ -5513,3 +5513,178 @@ button:disabled{
     grid-template-columns:1fr!important;
   }
 }
+
+/* Final clean layout pass */
+#hero-route-form{
+  display:none!important;
+}
+
+.dashboard.app-start-screen #map-panel,
+.dashboard.app-start-screen #right-route-panel,
+.dashboard.app-start-screen #route-results,
+.dashboard.app-start-screen #floating-route-results,
+.dashboard.app-start-screen #route-steps-panel,
+.dashboard.app-start-screen #insights,
+.dashboard.app-start-screen .navigation-controls,
+.dashboard.app-start-screen .navigation-instruction-bar,
+.dashboard.app-start-screen .navigation-stats-card,
+.dashboard.app-start-screen .map-legend,
+.dashboard.app-start-screen .map-overlay,
+.dashboard.app-start-screen .left-sos-panel{
+  display:none!important;
+}
+
+.dashboard.app-start-screen .dashboard-grid{
+  display:block!important;
+  width:min(920px, calc(100% - 28px))!important;
+  margin:28px auto 36px!important;
+}
+
+.dashboard.app-start-screen #planner{
+  display:grid!important;
+  gap:18px!important;
+}
+
+.dashboard.app-start-screen #planner > .section-head:nth-of-type(2),
+.dashboard.app-start-screen #planner #route-results{
+  display:none!important;
+}
+
+.dashboard.has-route-view #dashboard-top,
+.dashboard.has-route-view #insights,
+.dashboard.has-route-view #floating-route-results,
+.dashboard.has-route-view .left-sos-panel,
+.dashboard.has-route-view .map-toolbar-badges,
+.dashboard.has-route-view .map-overlay{
+  display:none!important;
+}
+
+.dashboard.has-route-view .dashboard-grid{
+  display:grid!important;
+  grid-template-columns:minmax(280px, 28fr) minmax(420px, 44fr) minmax(260px, 28fr)!important;
+  grid-template-areas:"left map right"!important;
+  gap:16px!important;
+  align-items:stretch!important;
+  width:min(1600px, calc(100% - 24px))!important;
+  margin:16px auto 24px!important;
+}
+
+.dashboard.has-route-view #planner{
+  grid-area:left!important;
+}
+
+.dashboard.has-route-view #map-panel{
+  grid-area:map!important;
+  display:grid!important;
+  grid-template-rows:auto minmax(0, 1fr) auto!important;
+  min-height:calc(100svh - 116px)!important;
+  max-height:calc(100svh - 116px)!important;
+  overflow:hidden!important;
+}
+
+.dashboard.has-route-view #right-route-panel{
+  grid-area:right!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:14px!important;
+}
+
+.dashboard.has-route-view #planner,
+.dashboard.has-route-view #right-route-panel{
+  max-height:calc(100svh - 116px)!important;
+  overflow:auto!important;
+}
+
+.dashboard.has-route-view #route-results{
+  display:grid!important;
+}
+
+.dashboard.has-route-view #map-panel .map-wrap{
+  height:auto!important;
+  min-height:0!important;
+}
+
+.dashboard.has-route-view #map{
+  height:100%!important;
+  min-height:0!important;
+}
+
+.dashboard.has-route-view #route-steps-panel{
+  display:grid!important;
+  position:relative!important;
+  inset:auto!important;
+  width:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  transform:none!important;
+}
+
+.dashboard.has-route-view #route-steps-panel.is-collapsed .route-steps-body{
+  display:block!important;
+}
+
+.dashboard.has-route-view #route-steps-panel .route-steps-collapse{
+  display:none!important;
+}
+
+@media (max-width: 1200px){
+  .dashboard.has-route-view .dashboard-grid{
+    grid-template-columns:minmax(0, 1fr) minmax(0, 1fr)!important;
+    grid-template-areas:"map map" "left right"!important;
+  }
+
+  .dashboard.has-route-view #map-panel{
+    min-height:64svh!important;
+    max-height:none!important;
+  }
+
+  .dashboard.has-route-view #planner,
+  .dashboard.has-route-view #right-route-panel{
+    max-height:none!important;
+  }
+}
+
+@media (max-width: 768px){
+  .dashboard.app-start-screen .dashboard-grid{
+    width:calc(100% - 18px)!important;
+    margin:14px auto 24px!important;
+  }
+
+  .dashboard.has-route-view{
+    padding-top:72px!important;
+  }
+
+  .dashboard.has-route-view .dashboard-grid{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"left" "map" "right"!important;
+    width:calc(100% - 18px)!important;
+    margin:0 auto 18px!important;
+    gap:12px!important;
+  }
+
+  .dashboard.has-route-view #planner,
+  .dashboard.has-route-view #map-panel,
+  .dashboard.has-route-view #right-route-panel{
+    min-height:auto!important;
+    max-height:none!important;
+    width:100%!important;
+  }
+
+  .dashboard.has-route-view #map-panel .map-wrap{
+    height:64svh!important;
+    min-height:420px!important;
+  }
+
+  .dashboard.has-route-view .navigation-controls,
+  .dashboard.has-route-view .map-toolbar-actions,
+  .dashboard.has-route-view .map-mode-controls{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+  }
+
+  .dashboard.has-route-view .map-toolbar-actions .btn{
+    max-width:none!important;
+    width:100%!important;
+  }
+}
