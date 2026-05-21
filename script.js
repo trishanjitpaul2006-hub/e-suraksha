@@ -12,23 +12,23 @@ const showRegister = document.getElementById("showRegister");
 const showLogin = document.getElementById("showLogin");
 
 // Toggle forms
-showRegister.addEventListener("click", e => {
+showRegister?.addEventListener("click", e => {
     e.preventDefault();
     loginContainer.style.display = "none";
     registerContainer.style.display = "block";
 });
 
-showLogin.addEventListener("click", e => {
+showLogin?.addEventListener("click", e => {
     e.preventDefault();
     registerContainer.style.display = "none";
     loginContainer.style.display = "block";
 });
 
 // Login
-loginForm.addEventListener("submit", e => {
+loginForm?.addEventListener("submit", e => {
     e.preventDefault();
-    const username = document.getElementById("loginUsername").value;
-    const password = document.getElementById("loginPassword").value;
+    const username = document.getElementById("loginUsername")?.value;
+    const password = document.getElementById("loginPassword")?.value;
 
     let users = JSON.parse(localStorage.getItem("users"));
     if (users[username] && users[username] === password) {
@@ -40,10 +40,10 @@ loginForm.addEventListener("submit", e => {
 });
 
 // Register
-registerForm.addEventListener("submit", e => {
+registerForm?.addEventListener("submit", e => {
     e.preventDefault();
-    const username = document.getElementById("registerUsername").value;
-    const password = document.getElementById("registerPassword").value;
+    const username = document.getElementById("registerUsername")?.value;
+    const password = document.getElementById("registerPassword")?.value;
 
     let users = JSON.parse(localStorage.getItem("users"));
     if (users[username]) {
@@ -57,6 +57,16 @@ registerForm.addEventListener("submit", e => {
         registerContainer.style.display = "none";
         loginContainer.style.display = "block";
     }
+});
+
+document.querySelectorAll("[data-sidebar-auth]").forEach((button) => {
+    button.addEventListener("click", () => {
+        const tabName = button.dataset.sidebarAuth || "login";
+        const authSection = document.getElementById("auth");
+        const tab = document.querySelector(`[data-auth-tab="${tabName}"]`);
+        tab?.click();
+        authSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 });
 
 function normalizeSosPhoneForMsg91(value) {

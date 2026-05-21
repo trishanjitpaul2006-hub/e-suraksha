@@ -18,11 +18,16 @@ DATA_DIR = BASE_DIR / "data"
 USERS_FILE = DATA_DIR / "users.json"
 OTP_EXPIRY_SECONDS = 300
 OTP_STORE = {}
-MSG91_AUTH_KEY = "507139AdLkp8NcIL3C69d7114eP1"
-MSG91_SENDER_ID = "ESURAK"
-MSG91_ROUTE = "4"
-MSG91_COUNTRY = "91"
+SOS_COOLDOWN_SECONDS = int(os.environ.get("SOS_COOLDOWN_SECONDS", "60"))
+SOS_COOLDOWN_STORE = {}
+SMS_PROVIDER = os.environ.get("SMS_PROVIDER", "msg91").strip().lower()
+MSG91_AUTH_KEY = os.environ.get("MSG91_AUTH_KEY", "")
+MSG91_SENDER_ID = os.environ.get("MSG91_SENDER_ID", "ESURAK")
+MSG91_ROUTE = os.environ.get("MSG91_ROUTE", "4")
+MSG91_COUNTRY = os.environ.get("MSG91_COUNTRY", "91")
 MSG91_SEND_URL = "https://api.msg91.com/api/sendhttp.php"
+FAST2SMS_API_KEY = os.environ.get("FAST2SMS_API_KEY", "")
+FAST2SMS_SEND_URL = "https://www.fast2sms.com/dev/bulkV2"
 
 
 def ensure_data_files():
@@ -77,6 +82,102 @@ def normalize_msg91_phone(phone):
     if len(digits) == 10:
         return f"91{digits}"
     return digits
+
+
+def build_sos_message(lat_value, lng_value):
+    maps_link = f"https://maps.google.com/?q={lat_value:.6f},{lng_value:.6f}"
+    return (
+        "SOS ALERT - E-SURAKSHA\n\n"
+        "Emergency assistance needed.\n\n"
+        "Current Location:\n"
+        f"Latitude: {lat_value:.6f}\n"
+        f"Longitude: {lng_value:.6f}\n\n"
+        "Google Maps:\n"
+        f"{maps_link}"
+    )
+
+
+def get_sos_cooldown_key(phone, client_id=""):
+    normalized_phone = normalize_msg91_phone(phone)
+    normalized_client = str(client_id or "").strip()
+    remote_addr = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0].strip()
+    return normalized_phone or normalized_client or remote_addr or "anonymous"
+
+
+def get_sos_cooldown_remaining(key):
+    last_sent_at = SOS_COOLDOWN_STORE.get(key)
+    if not last_sent_at:
+        return 0
+    elapsed = time.time() - last_sent_at
+    remaining = SOS_COOLDOWN_SECONDS - elapsed
+    return max(0, int(remaining + 0.999))
+
+
+def send_msg91_sms(phone, message):
+    if not MSG91_AUTH_KEY:
+        raise RuntimeError("MSG91_AUTH_KEY is not configured.")
+    if len(MSG91_SENDER_ID) != 6:
+        raise RuntimeError("MSG91_SENDER_ID must be exactly 6 characters.")
+    params = {
+        "authkey": MSG91_AUTH_KEY,
+        "mobiles": phone,
+        "message": message,
+        "sender": MSG91_SENDER_ID,
+        "route": MSG91_ROUTE,
+        "country": MSG91_COUNTRY,
+    }
+    response = requests.get(MSG91_SEND_URL, params=params, timeout=15)
+    response.raise_for_status()
+    return (response.text or "").strip()
+
+
+def send_fast2sms_sms(phone, message):
+    if not FAST2SMS_API_KEY:
+        raise RuntimeError("FAST2SMS_API_KEY is not configured.")
+    numbers = normalize_phone(phone)
+    if numbers.startswith("91") and len(numbers) == 12:
+        numbers = numbers[2:]
+    payload = {
+        "route": "q",
+        "message": message,
+        "numbers": numbers,
+    }
+    response = requests.post(
+        FAST2SMS_SEND_URL,
+        headers={
+            "authorization": FAST2SMS_API_KEY,
+            "Content-Type": "application/json",
+        },
+        json=payload,
+        timeout=15,
+    )
+    response.raise_for_status()
+    return (response.text or "").strip()
+
+
+def send_sms(phone, message):
+    if SMS_PROVIDER == "fast2sms":
+        return "fast2sms", send_fast2sms_sms(phone, message)
+    if SMS_PROVIDER == "msg91":
+        return "msg91", send_msg91_sms(phone, message)
+    raise RuntimeError("SMS_PROVIDER must be msg91 or fast2sms.")
+
+
+def validate_sos_payload(body):
+    phone = normalize_msg91_phone(body.get("phone") or body.get("emergencyPhone") or "")
+    lat = body.get("lat")
+    lng = body.get("lng")
+
+    if not is_valid_msg91_phone(phone):
+        return None, json_response(400, {"success": False, "message": "Phone number must be in 91XXXXXXXXXX format."})
+    try:
+        lat_value = float(lat)
+        lng_value = float(lng)
+    except (TypeError, ValueError):
+        return None, json_response(400, {"success": False, "message": "Latitude and longitude must be valid numbers."})
+    if not (-90 <= lat_value <= 90) or not (-180 <= lng_value <= 180):
+        return None, json_response(400, {"success": False, "message": "Latitude or longitude is outside the valid range."})
+    return {"phone": phone, "lat": lat_value, "lng": lng_value}, None
 
 
 def generate_otp():
@@ -301,57 +402,49 @@ def send_sos():
     body = request.get_json(silent=True) or {}
     print(f"[HIT] /send-sos -> {body}")
 
-    phone = normalize_msg91_phone(body.get("phone", ""))
-    lat = body.get("lat")
-    lng = body.get("lng")
+    payload, error = validate_sos_payload(body)
+    if error:
+        return error
 
-    if not is_valid_msg91_phone(phone):
-        return json_response(400, {"success": False, "message": "Phone number must be in 91XXXXXXXXXX format."})
-    if lat is None or lng is None:
-        return json_response(400, {"success": False, "message": "Latitude and longitude are required."})
-
-    try:
-        lat_value = float(lat)
-        lng_value = float(lng)
-    except (TypeError, ValueError):
-        return json_response(400, {"success": False, "message": "Latitude and longitude must be valid numbers."})
-
-    if not MSG91_AUTH_KEY or MSG91_AUTH_KEY == "PASTE_MSG91_AUTH_KEY_HERE":
-        return json_response(500, {"success": False, "message": "MSG91 auth key is not configured in server.py."})
-    if len(MSG91_SENDER_ID) != 6:
-        return json_response(500, {"success": False, "message": "MSG91 sender ID must be exactly 6 characters."})
-
-    timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    message = (
-        "I am in trouble. Please help me.\n"
-        f"Location: https://maps.google.com/?q={lat_value},{lng_value}\n"
-        f"Time: {timestamp}"
-    )
-
-    params = {
-        "authkey": MSG91_AUTH_KEY,
-        "mobiles": phone,
-        "message": message,
-        "sender": MSG91_SENDER_ID,
-        "route": MSG91_ROUTE,
-        "country": MSG91_COUNTRY,
-    }
+    cooldown_key = get_sos_cooldown_key(payload["phone"], body.get("clientId", ""))
+    cooldown_remaining = get_sos_cooldown_remaining(cooldown_key)
+    if cooldown_remaining:
+        return json_response(
+            429,
+            {
+                "success": False,
+                "message": f"Please wait {cooldown_remaining} seconds before sending another SOS alert.",
+                "cooldownRemaining": cooldown_remaining,
+            },
+        )
 
     try:
-        response = requests.get(MSG91_SEND_URL, params=params, timeout=15)
-        response.raise_for_status()
+        message = build_sos_message(payload["lat"], payload["lng"])
+        provider, response_text = send_sms(payload["phone"], message)
     except requests.RequestException as exc:
-        return json_response(502, {"success": False, "message": f"MSG91 request failed: {exc}"})
+        return json_response(502, {"success": False, "message": f"{SMS_PROVIDER.upper()} request failed: {exc}"})
+    except RuntimeError as exc:
+        return json_response(500, {"success": False, "message": str(exc)})
 
-    response_text = (response.text or "").strip()
     lowered = response_text.lower()
     rejection_markers = ["error", "invalid", "failed", "denied", "unauthor", "reject", "missing"]
     if not response_text:
-        return json_response(502, {"success": False, "message": "MSG91 returned an empty response."})
+        return json_response(502, {"success": False, "message": f"{provider.upper()} returned an empty response."})
     if any(marker in lowered for marker in rejection_markers):
-        return json_response(502, {"success": False, "message": f"MSG91 rejected SMS: {response_text}"})
+        return json_response(502, {"success": False, "message": f"{provider.upper()} rejected SMS: {response_text}"})
 
-    return json_response(200, {"status": "sent", "providerResponse": response_text})
+    SOS_COOLDOWN_STORE[cooldown_key] = time.time()
+    return json_response(
+        200,
+        {
+            "success": True,
+            "status": "sent",
+            "provider": provider,
+            "cooldownSeconds": SOS_COOLDOWN_SECONDS,
+            "mapsLink": f"https://maps.google.com/?q={payload['lat']:.6f},{payload['lng']:.6f}",
+            "providerResponse": response_text,
+        },
+    )
 
 
 @app.route("/", methods=["GET"])

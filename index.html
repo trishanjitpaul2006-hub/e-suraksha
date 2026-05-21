@@ -1127,6 +1127,30 @@
       line-height:1.5;
       font-size:0.9rem;
     }
+    .settings-form{
+      display:grid;
+      gap:16px;
+      margin-top:18px;
+      max-width:760px;
+    }
+    .settings-form .form-row{
+      display:grid;
+      gap:8px;
+    }
+    .settings-form label{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+    }
+    .settings-form input{
+      width:100%;
+    }
+    .settings-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
     body.sos-open{
       overflow:hidden;
     }
@@ -1286,8 +1310,20 @@
           <li><a class="sidebar-link" href="#auth" data-section="map-panel" data-nav-target="auth" id="sidebar-map-link">Safety Map</a></li>
           <li><a class="sidebar-link" href="#about-project" data-section="about-project" data-nav-target="about-project">About</a></li>
           <li><a class="sidebar-link" href="#auth" data-section="dashboard-top" data-nav-target="auth" id="sidebar-dashboard-link">Dashboard</a></li>
+          <li><a class="sidebar-link" href="#auth" data-section="settings-panel" data-nav-target="auth" id="sidebar-settings-link">Settings</a></li>
           <li class="hidden" id="mobile-admin-nav-item"><a class="sidebar-link" href="#admin-panel" data-section="admin-panel" data-nav-target="admin-panel">Admin</a></li>
         </ul>
+
+        <div class="sidebar-auth-actions" id="sidebar-auth-actions" aria-label="Account access">
+          <button class="sidebar-auth-btn sidebar-login-btn" type="button" data-sidebar-auth="login">
+            <span class="sidebar-auth-icon" aria-hidden="true">U</span>
+            <span>Login</span>
+          </button>
+          <button class="sidebar-auth-btn sidebar-signup-btn" type="button" data-sidebar-auth="register">
+            <span class="sidebar-auth-icon" aria-hidden="true">+</span>
+            <span>Sign Up</span>
+          </button>
+        </div>
 
         <div class="mobile-menu-actions">
           <button class="btn sos-trigger sos-trigger-strong" type="button" id="mobile-sos-btn" data-ripple>
@@ -1513,6 +1549,10 @@
               <input id="register-password" name="register-password" type="password" placeholder="Create a password" autocomplete="new-password">
             </div>
             <div class="field">
+              <label for="register-confirm-password">Confirm Password</label>
+              <input id="register-confirm-password" name="register-confirm-password" type="password" placeholder="Re-enter your password" autocomplete="new-password">
+            </div>
+            <div class="field">
               <label for="register-alt-phone">Alternate Emergency Number</label>
               <input id="register-alt-phone" name="register-alt-phone" type="tel" placeholder="10-digit alternate number" inputmode="numeric" maxlength="10" autocomplete="tel">
             </div>
@@ -1524,8 +1564,8 @@
               </select>
             </div>
             <div class="auth-message is-hidden" id="register-message" aria-live="polite"></div>
-            <button class="btn btn-primary" type="submit" data-ripple>Create Account</button>
-            <p class="auth-note">Stored locally with username, password, phone, alternate emergency number, and role.</p>
+            <button class="btn btn-primary" type="submit" data-ripple>Sign Up</button>
+            <p class="auth-note">Already have account? <button class="auth-inline-link" type="button" data-auth-tab="login">Login</button></p>
           </form>
         </section>
       </section>
@@ -1617,10 +1657,75 @@
         </div>
       </section>
 
-      <footer class="project-footer">
-        <strong>E-Suraksha</strong>
-        <span>Team/Member: Trishanjit Paul</span>
-        <span>College project for public safety route planning</span>
+      <footer class="project-footer" aria-label="Project footer">
+        <div class="footer-grid">
+          <section class="footer-column footer-project">
+            <div class="footer-heading">
+              <span class="footer-shield" aria-hidden="true"></span>
+              <h2>E-SURAKSHA</h2>
+            </div>
+            <strong>Smart Safety Navigation</strong>
+            <p>Navigate smarter. Travel safer. AI-inspired route intelligence for public safety.</p>
+          </section>
+
+          <section class="footer-column footer-status-column">
+            <div class="footer-heading">
+              <span class="footer-icon" aria-hidden="true"></span>
+              <h3>Live Safety Status</h3>
+            </div>
+            <div class="footer-status-grid">
+              <div class="footer-status-card">
+                <span>Nearby Incidents</span>
+                <strong>4 Active</strong>
+                <i class="status-dot risk" aria-hidden="true"></i>
+              </div>
+              <div class="footer-status-card">
+                <span>Risk Level</span>
+                <strong>LOW</strong>
+                <i class="status-dot safe" aria-hidden="true"></i>
+              </div>
+              <div class="footer-status-card">
+                <span>Crowd Density</span>
+                <strong>MEDIUM</strong>
+                <i class="status-dot moderate" aria-hidden="true"></i>
+              </div>
+              <div class="footer-status-card">
+                <span>Emergency Support</span>
+                <strong>AVAILABLE</strong>
+                <i class="status-dot safe" aria-hidden="true"></i>
+              </div>
+            </div>
+          </section>
+
+          <section class="footer-column">
+            <div class="footer-heading">
+              <span class="footer-icon" aria-hidden="true"></span>
+              <h3>Navigation Features</h3>
+            </div>
+            <ul class="footer-check-list">
+              <li>Shortest Route</li>
+              <li>Safest Route</li>
+              <li>Safety Heatmap</li>
+              <li>SOS Emergency</li>
+              <li>Turn-by-Turn Navigation</li>
+              <li>Smart Safety Score</li>
+            </ul>
+          </section>
+
+          <section class="footer-column">
+            <div class="footer-heading">
+              <span class="footer-icon" aria-hidden="true"></span>
+              <h3>System Status</h3>
+            </div>
+            <ul class="footer-system-list">
+              <li><span>Map System:</span><strong>ONLINE</strong></li>
+              <li><span>Route Engine:</span><strong>ACTIVE</strong></li>
+              <li><span>Emergency Service:</span><strong>READY</strong></li>
+              <li><span>Platform Status:</span><strong>OPERATIONAL</strong></li>
+            </ul>
+          </section>
+        </div>
+        <div class="footer-bottom">Stay Safe • Navigate Smart • E-Suraksha</div>
       </footer>
     </main>
 
@@ -1718,6 +1823,10 @@
                 <strong>Open SOS</strong>
                 <span>Emergency panel</span>
               </button>
+              <button class="quick-action-card" type="button" id="quick-open-settings" data-ripple>
+                <strong>SOS Settings</strong>
+                <span>Emergency numbers</span>
+              </button>
               <button class="quick-action-card" type="button" id="quick-report-incident" data-ripple>
                 <strong>Report Incident</strong>
                 <span>Incident area</span>
@@ -1802,6 +1911,31 @@
             </div>
           </div>
         </section>
+      </section>
+
+      <section class="dashboard-card glass hidden page-section" id="settings-panel">
+        <div class="dashboard-head">
+          <div>
+            <span class="eyebrow">Emergency Settings</span>
+            <h2>SOS Contacts</h2>
+            <p>Save the phone numbers used by E-Suraksha when an SOS alert is confirmed.</p>
+          </div>
+        </div>
+        <form class="settings-form" id="settings-form">
+          <div class="form-row">
+            <label for="settings-emergency-phone">Emergency Contact Number</label>
+            <input id="settings-emergency-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91XXXXXXXXXX">
+          </div>
+          <div class="form-row">
+            <label for="settings-alternate-phone">Alternate Contact Number</label>
+            <input id="settings-alternate-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91XXXXXXXXXX">
+          </div>
+          <div class="settings-actions">
+            <button class="btn btn-primary" type="submit" data-ripple>Save Settings</button>
+            <button class="btn btn-secondary" type="button" id="settings-open-sos" data-ripple>Open SOS</button>
+          </div>
+          <div class="app-message is-hidden" id="settings-message" aria-live="polite"></div>
+        </form>
       </section>
 
       <section class="dashboard-card glass hidden page-section" id="admin-panel">
@@ -2365,8 +2499,8 @@
         </div>
         <div class="sos-compact-body">
           <div class="sos-compact-card">
-            <span>Alternate Number</span>
-            <strong id="sos-alt-number">No alternate emergency number saved.</strong>
+            <span>SOS SMS Contact</span>
+            <strong id="sos-alt-number">No emergency contact number saved.</strong>
           </div>
           <div class="sos-quick-contacts">
             <a class="sos-contact-btn" href="tel:112" id="sos-police-btn">
@@ -2378,7 +2512,7 @@
               <strong>108</strong>
             </a>
           </div>
-          <div class="sos-compact-warning hidden" id="sos-warning">No alternate emergency number saved.</div>
+          <div class="sos-compact-warning hidden" id="sos-warning">No emergency contact number saved.</div>
           <button class="btn btn-primary sos-send-btn" type="button" id="sos-send-btn" data-ripple>
             <span class="sos-hold-fill" aria-hidden="true"></span>
             <span class="sos-hold-label">Hold 3s to send SOS</span>
@@ -2423,6 +2557,7 @@
         incidents: "e-suraksha-incidents",
         emergencyContacts: "e-suraksha-emergency-contacts",
         sosLog: "e-suraksha-sos-log",
+        sosCooldowns: "e-suraksha-sos-cooldowns",
         placeCache: "e-suraksha-place-cache",
         voiceEnabled: "e-suraksha-voice-enabled",
         otpSession: "e-suraksha-otp-session"
@@ -2563,6 +2698,7 @@
           intervalId: null,
           timeoutId: null
         },
+        sosSendInFlight: false,
         editingIncidentId: null,
         firebaseReady: false,
         otpConfirmationResult: null,
@@ -2593,9 +2729,11 @@
         mobilePublicNav: document.getElementById("mobile-public-nav"),
         mobileDashboardNav: document.getElementById("mobile-dashboard-nav"),
         mobileAdminNavItem: document.getElementById("mobile-admin-nav-item"),
+        sidebarAuthActions: document.getElementById("sidebar-auth-actions"),
         sidebarRouteLink: document.getElementById("sidebar-route-link"),
         sidebarMapLink: document.getElementById("sidebar-map-link"),
         sidebarDashboardLink: document.getElementById("sidebar-dashboard-link"),
+        sidebarSettingsLink: document.getElementById("sidebar-settings-link"),
         mobileNavToggle: document.getElementById("mobile-nav-toggle"),
         mobileMenu: document.getElementById("mobile-menu"),
         mobileMenuBackdrop: document.getElementById("mobile-menu-backdrop"),
@@ -2628,6 +2766,7 @@
         quickSafestRoute: document.getElementById("quick-safest-route"),
         quickResetRoute: document.getElementById("quick-reset-route"),
         quickOpenSos: document.getElementById("quick-open-sos"),
+        quickOpenSettings: document.getElementById("quick-open-settings"),
         quickReportIncident: document.getElementById("quick-report-incident"),
         sosReadyStatus: document.getElementById("sos-ready-status"),
         sosRouteStatus: document.getElementById("sos-route-status"),
@@ -2684,6 +2823,7 @@
         registerPhone: document.getElementById("register-phone"),
         registerUserId: document.getElementById("register-user-id"),
         registerPassword: document.getElementById("register-password"),
+        registerConfirmPassword: document.getElementById("register-confirm-password"),
         registerAltPhone: document.getElementById("register-alt-phone"),
         registerRole: document.getElementById("register-role"),
         loginMessage: document.getElementById("login-message"),
@@ -2741,6 +2881,11 @@
         sosContactPhone: document.getElementById("sos-contact-phone"),
         sosContactRelation: document.getElementById("sos-contact-relation"),
         sosLogList: document.getElementById("sos-log-list"),
+        settingsForm: document.getElementById("settings-form"),
+        settingsEmergencyPhone: document.getElementById("settings-emergency-phone"),
+        settingsAlternatePhone: document.getElementById("settings-alternate-phone"),
+        settingsOpenSos: document.getElementById("settings-open-sos"),
+        settingsMessage: document.getElementById("settings-message"),
         heroRouteForm: document.getElementById("hero-route-form"),
         startNavigationBtn: document.getElementById("start-navigation-btn"),
         startNavigationLiveBtn: document.getElementById("start-navigation-live-btn"),
@@ -2836,6 +2981,7 @@
         const phone = normalizePhone(user.phone || user.phoneNumber || "");
         const username = String(user.username || user.userId || phone || "").trim();
         const fullname = String(user.fullname || user.fullName || "").trim();
+        const emergencyContactNumber = normalizePhone(user.emergencyContactNumber || user.emergencyPhone || "");
         const alternateEmergencyNumber = normalizePhone(user.alternateEmergencyNumber || user.altPhone || user.emergencyPhone || "");
         return {
           id: user.id || `user-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
@@ -2843,6 +2989,7 @@
           username,
           usernameNormalized: normalizeUserId(username),
           phone,
+          emergencyContactNumber,
           alternateEmergencyNumber,
           password: String(user.password || ""),
           role: user.role === "admin" ? "admin" : "user",
@@ -2952,6 +3099,7 @@
             fullname: payload.fullname,
             username: payload.username || payload.phone,
             phone: payload.phone,
+            emergencyContactNumber: payload.emergencyContactNumber,
             alternateEmergencyNumber: payload.alternateEmergencyNumber,
             password: payload.password,
             role: payload.role || "user",
@@ -2965,6 +3113,15 @@
         findByPhone(phone) {
           const digits = normalizePhone(phone).slice(-10);
           return readUsers().find((item) => item.phone === digits) || null;
+        },
+        update(userId, updater) {
+          const users = readUsers();
+          const index = users.findIndex((item) => item.id === userId || item.usernameNormalized === userId);
+          if (index < 0) return null;
+          const nextUser = normalizeLegacyUser({ ...users[index], ...updater(users[index]) });
+          users[index] = nextUser;
+          saveUsers(users);
+          return nextUser;
         }
       };
 
@@ -3092,10 +3249,12 @@
           setLink(elements.sidebarRouteLink, "planner");
           setLink(elements.sidebarMapLink, "map-panel");
           setLink(elements.sidebarDashboardLink, "dashboard-top");
+          setLink(elements.sidebarSettingsLink, "settings-panel");
         } else {
           setLink(elements.sidebarRouteLink, "auth", "login");
           setLink(elements.sidebarMapLink, "auth", "login");
           setLink(elements.sidebarDashboardLink, "auth", "login");
+          setLink(elements.sidebarSettingsLink, "auth", "login");
         }
       };
       const updateFloatingSosVisibility = () => {
@@ -3189,9 +3348,9 @@
         });
       };
 
-      const PAGE_SECTION_IDS = ["overview", "auth", "about-project", "dashboard-top", "admin-panel", "planner", "map-panel"];
+      const PAGE_SECTION_IDS = ["overview", "auth", "about-project", "dashboard-top", "settings-panel", "admin-panel", "planner", "map-panel"];
       const LANDING_SECTION_IDS = new Set(["overview", "auth", "about-project"]);
-      const DASHBOARD_SECTION_IDS = new Set(["dashboard-top", "admin-panel", "planner", "map-panel"]);
+      const DASHBOARD_SECTION_IDS = new Set(["dashboard-top", "settings-panel", "admin-panel", "planner", "map-panel"]);
 
       function setActiveSidebarLink(sectionId) {
         document.querySelectorAll(".sidebar-link").forEach((link) => {
@@ -3498,7 +3657,7 @@
           appState.sosLocationError = error.code === 1
             ? "Location permission denied. SOS will use your last known route or selected place."
             : "Current location unavailable. SOS will use your last known route or selected place.";
-          resolve({ ok: false, message: appState.sosLocationError });
+          resolve({ ok: false, message: appState.sosLocationError, error });
         }, { enableHighAccuracy: true, maximumAge: 0, timeout: 7000 });
       });
       const getSosLocationPayload = () => {
@@ -3616,9 +3775,10 @@
         }
         return parts.join(" ");
       };
-      const getAlternateEmergencyContact = () => appState.currentUser?.alternateEmergencyNumber
-        ? { name: "Alternate Emergency Number", phone: appState.currentUser.alternateEmergencyNumber }
-        : null;
+      const getAlternateEmergencyContact = () => {
+        const primary = getPrimarySosContact();
+        return primary ? { name: primary.label, phone: formatContactDisplay(primary.phone) } : null;
+      };
       const formatTrustedContact = (trusted) => {
         if (!trusted) return "No trusted contact saved";
         return trusted.relation
@@ -3635,14 +3795,25 @@
         parts.push(`Time: ${timestamp}.`);
         return parts.join(" ");
       };
-      const buildDemoSosMessage = (location) => `I need help. My location is: ${location.latitude}, ${location.longitude}`;
+      const buildSmsSosMessage = (lat, lng) => [
+        "SOS ALERT - E-SURAKSHA",
+        "",
+        "Emergency assistance needed.",
+        "",
+        "Current Location:",
+        `Latitude: ${lat.toFixed(6)}`,
+        `Longitude: ${lng.toFixed(6)}`,
+        "",
+        "Google Maps:",
+        `https://maps.google.com/?q=${lat.toFixed(6)},${lng.toFixed(6)}`
+      ].join("\n");
       const renderSosStatusCard = () => {
         const alternate = getAlternateEmergencyContact();
         const latestAlert = readSosLog().find((item) => item.type === "emergency-alert" && (item.userKey === getCurrentSosUserKey() || item.userKey === "guest"));
         elements.sosReadyStatus.textContent = alternate ? "Ready" : "Setup needed";
-        elements.sosRouteStatus.textContent = alternate ? "One-tap SOS available" : "Add alternate number during registration";
+        elements.sosRouteStatus.textContent = alternate ? "Hold-to-send SMS available" : "Add an emergency number in Settings";
         elements.sosContactStatus.textContent = alternate ? "Saved" : "Not saved";
-        elements.sosContactSub.textContent = alternate ? alternate.phone : "No alternate emergency number saved";
+        elements.sosContactSub.textContent = alternate ? alternate.phone : "No emergency contact number saved";
         elements.sosQuickStatus.textContent = latestAlert ? "SOS ready" : "No activity";
         elements.sosLocationStatus.textContent = appState.userLocation || appState.navigation?.lastPosition ? "Available" : "Waiting";
         elements.sosLocationStatusSub.textContent = appState.userLocation || appState.navigation?.lastPosition ? getSosLocationPayload().coordinates : "Location will be added if available";
@@ -3650,16 +3821,26 @@
       const refreshSosPanel = () => {
         const alternate = getAlternateEmergencyContact();
         if (elements.sosAltNumber) {
-          elements.sosAltNumber.textContent = alternate ? alternate.phone : "No alternate emergency number saved.";
+          elements.sosAltNumber.textContent = alternate ? alternate.phone : "No emergency contact number saved.";
         }
         if (elements.sosWarning) {
-          elements.sosWarning.textContent = alternate ? "" : "No alternate emergency number saved.";
+          elements.sosWarning.textContent = alternate ? "" : "No emergency contact number saved.";
           elements.sosWarning.classList.toggle("hidden", !!alternate);
         }
         renderSosStatusCard();
       };
+      const renderSettingsForm = () => {
+        if (!appState.currentUser) return;
+        if (elements.settingsEmergencyPhone) {
+          elements.settingsEmergencyPhone.value = formatContactDisplay(appState.currentUser.emergencyContactNumber || "");
+        }
+        if (elements.settingsAlternatePhone) {
+          elements.settingsAlternatePhone.value = formatContactDisplay(appState.currentUser.alternateEmergencyNumber || "");
+        }
+      };
       const renderSosState = () => {
         renderSosStatusCard();
+        renderSettingsForm();
         if (!elements.sosModal.classList.contains("hidden")) refreshSosPanel();
       };
       const renderDashboardOverview = (profile = null) => {
@@ -3720,6 +3901,22 @@
         if (digits.length === 12 && digits.startsWith("91")) return digits.slice(2);
         return digits;
       };
+      const formatContactDisplay = (value) => {
+        const digits = normalizeAltEmergencyTo10Digits(value);
+        return digits ? `+91${digits}` : "";
+      };
+      const formatContactInputValue = (value) => {
+        const digits = normalizePhone(value).slice(0, 12);
+        if (!digits) return "";
+        return digits.startsWith("91") ? `+${digits}` : digits.slice(0, 10);
+      };
+      const getPrimarySosContact = () => {
+        const primary = normalizeAltEmergencyTo10Digits(appState.currentUser?.emergencyContactNumber || "");
+        const alternate = normalizeAltEmergencyTo10Digits(appState.currentUser?.alternateEmergencyNumber || "");
+        if (primary) return { label: "Emergency Contact Number", phone: primary };
+        if (alternate) return { label: "Alternate Contact Number", phone: alternate };
+        return null;
+      };
       const getGeolocationErrorMessage = (error) => {
         if (error?.code === 1) return "Geolocation denied. Allow location access and try again.";
         if (error?.code === 2) return "Location unavailable. Move to an open area and try again.";
@@ -3727,7 +3924,7 @@
         return "Location access is required to send SOS.";
       };
       const getSosPhoneErrorMessage = (phone) => {
-        if (!phone) return "No alternate emergency number saved.";
+        if (!phone) return "No emergency contact number saved.";
         return "Alternate emergency number is invalid. Use +91XXXXXXXXXX or XXXXXXXXXX.";
       };
       const getBackendSosErrorMessage = (error, payload = {}) => {
@@ -3735,6 +3932,7 @@
         const backendMessage = payload.message || error?.message || "SOS sending failed.";
         if (backendMessage.includes("91XXXXXXXXXX")) return "Phone format invalid. Use +91XXXXXXXXXX or XXXXXXXXXX.";
         if (backendMessage.startsWith("MSG91 rejected SMS:")) return backendMessage;
+        if (backendMessage.startsWith("FAST2SMS rejected SMS:")) return backendMessage;
         return backendMessage;
       };
       const setSosHoldProgress = (percent) => {
@@ -3757,39 +3955,94 @@
         appState.sosHold.intervalId = null;
         appState.sosHold.timeoutId = null;
       };
+      const getSosCooldownStore = () => getStoredObject(STORAGE_KEYS.sosCooldowns);
+      const getSosCooldownKey = () => getCurrentSosUserKey();
+      const getSosCooldownRemaining = () => {
+        const until = Number(getSosCooldownStore()[getSosCooldownKey()] || 0);
+        return Math.max(0, Math.ceil((until - Date.now()) / 1000));
+      };
+      const setSosCooldown = (seconds = 60) => {
+        const store = getSosCooldownStore();
+        store[getSosCooldownKey()] = Date.now() + seconds * 1000;
+        setStoredValue(STORAGE_KEYS.sosCooldowns, store);
+      };
       const sendSOS = async () => {
-        const locationResult = await fetchSosGeolocation();
-        const location = getSosLocationPayload();
-        if (!locationResult.ok) {
-          showMessage(elements.sosFeedback, "info", `${location.status}. Demo SOS will use available route/place coordinates.`);
+        if (appState.sosSendInFlight) {
+          showMessage(elements.sosFeedback, "info", "SOS alert is already being sent.");
+          return;
         }
-        const lat = Number(location.latitude);
-        const lng = Number(location.longitude);
-        if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-          showMessage(elements.sosFeedback, "error", "Demo SOS needs browser location permission or a selected route location.");
+        const localCooldownRemaining = getSosCooldownRemaining();
+        if (localCooldownRemaining) {
+          showMessage(elements.sosFeedback, "error", `Please wait ${localCooldownRemaining} seconds before sending another SOS alert.`);
+          resetSosHoldUi();
+          return;
+        }
+        const sosContact = getPrimarySosContact();
+        if (!sosContact) {
+          showMessage(elements.sosFeedback, "error", "Save an emergency contact number in Settings before sending SOS.");
           resetSosHoldUi();
           refreshSosPanel();
           return;
         }
-        const message = buildDemoSosMessage(location);
-        try {
-          if (navigator.clipboard?.writeText) {
-            await navigator.clipboard.writeText(message);
-          }
-        } catch (error) {
-          // Clipboard access is optional for this compact SOS flow.
+        const locationResult = await fetchSosGeolocation();
+        const location = getSosLocationPayload();
+        if (!locationResult.ok) {
+          showMessage(elements.sosFeedback, "error", getGeolocationErrorMessage(locationResult.error) || "Current GPS location is required to send SOS.");
+          resetSosHoldUi();
+          refreshSosPanel();
+          return;
         }
-        pushSosLog({
-          title: "Demo Emergency SOS",
-          summary: message,
-          sharedItems: ["Demo alert", "Current location", "No SMS sent"],
-          type: "emergency-alert"
-        });
-        elements.sosSendBtn?.classList.add("is-sent");
-        setSosHoldProgress(100);
-        setSosHoldLabel("Emergency alert sent");
-        showMessage(elements.sosFeedback, "success", `Emergency alert sent with current location. ${message}`);
-        refreshSosPanel();
+        const lat = Number(location.latitude);
+        const lng = Number(location.longitude);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+          showMessage(elements.sosFeedback, "error", "Current GPS latitude and longitude are required to send SOS.");
+          resetSosHoldUi();
+          refreshSosPanel();
+          return;
+        }
+        const message = buildSmsSosMessage(lat, lng);
+        appState.sosSendInFlight = true;
+        if (elements.sosSendBtn) elements.sosSendBtn.disabled = true;
+        try {
+          const response = await fetch("http://localhost:5000/send-sos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              phone: normalizeSosPhoneForMsg91(sosContact.phone),
+              lat,
+              lng,
+              mapsLink: `https://maps.google.com/?q=${lat.toFixed(6)},${lng.toFixed(6)}`,
+              clientId: getCurrentSosUserKey()
+            })
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || payload.success === false) {
+            const error = new Error(payload.message || "SOS sending failed.");
+            error.payload = payload;
+            throw error;
+          }
+          const cooldownSeconds = Number(payload.cooldownSeconds || 60);
+          setSosCooldown(cooldownSeconds);
+          pushSosLog({
+            title: "Emergency SOS",
+            summary: message,
+            sharedItems: ["SMS sent", "Current latitude", "Current longitude", "Google Maps link"],
+            type: "emergency-alert"
+          });
+          elements.sosSendBtn?.classList.add("is-sent");
+          setSosHoldProgress(100);
+          setSosHoldLabel("Emergency alert sent");
+          showMessage(elements.sosFeedback, "success", `SOS SMS sent to ${formatContactDisplay(sosContact.phone)} with current location.`);
+          refreshSosPanel();
+        } catch (error) {
+          const payload = error.payload || {};
+          if (payload.cooldownRemaining) setSosCooldown(Number(payload.cooldownRemaining));
+          showMessage(elements.sosFeedback, "error", getBackendSosErrorMessage(error, payload));
+          resetSosHoldUi();
+        } finally {
+          appState.sosSendInFlight = false;
+          if (elements.sosSendBtn) elements.sosSendBtn.disabled = false;
+        }
       };
       const completeSosHold = async () => {
         if (!appState.sosHold.active || appState.sosHold.completed) return;
@@ -3811,6 +4064,15 @@
       const startSosHold = (event) => {
         event.preventDefault();
         if (appState.sosHold.active) return;
+        if (appState.sosSendInFlight) {
+          showMessage(elements.sosFeedback, "info", "SOS alert is already being sent.");
+          return;
+        }
+        const cooldownRemaining = getSosCooldownRemaining();
+        if (cooldownRemaining) {
+          showMessage(elements.sosFeedback, "error", `Please wait ${cooldownRemaining} seconds before sending another SOS alert.`);
+          return;
+        }
         appState.sosHold = {
           active: true,
           completed: false,
@@ -4933,6 +5195,7 @@
         elements.mobileUserChip.classList.remove("hidden");
         elements.logoutBtn.classList.remove("hidden");
         elements.mobileLogoutBtn.classList.remove("hidden");
+        elements.sidebarAuthActions?.classList.add("hidden");
         elements.publicNav?.classList.add("hidden");
         elements.mobilePublicNav?.classList.remove("hidden");
         elements.dashboardNav?.classList.remove("hidden");
@@ -4961,6 +5224,7 @@
         elements.mobileUserChip.classList.add("hidden");
         elements.logoutBtn.classList.add("hidden");
         elements.mobileLogoutBtn.classList.add("hidden");
+        elements.sidebarAuthActions?.classList.remove("hidden");
         elements.publicNav?.classList.remove("hidden");
         elements.mobilePublicNav?.classList.remove("hidden");
         elements.dashboardNav?.classList.add("hidden");
@@ -5000,6 +5264,7 @@
         const phone = normalizePhone(elements.registerPhone.value);
         const username = elements.registerUserId.value.trim();
         const password = elements.registerPassword.value;
+        const confirmPassword = elements.registerConfirmPassword.value;
         const alternateEmergencyNumber = normalizeAltEmergencyTo10Digits(elements.registerAltPhone.value);
         const role = elements.registerRole.value === "admin" ? "admin" : "user";
         const usernameNormalized = normalizeUserId(username);
@@ -5008,6 +5273,7 @@
         if (!/^\d{10}$/.test(alternateEmergencyNumber)) return { ok: false, message: "Alternate emergency number must be +91XXXXXXXXXX or XXXXXXXXXX." };
         if (phone === alternateEmergencyNumber) return { ok: false, message: "Alternate emergency number must be different from the main phone number." };
         if (password.length < 4) return { ok: false, message: "Password must be at least 4 characters." };
+        if (password !== confirmPassword) return { ok: false, message: "Confirm password must match your password." };
         const users = readUsers();
         if (users.find((user) => user.usernameNormalized === usernameNormalized)) return { ok: false, message: "This user ID already exists. Choose a different one." };
         if (users.find((user) => user.phone === phone)) return { ok: false, message: "This phone number is already registered." };
@@ -5024,12 +5290,8 @@
         }
         const createdUser = userStore.create(result.user);
         elements.registerPanel.reset();
-        elements.loginPhone.value = `+91${createdUser.phone}`;
-        elements.loginUsername.value = createdUser.username;
-        setAuthTab("login");
-        setLoginMethod("username");
-        showMessage(elements.registerMessage, "success", "Account created successfully. You can now log in with username/password or OTP.");
-        showMessage(elements.loginMessage, "success", "Registration complete. Use your username and password to continue.");
+        showMessage(elements.registerMessage, "success", "Account created successfully. Opening your E-Suraksha dashboard.");
+        window.setTimeout(() => setCurrentUser(createdUser), 500);
       };
 
       const geocodeLocation = async (query) => {
@@ -5539,6 +5801,44 @@
         saveEmergencyContact({ name, phone, relation });
         renderSosState();
         showMessage(elements.sosFeedback, "success", `Trusted contact ${name} updated successfully.`);
+      };
+
+      const handleSettingsSubmit = (event) => {
+        event.preventDefault();
+        if (!appState.currentUser) {
+          showMessage(elements.settingsMessage, "error", "Login before saving SOS settings.");
+          return;
+        }
+        const emergencyContactNumber = normalizeAltEmergencyTo10Digits(elements.settingsEmergencyPhone.value);
+        const alternateEmergencyNumber = normalizeAltEmergencyTo10Digits(elements.settingsAlternatePhone.value);
+        if (!emergencyContactNumber && !alternateEmergencyNumber) {
+          showMessage(elements.settingsMessage, "error", "Save at least one emergency contact number.");
+          return;
+        }
+        if (emergencyContactNumber && !/^\d{10}$/.test(emergencyContactNumber)) {
+          showMessage(elements.settingsMessage, "error", "Emergency contact number must be +91XXXXXXXXXX or XXXXXXXXXX.");
+          return;
+        }
+        if (alternateEmergencyNumber && !/^\d{10}$/.test(alternateEmergencyNumber)) {
+          showMessage(elements.settingsMessage, "error", "Alternate contact number must be +91XXXXXXXXXX or XXXXXXXXXX.");
+          return;
+        }
+        if (emergencyContactNumber && alternateEmergencyNumber && emergencyContactNumber === alternateEmergencyNumber) {
+          showMessage(elements.settingsMessage, "error", "Emergency and alternate numbers must be different.");
+          return;
+        }
+        const updatedUser = userStore.update(appState.currentUser.id || appState.currentUser.usernameNormalized, () => ({
+          emergencyContactNumber,
+          alternateEmergencyNumber
+        }));
+        if (!updatedUser) {
+          showMessage(elements.settingsMessage, "error", "Could not update SOS settings. Login again and retry.");
+          return;
+        }
+        appState.currentUser = updatedUser;
+        setSession(updatedUser);
+        renderSosState();
+        showMessage(elements.settingsMessage, "success", "SOS settings saved.");
       };
 
       const chooseDistinctRoute = (sortedRoutes, excludedKeys = []) => sortedRoutes.find((route) => !excludedKeys.includes(route.routeKey)) || sortedRoutes[0] || null;
@@ -6252,6 +6552,12 @@
           setLoginMethod(loginMethodTab.dataset.loginMethod);
           return;
         }
+        const sidebarAuthButton = event.target.closest("[data-sidebar-auth]");
+        if (sidebarAuthButton) {
+          event.preventDefault();
+          openAuthSection(sidebarAuthButton.dataset.sidebarAuth || "login");
+          return;
+        }
         const recentItem = event.target.closest("[data-recent-index]");
         if (recentItem) {
           event.preventDefault();
@@ -6364,6 +6670,11 @@
       elements.sosContactRelation?.addEventListener("input", () => {
         elements.sosContactRelation.value = elements.sosContactRelation.value.slice(0, 40);
       });
+      [elements.settingsEmergencyPhone, elements.settingsAlternatePhone].filter(Boolean).forEach((input) => {
+        input.addEventListener("input", () => {
+          input.value = formatContactInputValue(input.value);
+        });
+      });
       elements.sosMessageInput?.addEventListener("input", () => {
         elements.sosMessageInput.dataset.autoGenerated = "false";
       });
@@ -6394,6 +6705,11 @@
         hideMessage(elements.adminIncidentMessage);
       });
       elements.sosContactForm?.addEventListener("submit", handleSosContactSubmit);
+      elements.settingsForm?.addEventListener("submit", handleSettingsSubmit);
+      elements.settingsOpenSos?.addEventListener("click", (event) => {
+        event.preventDefault();
+        setSosModalOpen(true);
+      });
       elements.heroRouteForm.addEventListener("submit", handleHeroRouteSubmit);
       elements.startNavigationBtn?.addEventListener("click", (event) => {
         event.preventDefault();
@@ -6427,6 +6743,7 @@
         resetRoute();
         jumpToPlanner();
       });
+      elements.quickOpenSettings?.addEventListener("click", () => showSection("settings-panel"));
       [elements.topbarSosBtn, elements.mobileSosBtn, elements.dashboardSosBtn, elements.floatingSosBtn, elements.dashboardInlineSosBtn]
         .filter(Boolean)
         .forEach((button) => button.addEventListener("click", (event) => {
